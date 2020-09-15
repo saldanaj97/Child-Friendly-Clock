@@ -3,4 +3,4 @@ CSCE 4901 Capstone Project
 
 Team: Fullstack Frontiers
 
-Members: Rupesh Solanki, Ali Tahririan
+Members: Rupesh Solanki, Ali Tahririan, Arnulfo Moses Molina
