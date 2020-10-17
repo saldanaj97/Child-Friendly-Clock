@@ -22,6 +22,7 @@ class _AlarmState extends State<Alarm> {
             pinned: true,
             expandedHeight: 100,
             backgroundColor: const Color(0xff2d2e40),
+            centerTitle: false,
             title: Text(
               'Alarms',
               style: TextStyle(
@@ -30,6 +31,7 @@ class _AlarmState extends State<Alarm> {
                 color: const Color(0xffffffff),
                 fontWeight: FontWeight.w600,
               ),
+              textAlign: TextAlign.left,
             ),
             actions: <Widget>[
               IconButton(
