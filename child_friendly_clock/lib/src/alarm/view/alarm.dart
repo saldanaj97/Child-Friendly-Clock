@@ -57,12 +57,16 @@ class _AlarmState extends State<Alarm> {
           ),
         ],
       ),
-      /* **** (alarm/view/alarm_cards.dart) **** */
-      /*AlarmCards(),
-        /* **** (src/widgets/view/navbar.dart) **** */
-        Navbar(),
-      ],
-      ),*/
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xff2d2e40),
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Clock', style: TextStyle(color: Colors.white))),
+          BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Alarm', style: TextStyle(color: Colors.white))),
+          BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Timer', style: TextStyle(color: Colors.white))),
+          BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Stopwatch', style: TextStyle(color: Colors.white))),
+        ],
+      ),
     );
   }
 }

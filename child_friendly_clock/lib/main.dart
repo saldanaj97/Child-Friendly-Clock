@@ -1,3 +1,4 @@
+import 'package:child_friendly_clock/src/alarm/view/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:child_friendly_clock/src/home/view/home.dart';
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new Home(),
+      home: new Alarm(),
     );
   }
 }
