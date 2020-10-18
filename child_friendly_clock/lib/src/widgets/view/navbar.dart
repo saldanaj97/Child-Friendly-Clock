@@ -14,9 +14,9 @@ class _NavbarState extends State<Navbar> {
       type: BottomNavigationBarType.fixed,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Clock', style: TextStyle(color: Colors.white))),
-        BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Alarm', style: TextStyle(color: Colors.white))),
-        BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Timer', style: TextStyle(color: Colors.white))),
-        BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Stopwatch', style: TextStyle(color: Colors.white))),
+        BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Alarm', style: TextStyle(color: Colors.white))),
+        BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Timer', style: TextStyle(color: Colors.white))),
+        BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Stopwatch', style: TextStyle(color: Colors.white))),
       ],
     );
   }

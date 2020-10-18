@@ -1,3 +1,4 @@
+import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './alarm_cards.dart';
@@ -57,16 +58,7 @@ class _AlarmState extends State<Alarm> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xff2d2e40),
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Clock', style: TextStyle(color: Colors.white))),
-          BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Alarm', style: TextStyle(color: Colors.white))),
-          BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Timer', style: TextStyle(color: Colors.white))),
-          BottomNavigationBarItem(icon: Icon(Icons.watch, color: Colors.white), title: Text('Stopwatch', style: TextStyle(color: Colors.white))),
-        ],
-      ),
+      bottomNavigationBar: Navbar(),
     );
   }
 }
