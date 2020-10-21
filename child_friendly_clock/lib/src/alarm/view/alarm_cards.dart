@@ -324,6 +324,7 @@ class _AlarmCardsState extends State<AlarmCards> {
       );
     }
     if(_form == FormType.delete){
+      _form = FormType.regular;
       return Container();
     }
   }
