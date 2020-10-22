@@ -49,14 +49,13 @@ class DBProvider{
     return res;
   }
 
-  Future<dynamic> getAlarm() async{
+  Future<dynamic> getAlarms() async{
     final db = await database;
     var res = await db.query("alarm");
     if(res.length == 0)
       return null;
     else{
-      var resMap = res[0];
-      return resMap.isNotEmpty ? resMap : Null;
+      return res.isNotEmpty ? res : Null;
     }
 
   }

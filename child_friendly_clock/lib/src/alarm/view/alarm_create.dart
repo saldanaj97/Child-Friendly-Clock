@@ -53,7 +53,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
             ),
             delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                return AlarmCards();
+                return Text('');
               },
             ),
           ),

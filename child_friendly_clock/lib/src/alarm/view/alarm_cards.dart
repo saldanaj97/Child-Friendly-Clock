@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 
 
 class AlarmCards extends StatefulWidget {
+  final Alarm alarm;
+  AlarmCards(this.alarm);
+
   @override
   _AlarmCardsState createState() => _AlarmCardsState();
 }
@@ -40,6 +43,17 @@ class _AlarmCardsState extends State<AlarmCards> {
 
   @override
   Widget build(BuildContext context) {
+    var time;
+    print(widget.alarm.name);
+    print('Hour Value: ' + '${widget.alarm.hour}');
+    print('Period: ' + widget.alarm.period);
+    if(widget.alarm.period == "PM" && widget.alarm.hour != 12)
+      time = TimeOfDay(hour: widget.alarm.hour + 12, minute: widget.alarm.minute);
+    else if(widget.alarm.period == "AM" && widget.alarm.hour == 12)
+      time = TimeOfDay(hour: widget.alarm.hour - 12, minute: widget.alarm.minute);
+    else
+      time = TimeOfDay(hour: widget.alarm.hour, minute: widget.alarm.minute);
+
     if (_form == FormType.regular) {
       return Container(
         child: Transform.translate(
@@ -80,7 +94,7 @@ class _AlarmCardsState extends State<AlarmCards> {
                                     Container(
                                       margin: EdgeInsets.only(bottom: 5),
                                       child: Text(
-                                        'Work',
+                                        widget.alarm.name,
                                         style: TextStyle(
                                           fontFamily: 'Open Sans',
                                           fontSize: 25,
@@ -130,7 +144,7 @@ class _AlarmCardsState extends State<AlarmCards> {
                                       Container(
                                         margin: EdgeInsets.only(left: 24),
                                         child: Text(
-                                          '05:00 AM',
+                                          time.format(context),
                                           style: TextStyle(
                                             fontFamily: 'Open Sans',
                                             fontSize: 25,
@@ -171,7 +185,7 @@ class _AlarmCardsState extends State<AlarmCards> {
         ),
       );
     }
-    if (_form == FormType.edit) {
+    else if (_form == FormType.edit) {
       return Container(
         child: Transform.translate(
           offset: Offset(35.0, 0),
@@ -211,7 +225,7 @@ class _AlarmCardsState extends State<AlarmCards> {
                                     Container(
                                       margin: EdgeInsets.only(bottom: 5),
                                       child: Text(
-                                        'Test',
+                                        widget.alarm.name,
                                         style: TextStyle(
                                           fontFamily: 'Open Sans',
                                           fontSize: 25,
@@ -261,7 +275,7 @@ class _AlarmCardsState extends State<AlarmCards> {
                                       Container(
                                         margin: EdgeInsets.only(left: 24),
                                         child: Text(
-                                          '05:00 AM',
+                                          time.toString(),
                                           style: TextStyle(
                                             fontFamily: 'Open Sans',
                                             fontSize: 25,
@@ -323,7 +337,7 @@ class _AlarmCardsState extends State<AlarmCards> {
         ),
       );
     }
-    if(_form == FormType.delete){
+    else if(_form == FormType.delete){
       _form = FormType.regular;
       return Container();
     }

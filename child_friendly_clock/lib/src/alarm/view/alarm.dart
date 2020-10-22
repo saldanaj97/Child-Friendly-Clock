@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './alarm_cards.dart';
 import './CreateAlarm.dart';
+import 'package:child_friendly_clock/src/alarm/utils/database.dart';
+import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 
 class alarm extends StatefulWidget {
   alarm({
@@ -14,8 +16,22 @@ class alarm extends StatefulWidget {
 }
 
 class _AlarmState extends State<alarm> {
+  Future alarmsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    alarmsFuture = getAlarms();
+  }
+
+  getAlarms() async{
+    final alarmsData = await DBProvider.db.getAlarms();
+    return alarmsData;
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color(0xff2d2e40),
       body: CustomScrollView(
@@ -44,23 +60,46 @@ class _AlarmState extends State<alarm> {
                 ),
                 onPressed: (){
                   Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CreateAlarm()),
+                  MaterialPageRoute(builder: (context) => CreateAlarm(clickCallback: () => setState((){
+                    alarmsFuture = getAlarms();
+                  }))),
                   );
                 },
               ),
             ],
           ),
-          SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
-              childAspectRatio: 2.25,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return AlarmCards();
-              },
-            ),
-          ),
+          FutureBuilder(
+            future: alarmsFuture,
+            builder: (_, alarmsData) {
+              if(alarmsData.hasData) {
+                return SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    childAspectRatio: 2.25,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      Map<String, dynamic> read = alarmsData.data[index];
+                      Alarm rowAlarm = Alarm.fromJson(read);
+                        return AlarmCards(rowAlarm);
+                    },
+                    childCount: alarmsData.data.length
+                  ),
+                );
+              }
+              else
+                return SliverGrid(delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index){
+                      return Container(
+                        child: Text('waiting ...'),
+                      );
+                    }
+                ), gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  childAspectRatio: 2.25,
+                ));
+            },
+          )
         ],
       ),
       bottomNavigationBar: Navbar(),

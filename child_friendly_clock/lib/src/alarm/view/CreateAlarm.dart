@@ -5,6 +5,10 @@ import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 
 class CreateAlarm extends StatefulWidget {
+  final VoidCallback clickCallback;
+
+  CreateAlarm({this.clickCallback});
+
   @override
   _CreateAlarmState createState() => _CreateAlarmState();
 }
@@ -158,6 +162,8 @@ class _CreateAlarmState extends State<CreateAlarm> {
                   onPressed: () {
                     newAlarm.name = _nameController.text;
                     DBProvider.db.newAlarm(newAlarm);
+                    widget.clickCallback();
+                    Navigator.pop(context);
                   },
                   height: 100,
                 ))
