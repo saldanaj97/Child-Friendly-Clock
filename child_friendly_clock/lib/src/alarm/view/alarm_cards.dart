@@ -2,102 +2,85 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+
+
 class AlarmCards extends StatefulWidget {
   @override
   _AlarmCardsState createState() => _AlarmCardsState();
 }
 
+enum FormType {
+  regular,
+  edit,
+  delete,
+}
+
+
 class _AlarmCardsState extends State<AlarmCards> {
+  FormType _form = FormType.regular;
   bool isSwitched = false;
+
+  void _formChange() async {
+    setState(() {
+      if(_form == FormType.regular){
+        _form = FormType.edit;
+      }
+      else{
+        _form = FormType.regular;
+      }
+    });
+  }
+
+  void _formChange2() async{
+    setState(() {
+      _form = FormType.delete;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Transform.translate(
-        offset: Offset(35.0, 0),
-        child: SizedBox(
-          width: 315.0,
-          height: 255.0,
-          child: Stack(
-            children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    child: Stack(
-                      children: <Widget>[
-                        SvgPicture.string(
-                          daytime_alarm_background,
-                          allowDrawingOutsideViewBox: true,
-                          fit: BoxFit.fill,
-                        ),
-                        Container(
-                          child: Stack(
-                            children: <Widget>[
-                              /* **** ALARM LABEL AND ON/OFF SWITCH **** */
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(left: 10, top: 5, right: 20, bottom: 10),
-                                    child: Icon(
-                                      Icons.arrow_right,
-                                      size: 45,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 5),
-                                    child: Text(
-                                      'Work',
-                                      style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 25,
-                                        color: const Color(0xffffffff),
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                  Transform.scale(
-                                    scale: 1.2,
-                                    origin: Offset(-525, 0),
-                                    child: Switch(
-                                      value: isSwitched,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isSwitched = value;
-                                          print(isSwitched);
-                                        });
-                                      },
-                                      activeTrackColor: Colors.lightGreenAccent,
-                                      activeColor: Colors.green,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              /* **** DAYS ALARM IS ACTIVE **** */
-                              Container(
-                                margin: EdgeInsets.only(top: 50, left: 24),
-                                child: Text(
-                                  'Mon - Fri',
-                                  style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    fontSize: 25,
-                                    color: const Color(0xffffffff),
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              /* **** TIME AND DROP DOWN ROW **** */
-                              Container(
-                                margin: EdgeInsets.only(top: 75),
-                                child: Row(
+    if (_form == FormType.regular) {
+      return Container(
+        child: Transform.translate(
+          offset: Offset(35.0, 0),
+          child: SizedBox(
+            width: 315.0,
+            height: 255.0,
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      child: Stack(
+                        children: <Widget>[
+                          SvgPicture.string(
+                            daytime_alarm_background,
+                            allowDrawingOutsideViewBox: true,
+                            fit: BoxFit.fill,
+                          ),
+                          Container(
+                            child: Stack(
+                              children: <Widget>[
+                                /* **** ALARM LABEL AND ON/OFF SWITCH **** */
+                                Row(
                                   children: <Widget>[
                                     Container(
-                                      margin: EdgeInsets.only(left: 24),
+                                      margin: EdgeInsets.only(left: 10,
+                                          top: 5,
+                                          right: 20,
+                                          bottom: 10),
+                                      child: Icon(
+                                        Icons.arrow_right,
+                                        size: 45,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 5),
                                       child: Text(
-                                        '05:00 AM',
+                                        'Work',
                                         style: TextStyle(
                                           fontFamily: 'Open Sans',
                                           fontSize: 25,
@@ -107,37 +90,246 @@ class _AlarmCardsState extends State<AlarmCards> {
                                         textAlign: TextAlign.left,
                                       ),
                                     ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: 120),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.arrow_downward,
-                                          color: Colors.white,
-                                        ),
-                                        iconSize: 35,
-                                        onPressed: () {
-                                          print('Pressed');
-                                        }, // TODO: Update to open up card when pressed
+                                    Transform.scale(
+                                      scale: 1.2,
+                                      origin: Offset(-525, 0),
+                                      child: Switch(
+                                        value: isSwitched,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isSwitched = value;
+                                            print(isSwitched);
+                                          });
+                                        },
+                                        activeTrackColor: Colors
+                                            .lightGreenAccent,
+                                        activeColor: Colors.green,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                                /* **** DAYS ALARM IS ACTIVE **** */
+                                Container(
+                                  margin: EdgeInsets.only(top: 50, left: 24),
+                                  child: Text(
+                                    'Mon - Fri',
+                                    style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 25,
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                                /* **** TIME AND DROP DOWN ROW **** */
+                                Container(
+                                  margin: EdgeInsets.only(top: 75),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(left: 24),
+                                        child: Text(
+                                          '05:00 AM',
+                                          style: TextStyle(
+                                            fontFamily: 'Open Sans',
+                                            fontSize: 25,
+                                            color: const Color(0xffffffff),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(left: 120),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.arrow_downward,
+                                            color: Colors.white,
+                                          ),
+                                          iconSize: 35,
+                                          onPressed: () {
+                                            _formChange();
+                                            print('Pressed');
+                                          }, //
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
+    if (_form == FormType.edit) {
+      return Container(
+        child: Transform.translate(
+          offset: Offset(35.0, 0),
+          child: SizedBox(
+            width: 315.0,
+            height: 255.0,
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      child: Stack(
+                        children: <Widget>[
+                          SvgPicture.string(
+                            daytime_alarm_background,
+                            allowDrawingOutsideViewBox: true,
+                            fit: BoxFit.fill,
+                          ),
+                          Container(
+                            child: Stack(
+                              children: <Widget>[
+                                /* **** ALARM LABEL AND ON/OFF SWITCH **** */
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(left: 10,
+                                          top: 5,
+                                          right: 20,
+                                          bottom: 10),
+                                      child: Icon(
+                                        Icons.arrow_right,
+                                        size: 45,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 5),
+                                      child: Text(
+                                        'Test',
+                                        style: TextStyle(
+                                          fontFamily: 'Open Sans',
+                                          fontSize: 25,
+                                          color: const Color(0xffffffff),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ),
+                                    Transform.scale(
+                                      scale: 1.2,
+                                      origin: Offset(-525, 0),
+                                      child: Switch(
+                                        value: isSwitched,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isSwitched = value;
+                                            print(isSwitched);
+                                          });
+                                        },
+                                        activeTrackColor: Colors
+                                            .lightGreenAccent,
+                                        activeColor: Colors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                /* **** DAYS ALARM IS ACTIVE **** */
+                                Container(
+                                  margin: EdgeInsets.only(top: 50, left: 24),
+                                  child: Text(
+                                    'Mon - Fri',
+                                    style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 25,
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                                /* **** TIME AND DROP DOWN ROW **** */
+                                Container(
+                                  margin: EdgeInsets.only(top: 75),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(left: 24),
+                                        child: Text(
+                                          '05:00 AM',
+                                          style: TextStyle(
+                                            fontFamily: 'Open Sans',
+                                            fontSize: 25,
+                                            color: const Color(0xffffffff),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 85),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(left: 10),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.close,
+                                            color:Colors.amber,
+                                          ),
+                                          iconSize: 35,
+                                          onPressed: (){
+                                            _formChange2();
+                                            print('Pressed');
+                                          }
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(left: 190),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.arrow_upward,
+                                            color: Colors.white,
+                                          ),
+                                          iconSize: 35,
+                                          onPressed: (){
+                                            _formChange();
+                                            print('Pressed');
+                                          },
+                                        ),
+                                      ),
+                                    ]
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    if(_form == FormType.delete){
+      _form = FormType.regular;
+      return Container();
+    }
   }
 }
+
 
 // Gradient background for the daytime alarm
 const String daytime_alarm_background =
