@@ -2,9 +2,10 @@ import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './alarm_cards.dart';
+import './CreateAlarm.dart';
 
-class Alarm extends StatefulWidget {
-  Alarm({
+class alarm extends StatefulWidget {
+  alarm({
     Key key,
   }) : super(key: key);
 
@@ -12,14 +13,14 @@ class Alarm extends StatefulWidget {
   _AlarmState createState() => _AlarmState();
 }
 
-class _AlarmState extends State<Alarm> {
+class _AlarmState extends State<alarm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff2d2e40),
       body: CustomScrollView(
         slivers: <Widget>[
-          const SliverAppBar(
+          SliverAppBar(
             pinned: true,
             expandedHeight: 100,
             backgroundColor: const Color(0xff2d2e40),
@@ -41,7 +42,11 @@ class _AlarmState extends State<Alarm> {
                   color: Colors.white,
                   size: 45,
                 ),
-                onPressed: null,
+                onPressed: (){
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CreateAlarm()),
+                  );
+                },
               ),
             ],
           ),
