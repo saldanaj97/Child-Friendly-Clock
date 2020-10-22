@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import './alarm_cards.dart';
 
 
-class Alarm extends StatefulWidget {
-  Alarm({
+class AlarmCreate extends StatefulWidget {
+  AlarmCreate({
     Key key,
   }) : super(key: key);
 
   @override
-  _AlarmState createState() => _AlarmState();
+  _AlarmCreateState createState() => _AlarmCreateState();
 }
 
-class _AlarmState extends State<Alarm> {
+class _AlarmCreateState extends State<AlarmCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +26,7 @@ class _AlarmState extends State<Alarm> {
             backgroundColor: const Color(0xff2d2e40),
             centerTitle: false,
             title: Text(
-              'Alarms',
+              'Alarmsssssssssssssssss',
               style: TextStyle(
                 fontFamily: 'Open Sans',
                 fontSize: 40,
@@ -52,7 +52,7 @@ class _AlarmState extends State<Alarm> {
               childAspectRatio: 2.25,
             ),
             delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                 return AlarmCards();
               },
             ),
