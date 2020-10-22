@@ -2,6 +2,7 @@ import 'package:child_friendly_clock/src/alarm/view/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:child_friendly_clock/src/home/view/home.dart';
+import 'package:child_friendly_clock/src/alarm/view/alarm_create.dart';
 
 void main() => runApp(new MyApp());
 
