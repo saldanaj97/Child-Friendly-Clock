@@ -59,11 +59,8 @@ class _AlarmState extends State<alarm> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => CreateAlarm(
-                    clickCallback: () => setState(
-                      () {
-                        alarmsFuture = getAlarms();
-                      },
-                    ),
+                    clickCallback: () => setState(() {
+                        alarmsFuture = getAlarms();},),
                   ),
                 ),
               );
@@ -86,7 +83,10 @@ class _AlarmState extends State<alarm> {
                     (BuildContext context, int index) {
                       Map<String, dynamic> read = alarmsData.data[index];
                       Alarm rowAlarm = Alarm.fromJson(read);
-                      return AlarmCards(rowAlarm); // One individual Alarm
+                      return AlarmCards(alarm: rowAlarm, updateListCallback: () => setState((){
+                          alarmsFuture = getAlarms();
+                        }),
+                      ); // One individual Alarm
                     },
                     childCount: alarmsData.data.length,
                   ),

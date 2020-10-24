@@ -1,12 +1,65 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 
+class SaveButton extends StatefulWidget {
+  final VoidCallback save;
+  final bool active;
+  SaveButton({this.active, this.save});
+
+  @override
+  _SaveButtonState createState() => _SaveButtonState();
+}
+
+class _SaveButtonState extends State<SaveButton> {
+  @override
+  Widget build(BuildContext context) {
+    if(widget.active){
+      return
+          Expanded(child: FlatButton(
+            textColor: Colors.white,
+            shape: CircleBorder(),
+            child: Text(
+                'Save',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,)),
+            color: Colors.lightBlue,
+            onPressed: () {
+              widget.save();
+            },
+            height: 100,
+          )
+        );
+    }
+    else{
+      return Expanded(
+          child: FlatButton(
+            textColor: Colors.grey,
+            shape: CircleBorder(),
+            child: Text(
+                'Save',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,)),
+            color: Colors.grey[800],
+            onPressed: () {
+            },
+            height: 100,
+        )
+      );
+    }
+  }
+}
+
+
 class CreateAlarm extends StatefulWidget {
   final VoidCallback clickCallback;
-
   CreateAlarm({this.clickCallback});
 
   @override
@@ -18,6 +71,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
   var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None");
   double proxyMinute = 0.0;
   List<bool> _selections = [true, false];
+  bool canSave = false;
 
   @override
   void initState() {
@@ -73,6 +127,18 @@ class _CreateAlarmState extends State<CreateAlarm> {
                       fontSize: 28.0,
                       letterSpacing: 2.0,
                     ),
+                    onChanged: (text) {
+                     print('WE ARE HERE: ' + text);
+                     setState((){
+                       if(text != '') {
+                          canSave = true;
+                       }
+                       else {
+                         canSave = false;
+                       }
+                     });
+
+                    },
                  )
                )
              ],
@@ -150,23 +216,14 @@ class _CreateAlarmState extends State<CreateAlarm> {
                   onPressed: () => Navigator.of(context).pop(),
                   height: 100,
                 )),
-                Expanded(child: FlatButton(
-                  textColor: Colors.white,
-                  shape: CircleBorder(),
-                  child: Text(
-                      'Save',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,)),
-                  color: Colors.lightBlue,
-                  onPressed: () {
-                    newAlarm.name = _nameController.text;
-                    DBProvider.db.newAlarm(newAlarm);
-                    widget.clickCallback();
-                    Navigator.pop(context);
-                  },
-                  height: 100,
-                ))
+                //savebutton
+                SaveButton(active: canSave,
+                    save: (){
+                      newAlarm.name = _nameController.text;
+                      DBProvider.db.newAlarm(newAlarm);
+                      widget.clickCallback();
+                      Navigator.pop(context);
+                    })
               ],
             )
           ]
