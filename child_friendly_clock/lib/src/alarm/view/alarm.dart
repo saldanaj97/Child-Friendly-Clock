@@ -24,80 +24,84 @@ class _AlarmState extends State<alarm> {
     alarmsFuture = getAlarms();
   }
 
-  getAlarms() async{
+  getAlarms() async {
     final alarmsData = await DBProvider.db.getAlarms();
     return alarmsData;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xff2d2e40),
+      appBar: AppBar(
+        backgroundColor: const Color(0xff2d2e40),
+        centerTitle: false,
+        elevation: 0,
+        title: Text(
+          'Alarms',
+          style: TextStyle(
+            fontFamily: 'Open Sans',
+            fontSize: 40,
+            color: const Color(0xffffffff),
+            fontWeight: FontWeight.w600,
+          ),
+          textAlign: TextAlign.left,
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 45,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateAlarm(
+                    clickCallback: () => setState(
+                      () {
+                        alarmsFuture = getAlarms();
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 100,
-            backgroundColor: const Color(0xff2d2e40),
-            centerTitle: false,
-            title: Text(
-              'Alarms',
-              style: TextStyle(
-                fontFamily: 'Open Sans',
-                fontSize: 40,
-                color: const Color(0xffffffff),
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 45,
-                ),
-                onPressed: (){
-                  Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CreateAlarm(clickCallback: () => setState((){
-                    alarmsFuture = getAlarms();
-                  }))),
-                  );
-                },
-              ),
-            ],
-          ),
           FutureBuilder(
             future: alarmsFuture,
             builder: (_, alarmsData) {
-              if(alarmsData.hasData) {
+              if (alarmsData.hasData) {
                 return SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
-                    childAspectRatio: 2.25,
+                    childAspectRatio: 1.75,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       Map<String, dynamic> read = alarmsData.data[index];
                       Alarm rowAlarm = Alarm.fromJson(read);
-                        return AlarmCards(rowAlarm);
+                      return AlarmCards(rowAlarm); // One individual Alarm
                     },
-                    childCount: alarmsData.data.length
+                    childCount: alarmsData.data.length,
                   ),
                 );
-              }
-              else
-                return SliverGrid(delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index){
+              } else
+                return SliverGrid(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
                       return Container(
                         child: Text('waiting ...'),
                       );
-                    }
-                ), gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  childAspectRatio: 2.25,
-                ));
+                    },
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: 2.25),
+                );
             },
           )
         ],
