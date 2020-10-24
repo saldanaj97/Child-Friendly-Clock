@@ -2,47 +2,31 @@ import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './alarm_cards.dart';
-import './CreateAlarm.dart';
-import 'package:child_friendly_clock/src/alarm/utils/database.dart';
-import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 
-class alarm extends StatefulWidget {
-  alarm({
+
+class AlarmCreate extends StatefulWidget {
+  AlarmCreate({
     Key key,
   }) : super(key: key);
 
   @override
-  _AlarmState createState() => _AlarmState();
+  _AlarmCreateState createState() => _AlarmCreateState();
 }
 
-class _AlarmState extends State<alarm> {
-  Future alarmsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    alarmsFuture = getAlarms();
-  }
-
-  getAlarms() async{
-    final alarmsData = await DBProvider.db.getAlarms();
-    return alarmsData;
-  }
-
+class _AlarmCreateState extends State<AlarmCreate> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xff2d2e40),
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
+          const SliverAppBar(
             pinned: true,
             expandedHeight: 100,
             backgroundColor: const Color(0xff2d2e40),
             centerTitle: false,
             title: Text(
-              'Alarms',
+              'Alarmsssssssssssssssss',
               style: TextStyle(
                 fontFamily: 'Open Sans',
                 fontSize: 40,
@@ -58,48 +42,21 @@ class _AlarmState extends State<alarm> {
                   color: Colors.white,
                   size: 45,
                 ),
-                onPressed: (){
-                  Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CreateAlarm(clickCallback: () => setState((){
-                    alarmsFuture = getAlarms();
-                  }))),
-                  );
-                },
+                onPressed: null,
               ),
             ],
           ),
-          FutureBuilder(
-            future: alarmsFuture,
-            builder: (_, alarmsData) {
-              if(alarmsData.hasData) {
-                return SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    childAspectRatio: 2.25,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      Map<String, dynamic> read = alarmsData.data[index];
-                      Alarm rowAlarm = Alarm.fromJson(read);
-                        return AlarmCards(rowAlarm);
-                    },
-                    childCount: alarmsData.data.length
-                  ),
-                );
-              }
-              else
-                return SliverGrid(delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index){
-                      return Container(
-                        child: Text('waiting ...'),
-                      );
-                    }
-                ), gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  childAspectRatio: 2.25,
-                ));
-            },
-          )
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: 2.25,
+            ),
+            delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return Text('');
+              },
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: Navbar(),
