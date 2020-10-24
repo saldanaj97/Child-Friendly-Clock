@@ -1,10 +1,12 @@
+import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 
 class AlarmCards extends StatefulWidget {
   final Alarm alarm;
-  AlarmCards(this.alarm);
+  final VoidCallback updateListCallback;
+  AlarmCards({this.alarm, this.updateListCallback});
 
   @override
   _AlarmCardsState createState() => _AlarmCardsState();
@@ -130,7 +132,8 @@ class _AlarmCardsState extends State<AlarmCards> {
                                         icon: Icon(Icons.cancel),
                                         color: Colors.white,
                                         onPressed: () {
-                                          // ADD THE DELETE ALARM FUNCTION HERE
+                                          DBProvider.db.deleteAlarm(widget.alarm.alarmID);
+                                          widget.updateListCallback();
                                           print('Delete Alarm Pressed');
                                         }),
                                   ],
