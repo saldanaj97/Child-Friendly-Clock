@@ -86,22 +86,33 @@ class _AlarmState extends State<alarm> {
                     (BuildContext context, int index) {
                       Map<String, dynamic> read = alarmsData.data[index];
                       Alarm rowAlarm = Alarm.fromJson(read);
-                      return AlarmCards(rowAlarm); // One individual Alarm
+                      return AlarmCards(
+                        alarm: rowAlarm,
+                        updateListCallback: () => setState(() {
+                          alarmsFuture = getAlarms();
+                        }),
+                      ); // One individual Alarm
                     },
                     childCount: alarmsData.data.length,
                   ),
                 );
-              } else
+              } else {
                 return SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return Container(
-                        child: Text('waiting ...'),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'No Alarms Set',
+                          style: TextStyle(color: Colors.white, fontSize: 30),
+                        ),
                       );
                     },
+                    childCount: 1,
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: 2.25),
                 );
+              }
             },
           )
         ],

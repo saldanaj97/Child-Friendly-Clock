@@ -49,6 +49,18 @@ class DBProvider{
     return res;
   }
 
+  deleteAlarm(int alarmID) async{
+    final db = await database;
+
+    int count = await db.rawDelete("DELETE FROM alarm WHERE alarmID = ?", [alarmID]);
+
+    //if count isn't one we either didn't delete anything or deleted more than we wanted to.
+    if(count == 1)
+      return 1;
+    else
+      return -1;
+  }
+
   Future<dynamic> getAlarms() async{
     final db = await database;
     var res = await db.query("alarm");
