@@ -39,6 +39,7 @@ class _TimerState extends State<Timer> {
                   width: 100,
                   height: 100,
                   child: FloatingActionButton(
+                    elevation: 15,
                     backgroundColor: Colors.red,
                     child: new Icon(
                       Icons.stop,
@@ -54,6 +55,7 @@ class _TimerState extends State<Timer> {
                   width: 100,
                   height: 100,
                   child: FloatingActionButton(
+                    elevation: 15,
                     backgroundColor: Colors.green,
                     child: new Icon(
                       Icons.play_arrow,
@@ -85,6 +87,7 @@ class _TimerState extends State<Timer> {
                         width: 100,
                         margin: EdgeInsets.only(bottom: 35),
                         child: RawMaterialButton(
+                          elevation: 15,
                           child: Text(
                             '1 Min',
                             style: TextStyle(color: Colors.white, fontSize: 43),
@@ -102,6 +105,7 @@ class _TimerState extends State<Timer> {
                         width: 100,
                         margin: EdgeInsets.only(bottom: 35),
                         child: RawMaterialButton(
+                          elevation: 15,
                           child: Text(
                             '5 Min',
                             style: TextStyle(color: Colors.white, fontSize: 43),
@@ -123,6 +127,7 @@ class _TimerState extends State<Timer> {
                         height: 100,
                         width: 100,
                         child: RawMaterialButton(
+                          elevation: 15,
                           child: Text(
                             '10 Min',
                             style: TextStyle(color: Colors.white, fontSize: 43),
@@ -139,6 +144,7 @@ class _TimerState extends State<Timer> {
                         height: 100,
                         width: 100,
                         child: RawMaterialButton(
+                          elevation: 15,
                           child: Text(
                             '30 Min',
                             style: TextStyle(color: Colors.white, fontSize: 43),
