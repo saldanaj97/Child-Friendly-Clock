@@ -28,7 +28,7 @@ class ClockDialPainter extends CustomPainter {
           fontFamily: 'Open Sans',
           fontSize: 20.0,
         ) {
-    tickPaint.color = Colors.cyan;
+    tickPaint.color = Colors.white;
   }
 
   @override
@@ -46,14 +46,34 @@ class ClockDialPainter extends CustomPainter {
       tickPaint.strokeWidth = i % 5 == 0 ? hourTickMarkWidth : minuteTickMarkWidth;
       canvas.drawLine(Offset(0.0, -radius), Offset(0.0, -radius + tickMarkLength), tickPaint);
 
-      //draw the text
+      //draw the hours
+      if (i % 5 == 0) {
+        canvas.save();
+        canvas.translate(0.0, -radius + 60.0);
+
+        textPainter.text = TextSpan(
+          text: this.clockText == ClockText.roman ? '${romanNumeralList[i ~/ 5]}' : '${i == 0 ? 12 : i ~/ 5}',
+          style: textStyle,
+        );
+
+        //helps make the text painted vertically
+        canvas.rotate(-angle * i);
+
+        textPainter.layout();
+
+        textPainter.paint(canvas, Offset(-(textPainter.width / 2), -(textPainter.height / 2)));
+
+        canvas.restore();
+      }
+
+      //draw the minutes
       if (i % 5 == 0) {
         canvas.save();
         canvas.translate(0.0, -radius + 25.0);
 
         textPainter.text = TextSpan(
-          text: this.clockText == ClockText.roman ? '${romanNumeralList[i ~/ 5]}' : '${i == 0 ? 12 : i ~/ 5}',
-          style: textStyle,
+          text: this.clockText == ClockText.roman ? '${romanNumeralList[i ~/ 5]}' : '${i}',
+          style: TextStyle(color: Colors.cyan, fontSize: 20, fontFamily: 'Open'),
         );
 
         //helps make the text painted vertically
