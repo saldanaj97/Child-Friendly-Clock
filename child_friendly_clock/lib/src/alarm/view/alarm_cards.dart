@@ -114,40 +114,40 @@ class _AlarmCardsState extends State<AlarmCards> {
                             ),
                             Container(
                               alignment: Alignment.bottomLeft,
+                              width: 325,
                               margin: EdgeInsets.only(left: 9),
-                              child: ExpansionTile(
-                                initiallyExpanded: false,
-                                title: Text(
-                                  'Mon - Fri',
-                                  style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    fontSize: 25,
-                                    color: const Color(0xffffffff),
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
+                              child: Row(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      /*editAlarm('M'),
-                                    editAlarm('T'),
-                                    editAlarm('W'),
-                                    editAlarm('TR'),
-                                    editAlarm('F'),
-                                    editAlarm('Sa'),
-                                    editAlarm('Su'),*/
-                                      /* IconButton(
-                                        icon: Icon(Icons.cancel),
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          DBProvider.db.deleteAlarm(widget.alarm.alarmID);
-                                          widget.updateListCallback();
-                                          print('Delete Alarm Pressed');
-                                        }), */
-                                    ],
+                                  Text(
+                                    'Mon - Fri',
+                                    style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 25,
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                    textAlign: TextAlign.left,
                                   ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 115),
+                                    child: Text(
+                                      'Edit',
+                                      style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontSize: 20,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    padding: EdgeInsets.only(),
+                                    icon: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {},
+                                  )
                                 ],
                               ),
                             ),
