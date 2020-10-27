@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:child_friendly_clock/src/home/controller/controller.dart';
 import './../../widgets/view/navbar.dart';
 import './clock/clock.dart';
 
@@ -45,7 +43,7 @@ class _HomeState extends State<Home> {
               child: todaysDate(now.month, now.day, now.year),
             ),
             Container(
-              child: currentTime(),
+              child: currentTime(now.hour, now.minute),
             ),
             Container(
               child: Clock(),
@@ -76,9 +74,39 @@ class _HomeState extends State<Home> {
     return timeOfDay;
   }
 
+  String numToMonth(int monthNum) {
+    String month;
+    if (monthNum == 1) {
+      month = 'January ';
+    } else if (monthNum == 2) {
+      month = 'February ';
+    } else if (monthNum == 3) {
+      month = 'March ';
+    } else if (monthNum == 4) {
+      month = 'April ';
+    } else if (monthNum == 5) {
+      month = 'May ';
+    } else if (monthNum == 6) {
+      month = 'June ';
+    } else if (monthNum == 7) {
+      month = 'July ';
+    } else if (monthNum == 8) {
+      month = 'August ';
+    } else if (monthNum == 9) {
+      month = 'September ';
+    } else if (monthNum == 10) {
+      month = 'October ';
+    } else if (monthNum == 11) {
+      month = 'November ';
+    } else {
+      month = 'December ';
+    }
+    return month;
+  }
+
   Widget greetingMessage(int hour) {
     return Container(
-      //margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(bottom: 15),
       child: Row(
         children: [
           Text('Good ', style: TextStyle(color: Colors.white, fontSize: 40, fontFamily: 'Open Sans')),
@@ -88,24 +116,23 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget todaysDate(var month, var day, var year) {
-    /* var day;
-    var date;
-    var month; */
-
+  Widget todaysDate(int month, int day, int year) {
     return Container(
       child: Column(
         children: [
           Row(
             children: [
-              Text('Today', style: TextStyle(color: Colors.red[400], fontSize: 35, fontWeight: FontWeight.bold)),
-              Text(' is', style: TextStyle(color: Colors.white, fontSize: 35)),
+              Text('The ', style: TextStyle(color: Colors.white, fontSize: 35)),
+              Text('date ', style: TextStyle(color: Colors.red[400], fontSize: 35, fontWeight: FontWeight.bold)),
+              Text('is', style: TextStyle(color: Colors.white, fontSize: 35)),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('January 1, 2020', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
+              Text(numToMonth(month), style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
+              Text(day.toString() + ', ', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
+              Text(year.toString(), style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
             ],
           ),
         ],
@@ -113,8 +140,18 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget currentTime() {
+  Widget currentTime(int hour, int minute) {
+    var hourConversion = hour % 12;
+    var am_pm;
+
+    if (hour >= 0 && hour < 12) {
+      am_pm = 'AM';
+    } else {
+      am_pm = 'PM';
+    }
+
     return Container(
+      margin: EdgeInsets.only(bottom: 30),
       child: Column(
         children: [
           Row(
@@ -127,10 +164,10 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('00', style: TextStyle(color: Colors.orange, fontSize: 37, fontWeight: FontWeight.w600)),
+              Text(hourConversion.toString(), style: TextStyle(color: Colors.orange, fontSize: 37, fontWeight: FontWeight.w600)),
               Text(':', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text('00', style: TextStyle(color: Colors.cyan, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text('AM', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600))
+              Text(minute.toString(), style: TextStyle(color: Colors.cyan, fontSize: 37, fontWeight: FontWeight.w600)),
+              Text(am_pm, style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600))
             ],
           ),
         ],
