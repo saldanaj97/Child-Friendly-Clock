@@ -32,6 +32,7 @@ class _HomeState extends State<Home> {
       ),
       backgroundColor: const Color(0xff2d2e40),
       body: Container(
+        margin: EdgeInsets.only(left: 15, right: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -65,8 +66,8 @@ class _HomeState extends State<Home> {
       //margin: EdgeInsets.only(left: 20),
       child: Row(
         children: [
-          Text('Good', style: TextStyle(color: Colors.white, fontSize: 45, fontFamily: 'Open Sans')),
-          Text(timeOfDay, style: TextStyle(color: Colors.red[400], fontSize: 45, fontFamily: 'Open Sans', fontWeight: FontWeight.bold)),
+          Text('Good', style: TextStyle(color: Colors.white, fontSize: 40, fontFamily: 'Open Sans')),
+          Text(timeOfDay, style: TextStyle(color: Colors.red[400], fontSize: 40, fontFamily: 'Open Sans', fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -82,8 +83,8 @@ class _HomeState extends State<Home> {
         children: [
           Row(
             children: [
-              Text('Today', style: TextStyle(color: Colors.red[400], fontSize: 40, fontWeight: FontWeight.bold)),
-              Text(' is', style: TextStyle(color: Colors.white, fontSize: 40)),
+              Text('Today', style: TextStyle(color: Colors.red[400], fontSize: 35, fontWeight: FontWeight.bold)),
+              Text(' is', style: TextStyle(color: Colors.white, fontSize: 35)),
             ],
           ),
           Row(
@@ -103,9 +104,9 @@ class _HomeState extends State<Home> {
         children: [
           Row(
             children: [
-              Text('The', style: TextStyle(color: Colors.white, fontSize: 40)),
-              Text(' time ', style: TextStyle(color: Colors.red[400], fontSize: 40, fontWeight: FontWeight.bold)),
-              Text('is ', style: TextStyle(color: Colors.white, fontSize: 40)),
+              Text('The', style: TextStyle(color: Colors.white, fontSize: 35)),
+              Text(' time ', style: TextStyle(color: Colors.red[400], fontSize: 35, fontWeight: FontWeight.bold)),
+              Text('is ', style: TextStyle(color: Colors.white, fontSize: 35)),
             ],
           ),
           Row(
