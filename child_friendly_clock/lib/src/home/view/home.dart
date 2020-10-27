@@ -13,6 +13,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  var now = new DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,13 +39,10 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              //margin: EdgeInsets.only(left: 20),
-              // TODO: Make the 'Morning' message dyanmic to the time that it is
-              child: greetingMessage(),
+              child: greetingMessage(now.hour),
             ),
             Container(
-              //margin: EdgeInsets.only(left: 20),
-              child: todaysDate(),
+              child: todaysDate(now.month, now.day, now.year),
             ),
             Container(
               child: currentTime(),
@@ -58,22 +57,38 @@ class _HomeState extends State<Home> {
     );
   }
 
-  // TODO: Make the 'Morning' message dyanmic to the time that it is
-  Widget greetingMessage() {
-    var timeOfDay = 'Morning';
+// Function to deterimine if it is morning, afternoon, or night
+  String timeOfDay(int hour) {
+    String timeOfDay = '';
 
+    if (hour >= 20 || hour < 4) {
+      // 8pm - 4am
+      timeOfDay = 'Night';
+    } else if (hour >= 5 || hour < 11) {
+      // 5am - 11am
+      timeOfDay = 'Morning';
+    } else if (hour >= 12 || hour <= 19) {
+      // 12pm - 7pm
+      timeOfDay = 'Afternoon';
+    } else {
+      timeOfDay = 'undefined';
+    }
+    return timeOfDay;
+  }
+
+  Widget greetingMessage(int hour) {
     return Container(
       //margin: EdgeInsets.only(left: 20),
       child: Row(
         children: [
-          Text('Good', style: TextStyle(color: Colors.white, fontSize: 40, fontFamily: 'Open Sans')),
-          Text(timeOfDay, style: TextStyle(color: Colors.red[400], fontSize: 40, fontFamily: 'Open Sans', fontWeight: FontWeight.bold)),
+          Text('Good ', style: TextStyle(color: Colors.white, fontSize: 40, fontFamily: 'Open Sans')),
+          Text(timeOfDay(hour), style: TextStyle(color: Colors.red[400], fontSize: 40, fontFamily: 'Open Sans', fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
 
-  Widget todaysDate() {
+  Widget todaysDate(var month, var day, var year) {
     /* var day;
     var date;
     var month; */
