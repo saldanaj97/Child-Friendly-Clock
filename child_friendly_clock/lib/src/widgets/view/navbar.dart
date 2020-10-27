@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../home/view/home.dart';
 import '../../alarm/view/alarm.dart';
 import '../../stopwatch/view/stopwatch.dart';
 import '../../timer/view/timer.dart';
 
-class Navbar extends StatefulWidget {
-  @override
-  _NavbarState createState() => _NavbarState();
-}
-
-class _NavbarState extends State<Navbar> {
+class Navbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -22,7 +18,7 @@ class _NavbarState extends State<Navbar> {
                 icon: Icon(Icons.watch_later, color: Colors.white, size: 35),
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                  Navigator.push(context, SizeRoute(page: Home()));
                 }),
             title: Text(
               'Clock',
@@ -33,7 +29,7 @@ class _NavbarState extends State<Navbar> {
               icon: Icon(Icons.alarm, color: Colors.white, size: 35),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => alarm()));
+                Navigator.push(context, SizeRoute(page: alarm()));
               }),
           title: Text(
             'Alarm',
@@ -45,7 +41,7 @@ class _NavbarState extends State<Navbar> {
               icon: Icon(Icons.hourglass_bottom, color: Colors.white, size: 35),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Timer()));
+                Navigator.push(context, SizeRoute(page: Timer()));
               }),
           title: Text(
             'Timer',
@@ -57,7 +53,7 @@ class _NavbarState extends State<Navbar> {
               icon: Icon(Icons.timer, color: Colors.white, size: 35),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => StopwatchPage()));
+                Navigator.push(context, SizeRoute(page: StopwatchPage()));
               }),
           title: Text(
             'Stopwatch',
@@ -67,4 +63,15 @@ class _NavbarState extends State<Navbar> {
       ],
     );
   }
+}
+
+class SizeRoute extends PageRouteBuilder {
+  final Widget page;
+  SizeRoute({this.page})
+      : super(
+          pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => page,
+          transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) => Align(
+            child: SizeTransition(sizeFactor: animation, child: child),
+          ),
+        );
 }
