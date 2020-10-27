@@ -13,10 +13,30 @@ class _NavbarState extends State<Navbar> {
       backgroundColor: const Color(0xff2d2e40),
       type: BottomNavigationBarType.fixed,
       items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Clock', style: TextStyle(color: Colors.white))),
-        BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Alarm', style: TextStyle(color: Colors.white))),
-        BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Timer', style: TextStyle(color: Colors.white))),
-        BottomNavigationBarItem(icon: Icon(Icons.timer, color: Colors.white), title: Text('Stopwatch', style: TextStyle(color: Colors.white))),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.watch_later, color: Colors.white, size: 35),
+            title: Text(
+              'Clock',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            )),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.alarm, color: Colors.white, size: 35),
+            title: Text(
+              'Alarm',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            )),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.hourglass_bottom, color: Colors.white, size: 35),
+            title: Text(
+              'Timer',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            )),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.timer, color: Colors.white, size: 35),
+            title: Text(
+              'Stopwatch',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            )),
       ],
     );
   }
