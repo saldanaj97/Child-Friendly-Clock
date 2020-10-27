@@ -80,7 +80,7 @@ class _AlarmState extends State<alarm> {
                 return SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
-                    childAspectRatio: 1.75,
+                    childAspectRatio: 2,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
