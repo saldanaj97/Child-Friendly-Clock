@@ -41,7 +41,11 @@ class _AlarmCardsState extends State<AlarmCards> {
               onDismissed: (direction) {
                 DBProvider.db.deleteAlarm(widget.alarm.alarmID);
                 widget.updateListCallback();
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text(widget.alarm.name + ' alarm deleted')));
               },
+              background: Container(
+                color: Colors.red,
+              ),
               child: Container(
                 width: 325,
                 height: height,
