@@ -103,28 +103,28 @@ class _CreateAlarmState extends State<CreateAlarm> {
                       fontSize: 28.0,
                     )),
                 Expanded(
-                    child: TextField(
-                  decoration: InputDecoration(border: InputBorder.none, hintText: 'enter name', hintStyle: TextStyle(color: Colors.grey[500])),
-                  autofocus: false,
-                  keyboardType: TextInputType.text,
-                  controller: _nameController,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28.0,
-                    letterSpacing: 2.0,
+                  child: TextField(
+                    decoration: InputDecoration(border: InputBorder.none, hintText: 'enter name', hintStyle: TextStyle(color: Colors.grey[500])),
+                    autofocus: false,
+                    keyboardType: TextInputType.text,
+                    controller: _nameController,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28.0,
+                      letterSpacing: 2.0,
+                    ),
+                    onChanged: (text) {
+                      setState(() {
+                        if (text != '') {
+                          canSave = true;
+                        } else {
+                          canSave = false;
+                        }
+                      });
+                    },
                   ),
-                  onChanged: (text) {
-                    print('WE ARE HERE: ' + text);
-                    setState(() {
-                      if (text != '') {
-                        canSave = true;
-                      } else {
-                        canSave = false;
-                      }
-                    });
-                  },
-                ))
+                )
               ],
             ),
             Divider(
@@ -145,7 +145,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                     initialValue: newAlarm.hour,
                     minValue: 1,
                     maxValue: 12,
-                    listViewWidth: 60.0,
+                    listViewWidth: 35.0,
                     onChanged: (newValue) => setState(() => newAlarm.hour = newValue)),
                 Text(':',
                     style: TextStyle(

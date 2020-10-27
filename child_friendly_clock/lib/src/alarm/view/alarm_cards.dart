@@ -30,127 +30,139 @@ class _AlarmCardsState extends State<AlarmCards> {
     else
       time = TimeOfDay(hour: widget.alarm.hour, minute: widget.alarm.minute);
 
-    return AnimatedContainer(
-      duration: Duration(seconds: 1),
+    return Stack(
       alignment: Alignment.center,
-      child: Stack(
-        children: <Widget>[
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                color: Colors.black,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Dismissible(
+              key: UniqueKey(),
+              onDismissed: (direction) {
+                DBProvider.db.deleteAlarm(widget.alarm.alarmID);
+                widget.updateListCallback();
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text(widget.alarm.name + ' deleted')));
+              },
+              background: Container(
+                color: Colors.red,
+              ),
+              child: Container(
                 width: 325,
                 height: height,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.topCenter,
-                      child: Stack(
-                        children: <Widget>[
-                          /* **** ALARM LABEL **** */
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(left: 10, top: 5, bottom: 10),
-                                child: Icon(
-                                  Icons.arrow_right,
-                                  size: 45,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 5),
-                                child: Text(
-                                  widget.alarm.name,
-                                  style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    fontSize: 23,
-                                    color: const Color(0xffffffff),
-                                    fontWeight: FontWeight.w600,
+                child: Card(
+                  color: Color(0xFF434974),
+                  elevation: 15,
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.topCenter,
+                        child: Stack(
+                          children: <Widget>[
+                            /* **** ALARM LABEL **** */
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(left: 10, top: 5, bottom: 10),
+                                  child: Icon(
+                                    Icons.arrow_right,
+                                    size: 45,
+                                    color: Colors.white,
                                   ),
-                                  textAlign: TextAlign.left,
                                 ),
-                              ),
-                            ],
-                          ),
-                          /* **** ON/OFF SWITCH **** */
-                          Container(
-                            alignment: Alignment.topRight,
-                            child: Switch(
-                              value: isSwitched,
-                              onChanged: (value) {
-                                setState(() {
-                                  isSwitched = value; //TODO: Make the on/off switch actually turn alarm on/off
-                                  print(isSwitched);
-                                });
-                              },
-                              activeTrackColor: Colors.lightGreenAccent,
-                              activeColor: Colors.green,
-                            ),
-                          ),
-                          /* **** DAYS ALARM IS ACTIVE **** */
-                          Container(
-                            margin: EdgeInsets.only(top: 50, left: 24),
-                            child: Text(
-                              time.format(context),
-                              style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontSize: 40,
-                                color: const Color(0xffffffff),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.bottomLeft,
-                            margin: EdgeInsets.only(left: 9),
-                            child: ExpansionTile(
-                              initiallyExpanded: false,
-                              title: Text(
-                                'Mon - Fri',
-                                style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 25,
-                                  color: const Color(0xffffffff),
-                                  fontWeight: FontWeight.w300,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    /*editAlarm('M'),
-                                    editAlarm('T'),
-                                    editAlarm('W'),
-                                    editAlarm('TR'),
-                                    editAlarm('F'),
-                                    editAlarm('Sa'),
-                                    editAlarm('Su'),*/
-                                    IconButton(
-                                        icon: Icon(Icons.cancel),
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          DBProvider.db.deleteAlarm(widget.alarm.alarmID);
-                                          widget.updateListCallback();
-                                          print('Delete Alarm Pressed');
-                                        }),
-                                  ],
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  child: Text(
+                                    widget.alarm.name,
+                                    style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 23,
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                            /* **** ON/OFF SWITCH **** */
+                            Container(
+                              alignment: Alignment.topRight,
+                              child: Switch(
+                                value: isSwitched,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isSwitched = value; //TODO: Make the on/off switch actually turn alarm on/off
+                                    print(isSwitched);
+                                  });
+                                },
+                                activeTrackColor: Colors.lightGreenAccent,
+                                activeColor: Colors.green,
+                              ),
+                            ),
+                            /* **** DAYS ALARM IS ACTIVE **** */
+                            Container(
+                              margin: EdgeInsets.only(top: 50, left: 24),
+                              child: Text(
+                                time.format(context),
+                                style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 40,
+                                  color: const Color(0xffffffff),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.bottomLeft,
+                              width: 325,
+                              margin: EdgeInsets.only(left: 25),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'Mon - Fri',
+                                    style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 25,
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 100),
+                                    child: Text(
+                                      'Edit',
+                                      style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontSize: 20,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    padding: EdgeInsets.only(),
+                                    icon: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {},
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
+            )
+          ],
+        ),
+      ],
     );
   }
 
