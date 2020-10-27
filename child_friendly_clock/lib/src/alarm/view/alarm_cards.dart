@@ -41,7 +41,7 @@ class _AlarmCardsState extends State<AlarmCards> {
               onDismissed: (direction) {
                 DBProvider.db.deleteAlarm(widget.alarm.alarmID);
                 widget.updateListCallback();
-                Scaffold.of(context).showSnackBar(SnackBar(content: Text(widget.alarm.name + ' alarm deleted')));
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text(widget.alarm.name + ' deleted')));
               },
               background: Container(
                 color: Colors.red,
@@ -115,8 +115,9 @@ class _AlarmCardsState extends State<AlarmCards> {
                             Container(
                               alignment: Alignment.bottomLeft,
                               width: 325,
-                              margin: EdgeInsets.only(left: 9),
+                              margin: EdgeInsets.only(left: 25),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
                                     'Mon - Fri',
@@ -129,7 +130,7 @@ class _AlarmCardsState extends State<AlarmCards> {
                                     textAlign: TextAlign.left,
                                   ),
                                   Container(
-                                    padding: EdgeInsets.only(left: 115),
+                                    padding: EdgeInsets.only(left: 100),
                                     child: Text(
                                       'Edit',
                                       style: TextStyle(
