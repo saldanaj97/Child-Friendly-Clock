@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
@@ -19,44 +16,39 @@ class SaveButton extends StatefulWidget {
 class _SaveButtonState extends State<SaveButton> {
   @override
   Widget build(BuildContext context) {
-    if(widget.active){
-      return
-          Expanded(child: FlatButton(
-            textColor: Colors.white,
-            shape: CircleBorder(),
-            child: Text(
-                'Save',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,)),
-            color: Colors.lightBlue,
-            onPressed: () {
-              widget.save();
-            },
-            height: 100,
-          )
-        );
-    }
-    else{
+    if (widget.active) {
       return Expanded(
           child: FlatButton(
-            textColor: Colors.grey,
-            shape: CircleBorder(),
-            child: Text(
-                'Save',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,)),
-            color: Colors.grey[800],
-            onPressed: () {
-            },
-            height: 100,
-        )
-      );
+        textColor: Colors.white,
+        shape: CircleBorder(),
+        child: Text('Save',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+            )),
+        color: Colors.lightBlue,
+        onPressed: () {
+          widget.save();
+        },
+        height: 100,
+      ));
+    } else {
+      return Expanded(
+          child: FlatButton(
+        textColor: Colors.grey,
+        shape: CircleBorder(),
+        child: Text('Save',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+            )),
+        color: Colors.grey[800],
+        onPressed: () {},
+        height: 100,
+      ));
     }
   }
 }
-
 
 class CreateAlarm extends StatefulWidget {
   final VoidCallback clickCallback;
@@ -88,108 +80,99 @@ class _CreateAlarmState extends State<CreateAlarm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 45, 45, 70),
-      appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+        backgroundColor: Color.fromARGB(255, 45, 45, 70),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text('Add Alarm'),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 55, 55, 70),
         ),
-        title: Text('Add Alarm'),
-        centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 55, 55, 70),
-      ),
-      body: Padding(
+        body: Padding(
           padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
-          child: Column(
-          children: <Widget>[
-            Row(
-             children: <Widget>[
-               Text(
-                   'Name:',
-                   style: TextStyle(
-                       color: Colors.white,
-                       letterSpacing: 2.0,
-                       fontWeight: FontWeight.bold,
-                       fontSize: 28.0,
-                   )),
-               Expanded(
-                  child: TextField(
-                   decoration: InputDecoration(
-                       border: InputBorder.none,
-                       hintText: 'enter name',
-                       hintStyle: TextStyle(color: Colors.grey[500])
-                   ),
-                   autofocus: false,
-                   keyboardType: TextInputType.text,
-                   controller: _nameController,
-                   textAlign: TextAlign.right,
-                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28.0,
-                      letterSpacing: 2.0,
-                    ),
-                    onChanged: (text) {
-                     print('WE ARE HERE: ' + text);
-                     setState((){
-                       if(text != '') {
-                          canSave = true;
-                       }
-                       else {
-                         canSave = false;
-                       }
-                     });
-
-                    },
-                 )
-               )
-             ],
-            ),
-            Divider(
-              color:Colors.grey[400],
-              height: 5.0,
-            ),
+          child: Column(children: <Widget>[
             Row(
               children: <Widget>[
-                Text(
-                    'Time:',
+                Text('Name:',
                     style: TextStyle(
                       color: Colors.white,
                       letterSpacing: 2.0,
                       fontWeight: FontWeight.bold,
                       fontSize: 28.0,
-                    )
-                ),
-                SizedBox(width: 20.0),
-                NumberPicker.integer(initialValue: newAlarm.hour, minValue: 1, maxValue: 12,listViewWidth: 60.0,
-                    onChanged: (newValue) => setState(() => newAlarm.hour = newValue)
-                ),
-                Text(
-                    ':',
+                    )),
+                Expanded(
+                    child: TextField(
+                  decoration: InputDecoration(border: InputBorder.none, hintText: 'enter name', hintStyle: TextStyle(color: Colors.grey[500])),
+                  autofocus: false,
+                  keyboardType: TextInputType.text,
+                  controller: _nameController,
+                  textAlign: TextAlign.right,
                   style: TextStyle(
-                    color: Colors.lightBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  )
-                ),
-                NumberPicker.integer(initialValue: newAlarm.minute, minValue: 0, maxValue: 59, zeroPad: true, listViewWidth: 60.0,
-                    onChanged: (newValue) => setState(() => newAlarm.minute = newValue)
-                ),
+                    color: Colors.white,
+                    fontSize: 28.0,
+                    letterSpacing: 2.0,
+                  ),
+                  onChanged: (text) {
+                    print('WE ARE HERE: ' + text);
+                    setState(() {
+                      if (text != '') {
+                        canSave = true;
+                      } else {
+                        canSave = false;
+                      }
+                    });
+                  },
+                ))
+              ],
+            ),
+            Divider(
+              color: Colors.grey[400],
+              height: 5.0,
+            ),
+            Row(
+              children: <Widget>[
+                Text('Time:',
+                    style: TextStyle(
+                      color: Colors.white,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28.0,
+                    )),
+                SizedBox(width: 20.0),
+                NumberPicker.integer(
+                    initialValue: newAlarm.hour,
+                    minValue: 1,
+                    maxValue: 12,
+                    listViewWidth: 60.0,
+                    onChanged: (newValue) => setState(() => newAlarm.hour = newValue)),
+                Text(':',
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    )),
+                NumberPicker.integer(
+                    initialValue: newAlarm.minute,
+                    minValue: 0,
+                    maxValue: 59,
+                    zeroPad: true,
+                    listViewWidth: 60.0,
+                    onChanged: (newValue) => setState(() => newAlarm.minute = newValue)),
                 ToggleButtons(
-                  children: [
-                    Text('AM'),
-                    Text('PM')
-                  ],
+                    children: [Text('AM'), Text('PM')],
                     isSelected: _selections,
                     onPressed: (int index) {
                       setState(() {
-                        for(int btnIndex = 0; btnIndex < _selections.length; btnIndex++) {
-                          if(btnIndex == index) {
+                        for (int btnIndex = 0; btnIndex < _selections.length; btnIndex++) {
+                          if (btnIndex == index) {
                             _selections[btnIndex] = true;
-                            if(btnIndex == 0)
+                            if (btnIndex == 0)
                               newAlarm.period = "AM";
                             else
                               newAlarm.period = "PM";
-                          }
-                          else{
+                          } else {
                             _selections[btnIndex] = false;
                           }
                         }
@@ -197,28 +180,27 @@ class _CreateAlarmState extends State<CreateAlarm> {
                     })
               ],
             ),
-            Divider(
-              color:Colors.grey[400],
-              height: 5.0
-            ),
+            Divider(color: Colors.grey[400], height: 5.0),
             SizedBox(height: 20.0),
             Row(
               children: [
-                Expanded(child: FlatButton(
+                Expanded(
+                    child: FlatButton(
                   textColor: Colors.lightBlue,
                   shape: CircleBorder(),
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,)),
+                  child: Text('Cancel',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      )),
                   color: Colors.white,
                   onPressed: () => Navigator.of(context).pop(),
                   height: 100,
                 )),
                 //savebutton
-                SaveButton(active: canSave,
-                    save: (){
+                SaveButton(
+                    active: canSave,
+                    save: () {
                       newAlarm.name = _nameController.text;
                       DBProvider.db.newAlarm(newAlarm);
                       widget.clickCallback();
@@ -226,9 +208,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                     })
               ],
             )
-          ]
-        ),
-      )
-    );
+          ]),
+        ));
   }
 }
