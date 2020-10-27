@@ -1,8 +1,6 @@
 import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import './alarm_cards.dart';
-
 
 class AlarmCreate extends StatefulWidget {
   AlarmCreate({
@@ -52,7 +50,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
               childAspectRatio: 2.25,
             ),
             delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
+              (BuildContext context, int index) {
                 return Text('');
               },
             ),
