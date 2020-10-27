@@ -8,7 +8,7 @@ class MinuteHandPainter extends CustomPainter {
   int seconds;
 
   MinuteHandPainter({this.minutes, this.seconds}) : minuteHandPaint = new Paint() {
-    minuteHandPaint.color = const Color(0xFF333333);
+    minuteHandPaint.color = Colors.cyan;
     minuteHandPaint.style = PaintingStyle.fill;
   }
 
@@ -21,17 +21,23 @@ class MinuteHandPainter extends CustomPainter {
 
     canvas.rotate(2 * pi * ((this.minutes + (this.seconds / 60)) / 60));
 
-    Path path = new Path();
-    path.moveTo(-1.5, -radius - 10.0);
-    path.lineTo(-5.0, -radius / 1.8);
-    path.lineTo(-2.0, 10.0);
-    path.lineTo(2.0, 10.0);
-    path.lineTo(5.0, -radius / 1.8);
-    path.lineTo(1.5, -radius - 10.0);
-    path.close();
+    // hour_hand
+    double hour_hand_xs = size.width / 300;
+    double hour_hand_ys = size.height / 100;
 
-    canvas.drawPath(path, minuteHandPaint);
-    canvas.drawShadow(path, Colors.black, 4.0, false);
+    Path minuteHand = Path()
+      ..moveTo(6.56 * hour_hand_xs, 0 * hour_hand_ys)
+      ..cubicTo(10.18 * hour_hand_xs, 0 * hour_hand_ys, 13.11 * hour_hand_xs, 2.94 * hour_hand_ys, 13.11 * hour_hand_xs, 6.56 * hour_hand_ys)
+      ..cubicTo(13.11 * hour_hand_xs, 45.95 * hour_hand_ys, 10.18 * hour_hand_xs, 48.88 * hour_hand_ys, 6.56 * hour_hand_xs, 48.88 * hour_hand_ys)
+      ..cubicTo(2.94 * hour_hand_xs, 48.88 * hour_hand_ys, 0 * hour_hand_xs, 45.95 * hour_hand_ys, 0 * hour_hand_xs, 42.33 * hour_hand_ys)
+      ..lineTo(0 * hour_hand_xs, 6.56 * hour_hand_ys)
+      ..cubicTo(0 * hour_hand_xs, 2.94 * hour_hand_ys, 2.94 * hour_hand_xs, 0 * hour_hand_ys, 6.56 * hour_hand_xs, 0 * hour_hand_ys)
+      ..close();
+
+    minuteHand = minuteHand.shift(Offset(hour_hand_xs * -5, hour_hand_ys * -47));
+
+    canvas.drawPath(minuteHand, minuteHandPaint);
+    canvas.drawShadow(minuteHand, Colors.black, 4.0, false);
 
     canvas.restore();
   }

@@ -26,19 +26,19 @@ class ClockFace extends StatelessWidget {
                   painter: ClockDialPainter(clockText: ClockText.arabic),
                 ),
               ),
+              //clock hands go here
+              ClockHands(),
               //centerpoint
               Center(
                 child: Container(
-                  width: 15.0,
-                  height: 15.0,
+                  width: 20.0,
+                  height: 20.0,
                   decoration: new BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
                   ),
                 ),
               ),
-              //clock hands go here
-              ClockHands(),
             ],
           ),
         ),

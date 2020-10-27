@@ -7,7 +7,7 @@ class HourHandPainter extends CustomPainter {
   int minutes;
 
   HourHandPainter({this.hours, this.minutes}) : hourHandPaint = new Paint() {
-    hourHandPaint.color = Colors.black87;
+    hourHandPaint.color = Colors.orange;
     hourHandPaint.style = PaintingStyle.fill;
   }
 
@@ -21,29 +21,23 @@ class HourHandPainter extends CustomPainter {
 
     //checks if hour is greater than 12 before calculating rotation
     canvas.rotate(this.hours >= 12 ? 2 * pi * ((this.hours - 12) / 12 + (this.minutes / 720)) : 2 * pi * ((this.hours / 12) + (this.minutes / 720)));
+    // hour_hand
+    double hour_hand_xs = size.width / 300;
+    double hour_hand_ys = size.height / 150;
 
-    Path path = new Path();
+    Path hourHand = Path()
+      ..moveTo(6.56 * hour_hand_xs, 0 * hour_hand_ys)
+      ..cubicTo(10.18 * hour_hand_xs, 0 * hour_hand_ys, 13.11 * hour_hand_xs, 2.94 * hour_hand_ys, 13.11 * hour_hand_xs, 6.56 * hour_hand_ys)
+      ..cubicTo(13.11 * hour_hand_xs, 45.95 * hour_hand_ys, 10.18 * hour_hand_xs, 48.88 * hour_hand_ys, 6.56 * hour_hand_xs, 48.88 * hour_hand_ys)
+      ..cubicTo(2.94 * hour_hand_xs, 48.88 * hour_hand_ys, 0 * hour_hand_xs, 45.95 * hour_hand_ys, 0 * hour_hand_xs, 42.33 * hour_hand_ys)
+      ..lineTo(0 * hour_hand_xs, 6.56 * hour_hand_ys)
+      ..cubicTo(0 * hour_hand_xs, 2.94 * hour_hand_ys, 2.94 * hour_hand_xs, 0 * hour_hand_ys, 6.56 * hour_hand_xs, 0 * hour_hand_ys)
+      ..close();
 
-    //heart shape head for the hour hand
-    path.moveTo(0.0, -radius + 15.0);
-    path.quadraticBezierTo(-3.5, -radius + 25.0, -15.0, -radius + radius / 4);
-    path.quadraticBezierTo(-20.0, -radius + radius / 3, -7.5, -radius + radius / 3);
-    path.lineTo(0.0, -radius + radius / 4);
-    path.lineTo(7.5, -radius + radius / 3);
-    path.quadraticBezierTo(20.0, -radius + radius / 3, 15.0, -radius + radius / 4);
-    path.quadraticBezierTo(3.5, -radius + 25.0, 0.0, -radius + 15.0);
+    hourHand = hourHand.shift(Offset(hour_hand_xs * -5, hour_hand_ys * -47));
 
-    //hour hand stem
-    path.moveTo(-1.0, -radius + radius / 4);
-    path.lineTo(-5.0, -radius + radius / 2);
-    path.lineTo(-2.0, 0.0);
-    path.lineTo(2.0, 0.0);
-    path.lineTo(5.0, -radius + radius / 2);
-    path.lineTo(1.0, -radius + radius / 4);
-    path.close();
-
-    canvas.drawPath(path, hourHandPaint);
-    canvas.drawShadow(path, Colors.black, 2.0, false);
+    canvas.drawPath(hourHand, hourHandPaint);
+    canvas.drawShadow(hourHand, Colors.black, 4.0, false);
 
     canvas.restore();
   }
