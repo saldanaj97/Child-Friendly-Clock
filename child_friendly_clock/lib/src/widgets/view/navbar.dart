@@ -38,7 +38,7 @@ class Navbar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: IconButton(
-              icon: Icon(Icons.hourglass_bottom, color: Colors.white, size: 35),
+              icon: Icon(Icons.hourglass_full, color: Colors.white, size: 35),
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.push(context, SizeRoute(page: Timer()));
