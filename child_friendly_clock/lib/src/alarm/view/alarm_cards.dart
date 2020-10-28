@@ -15,21 +15,20 @@ class AlarmCards extends StatefulWidget {
 class _AlarmCardsState extends State<AlarmCards> {
   bool isSwitched = false;
 
-  String intToDay(int i){
-    if(i == 0)
+  String intToDay(int i) {
+    if (i == 0)
       return "Sun";
-    else if(i == 1)
+    else if (i == 1)
       return "Mon";
-    else if(i == 2)
+    else if (i == 2)
       return "Tues";
-    else if(i == 3)
+    else if (i == 3)
       return "Wed";
-    else if(i == 4)
+    else if (i == 4)
       return "Thur";
-    else if(i == 5)
+    else if (i == 5)
       return "Fri";
-    else if(i == 6)
-      return "Sat";
+    else if (i == 6) return "Sat";
     return "";
   }
 
@@ -52,38 +51,34 @@ class _AlarmCardsState extends State<AlarmCards> {
     else
       time = TimeOfDay(hour: widget.alarm.hour, minute: widget.alarm.minute);
 
-    for(int i = 0; i < 7; i++){
+    for (int i = 0; i < 7; i++) {
       List<int> group = [];
-      while(widget.alarm.frequency[i]){
+      while (widget.alarm.frequency[i]) {
         group.add(i);
-        if(i == 6)
-          break;
+        if (i == 6) break;
         i++;
       }
-      if(group.isNotEmpty)
-        groups.add(group);
+      if (group.isNotEmpty) groups.add(group);
     }
-    for(int i = 0; i < groups.length; i++){
-      if(i == 0){
-        if(groups[i].length == 1)
+    for (int i = 0; i < groups.length; i++) {
+      if (i == 0) {
+        if (groups[i].length == 1)
           freq = intToDay(groups[i].first);
-        else if(groups[i].length == 2)
+        else if (groups[i].length == 2)
           freq = intToDay(groups[i].first) + ", " + intToDay(groups[i].last);
         else
           freq = intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
-      }
-      else if(i == groups.length - 1){
-        if(groups[i].length == 1)
+      } else if (i == groups.length - 1) {
+        if (groups[i].length == 1)
           freq = freq + " & " + intToDay(groups[i].first);
-        else if(groups[i].length == 2)
+        else if (groups[i].length == 2)
           freq = freq + ", " + intToDay(groups[i].first) + " & " + intToDay(groups[i].last);
         else
           freq = freq + " & " + intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
-      }
-      else{
-        if(groups[i].length == 1)
+      } else {
+        if (groups[i].length == 1)
           freq = freq + ", " + intToDay(groups[i].first);
-        else if(groups[i].length == 2)
+        else if (groups[i].length == 2)
           freq = freq + ", " + intToDay(groups[i].first) + ", " + intToDay(groups[i].last);
         else
           freq = freq + ", " + intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
@@ -179,35 +174,36 @@ class _AlarmCardsState extends State<AlarmCards> {
                               width: 325,
                               margin: EdgeInsets.only(left: 25),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     freq,
                                     style: TextStyle(
                                       fontFamily: 'Open Sans',
-                                      fontSize: 25,
+                                      fontSize: 15,
                                       color: const Color(0xffffffff),
                                       fontWeight: FontWeight.w300,
                                     ),
                                     textAlign: TextAlign.left,
                                   ),
-                                  Container(
+                                  /* Container(
                                     padding: EdgeInsets.only(left: 100),
                                     child: Text(
                                       'Edit',
                                       style: TextStyle(
                                         fontFamily: 'Open Sans',
-                                        fontSize: 20,
+                                        fontSize: 15,
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                  ),
+                                  ), */
                                   IconButton(
-                                    padding: EdgeInsets.only(),
+                                    padding: EdgeInsets.only(right: 5),
                                     icon: Icon(
                                       Icons.arrow_forward_ios,
                                       color: Colors.white,
+                                      size: 15,
                                     ),
                                     onPressed: () {},
                                   )
