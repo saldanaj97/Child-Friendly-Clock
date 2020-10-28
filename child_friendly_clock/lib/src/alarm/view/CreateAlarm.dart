@@ -4,6 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 
+
 class SaveButton extends StatefulWidget {
   final VoidCallback save;
   final bool active;
@@ -19,32 +20,32 @@ class _SaveButtonState extends State<SaveButton> {
     if (widget.active) {
       return Expanded(
           child: FlatButton(
-        textColor: Colors.white,
-        shape: CircleBorder(),
-        child: Text('Save',
-            style: TextStyle(
+            textColor: Colors.white,
+            shape: CircleBorder(),
+            child: Text('Save',
+              style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20.0,
             )),
-        color: Colors.lightBlue,
-        onPressed: () {
-          widget.save();
-        },
-        height: 100,
+          color: Colors.lightBlue,
+          onPressed: () {
+            widget.save();
+          },
+            //height: 100,
       ));
     } else {
       return Expanded(
           child: FlatButton(
-        textColor: Colors.grey,
-        shape: CircleBorder(),
-        child: Text('Save',
-            style: TextStyle(
+            textColor: Colors.grey,
+            shape: CircleBorder(),
+            child: Text('Save',
+              style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20.0,
-            )),
-        color: Colors.grey[800],
-        onPressed: () {},
-        height: 100,
+              )),
+            color: Colors.grey[800],
+            onPressed: () {},
+            //height: 100,
       ));
     }
   }
@@ -122,6 +123,8 @@ class _CreateAlarmState extends State<CreateAlarm> {
     _nameController.dispose();
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -261,16 +264,15 @@ class _CreateAlarmState extends State<CreateAlarm> {
               children: [
                 Expanded(
                     child: FlatButton(
-                  textColor: Colors.lightBlue,
-                  shape: CircleBorder(),
-                  child: Text('Cancel',
-                      style: TextStyle(
+                      textColor: Colors.lightBlue,
+                      shape: CircleBorder(),
+                      child: Text('Cancel',
+                        style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20.0,
                       )),
                   color: Colors.white,
-                  onPressed: () => Navigator.of(context).pop(),
-                  height: 100,
+                  onPressed: () => Navigator.of(context).pop(), //height: 100,
                 )),
                 //savebutton
                 SaveButton(

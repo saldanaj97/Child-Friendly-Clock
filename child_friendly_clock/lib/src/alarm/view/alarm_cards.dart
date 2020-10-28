@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class AlarmCards extends StatefulWidget {
   final Alarm alarm;
@@ -12,8 +15,65 @@ class AlarmCards extends StatefulWidget {
   _AlarmCardsState createState() => _AlarmCardsState();
 }
 
+enum FormType{
+  main,
+  edit,
+}
+
+
+
 class _AlarmCardsState extends State<AlarmCards> {
   bool isSwitched = false;
+  List<bool> _selections = [false, false];
+  Future alarmsFuture;
+  FormType _form = FormType.main;
+  TextEditingController _nameController;
+  bool canSave = false;
+  bool monday = false;
+  bool tuesday = false;
+  bool wednesday = false;
+  bool thursday = false;
+  bool friday = false;
+  bool saturday = false;
+  bool sunday = false;
+
+
+
+  @override
+  void initState(){
+    super.initState();
+    _nameController = TextEditingController(text: widget.alarm.name);
+    if(widget.alarm.period == 'AM'){
+      _selections = [true, false];
+    }
+    else{
+      _selections = [false, true];
+    }
+  }
+
+  @override
+  void dispose(){
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  getAlarms() async{
+    final alarmsData = await DBProvider.db.getAlarms();
+    return alarmsData;
+  }
+
+  void _formChange() async{
+    setState(() {
+      if(_form == FormType.main){
+        _form = FormType.edit;
+      }
+      else{
+        _form = FormType.main;
+      }
+    });
+  }
+
+
 
   String intToDay(int i) {
     if (i == 0)
@@ -40,6 +100,8 @@ class _AlarmCardsState extends State<AlarmCards> {
 
     List<List<int>> groups = [];
 
+
+
 /*     print(widget.alarm.name);
     print('Hour Value: ' + '${widget.alarm.hour}');
     print('Period: ' + widget.alarm.period); */
@@ -50,7 +112,7 @@ class _AlarmCardsState extends State<AlarmCards> {
       time = TimeOfDay(hour: widget.alarm.hour - 12, minute: widget.alarm.minute);
     else
       time = TimeOfDay(hour: widget.alarm.hour, minute: widget.alarm.minute);
-
+    
     for (int i = 0; i < 7; i++) {
       List<int> group = [];
       while (widget.alarm.frequency[i]) {
@@ -125,47 +187,35 @@ class _AlarmCardsState extends State<AlarmCards> {
                                     size: 45,
                                     color: Colors.white,
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    widget.alarm.name,
-                                    style: TextStyle(
-                                      fontFamily: 'Open Sans',
-                                      fontSize: 23,
-                                      color: const Color(0xffffffff),
-                                      fontWeight: FontWeight.w600,
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 5),
+                                    child: Text(
+                                      widget.alarm.name,
+                                      style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontSize: 23,
+                                        color: const Color(0xffffffff),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.left,
                                     ),
-                                    textAlign: TextAlign.left,
                                   ),
-                                ),
-                              ],
-                            ),
-                            /* **** ON/OFF SWITCH **** */
-                            Container(
-                              alignment: Alignment.topRight,
-                              child: Switch(
-                                value: isSwitched,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isSwitched = value; //TODO: Make the on/off switch actually turn alarm on/off
-                                    print(isSwitched);
-                                  });
-                                },
-                                activeTrackColor: Colors.lightGreenAccent,
-                                activeColor: Colors.green,
+                                ],
                               ),
-                            ),
-                            /* **** DAYS ALARM IS ACTIVE **** */
-                            Container(
-                              margin: EdgeInsets.only(top: 50, left: 24),
-                              child: Text(
-                                time.format(context),
-                                style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 40,
-                                  color: const Color(0xffffffff),
-                                  fontWeight: FontWeight.w600,
+                              /* **** ON/OFF SWITCH **** */
+                              Container(
+                                alignment: Alignment.topRight,
+                                child: Switch(
+                                  value: isSwitched,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isSwitched =
+                                          value; //TODO: Make the on/off switch actually turn alarm on/off
+                                      print(isSwitched);
+                                    });
+                                  },
+                                  activeTrackColor: Colors.lightGreenAccent,
+                                  activeColor: Colors.green,
                                 ),
                               ),
                             ),
@@ -195,39 +245,70 @@ class _AlarmCardsState extends State<AlarmCards> {
                                         fontSize: 15,
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w500,
+                              /* **** DAYS ALARM IS ACTIVE **** */
+                              Container(
+                                margin: EdgeInsets.only(top: 50, left: 24),
+                                child: Text(
+                                  time.format(context),
+                                  style: TextStyle(
+                                    fontFamily: 'Open Sans',
+                                    fontSize: 40,
+                                    color: const Color(0xffffffff),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.bottomLeft,
+                                width: 325,
+                                margin: EdgeInsets.only(left: 25),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceEvenly,
+                                  children: [
+                                    Text(
+                                      'Mon - Fri',
+                                      style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontSize: 25,
+                                        color: const Color(0xffffffff),
+                                        fontWeight: FontWeight.w300,
                                       ),
+                                      textAlign: TextAlign.left,
                                     ),
                                   ), */
-                                  IconButton(
-                                    padding: EdgeInsets.only(right: 5),
-                                    icon: Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Colors.white,
-                                      size: 15,
-                                    ),
-                                    onPressed: () {},
-                                  )
-                                ],
+                                    IconButton(
+                                      padding: EdgeInsets.only(),
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        _formChange();
+                                      },
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
-        ),
-      ],
-    );
-  }
+              )
+            ],
+          ),
+        ],
+      );
+    }
+   
 
 // Function that will contain the dropdown for the expandable list
-  Widget editAlarm(dayOfTheWeek) {
+  Widget editAlarm() {
     var selected = false;
-
+    print("edditing");
     return Container(
       child: ClipOval(
         child: Container(
@@ -245,7 +326,7 @@ class _AlarmCardsState extends State<AlarmCards> {
             },
             child: Center(
               child: Text(
-                dayOfTheWeek,
+                "dayOfTheWeek",
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
