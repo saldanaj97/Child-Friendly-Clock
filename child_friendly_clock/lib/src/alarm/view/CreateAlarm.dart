@@ -51,6 +51,51 @@ class _SaveButtonState extends State<SaveButton> {
   }
 }
 
+class FrequencyButton extends StatefulWidget {
+  final String day;
+  final bool active;
+  final VoidCallback toggle;
+  FrequencyButton({this.day, this.active, this.toggle});
+
+  @override
+  _FrequencyButtonState createState() => _FrequencyButtonState();
+}
+
+class _FrequencyButtonState extends State<FrequencyButton> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.active) {
+        return RawMaterialButton(
+          child: Text(widget.day,
+                      style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0,
+                      color: Colors.grey[200]
+              )),
+          shape: CircleBorder(),
+          fillColor: Colors.blue[500],
+          onPressed: widget.toggle,
+          constraints: BoxConstraints(minWidth: 40, minHeight: 40, maxWidth: 41, maxHeight: 40)
+        );
+    }
+    else {
+      return RawMaterialButton(
+        child: Text(widget.day,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14.0,
+                color: Colors.grey[900]
+            )),
+        shape: CircleBorder(),
+        fillColor: Colors.grey[200],
+        onPressed: widget.toggle,
+        constraints: BoxConstraints(minWidth: 40, minHeight: 40, maxWidth: 41, maxHeight: 40),
+      );
+    }
+  }
+}
+
+
 class CreateAlarm extends StatefulWidget {
   final VoidCallback clickCallback;
   CreateAlarm({this.clickCallback});
@@ -64,6 +109,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
   var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None");
   double proxyMinute = 0.0;
   List<bool> _selections = [true, false];
+  List<bool> _frequency = [false, false, false, false, false, false, false]; // for every day of the week starting with sunday
   bool canSave = false;
 
   @override
@@ -130,10 +176,6 @@ class _CreateAlarmState extends State<CreateAlarm> {
                 )
               ],
             ),
-            Divider(
-              color: Colors.grey[400],
-              height: 5.0,
-            ),
             Row(
               children: <Widget>[
                 Text('Time:',
@@ -183,6 +225,39 @@ class _CreateAlarmState extends State<CreateAlarm> {
                     })
               ],
             ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(child:
+                FrequencyButton(day: 'Sun', active: _frequency[0], toggle: () => setState(() {
+                  _frequency[0] = !_frequency[0];
+                }))),
+                Expanded(child:
+                FrequencyButton(day: 'Mon', active: _frequency[1], toggle: () => setState(() {
+                  _frequency[1] = !_frequency[1];
+                }))),
+                Expanded(child:
+                FrequencyButton(day: 'Tues', active: _frequency[2], toggle: () => setState(() {
+                  _frequency[2] = !_frequency[2];
+                }))),
+                Expanded(child:
+                FrequencyButton(day: 'Wed', active: _frequency[3], toggle: () => setState(() {
+                  _frequency[3] = !_frequency[3];
+                }))),
+                Expanded(child:
+                FrequencyButton(day: 'Thurs', active: _frequency[4], toggle: () => setState(() {
+                  _frequency[4] = !_frequency[4];
+                }))),
+                Expanded(child:
+                FrequencyButton(day: 'Fri', active: _frequency[5], toggle: () => setState(() {
+                  _frequency[5] = !_frequency[5];
+                }))),
+                Expanded(child:
+                FrequencyButton(day: 'Sat', active: _frequency[6], toggle: () => setState(() {
+                  _frequency[6] = !_frequency[6];
+                })))
+              ]
+            ),
             Divider(color: Colors.grey[400], height: 5.0),
             SizedBox(height: 20.0),
             Row(
@@ -204,6 +279,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                     active: canSave,
                     save: () {
                       newAlarm.name = _nameController.text;
+                      newAlarm.frequency = _frequency;
                       DBProvider.db.newAlarm(newAlarm);
                       widget.clickCallback();
                       Navigator.pop(context);

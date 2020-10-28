@@ -75,64 +75,117 @@ class _AlarmCardsState extends State<AlarmCards> {
 
 
 
+  String intToDay(int i) {
+    if (i == 0)
+      return "Sun";
+    else if (i == 1)
+      return "Mon";
+    else if (i == 2)
+      return "Tues";
+    else if (i == 3)
+      return "Wed";
+    else if (i == 4)
+      return "Thur";
+    else if (i == 5)
+      return "Fri";
+    else if (i == 6) return "Sat";
+    return "";
+  }
+
   @override
   Widget build(BuildContext context) {
     var time;
     var height = 150.0;
+    var freq = "";
+
+    List<List<int>> groups = [];
 
 
 
 /*     print(widget.alarm.name);
     print('Hour Value: ' + '${widget.alarm.hour}');
     print('Period: ' + widget.alarm.period); */
+    print('Frequency: ' + widget.alarm.frequency.toString());
     if (widget.alarm.period == "PM" && widget.alarm.hour != 12)
       time = TimeOfDay(hour: widget.alarm.hour + 12, minute: widget.alarm.minute);
     else if (widget.alarm.period == "AM" && widget.alarm.hour == 12)
       time = TimeOfDay(hour: widget.alarm.hour - 12, minute: widget.alarm.minute);
     else
       time = TimeOfDay(hour: widget.alarm.hour, minute: widget.alarm.minute);
+    
+    for (int i = 0; i < 7; i++) {
+      List<int> group = [];
+      while (widget.alarm.frequency[i]) {
+        group.add(i);
+        if (i == 6) break;
+        i++;
+      }
+      if (group.isNotEmpty) groups.add(group);
+    }
+    for (int i = 0; i < groups.length; i++) {
+      if (i == 0) {
+        if (groups[i].length == 1)
+          freq = intToDay(groups[i].first);
+        else if (groups[i].length == 2)
+          freq = intToDay(groups[i].first) + ", " + intToDay(groups[i].last);
+        else
+          freq = intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
+      } else if (i == groups.length - 1) {
+        if (groups[i].length == 1)
+          freq = freq + " & " + intToDay(groups[i].first);
+        else if (groups[i].length == 2)
+          freq = freq + ", " + intToDay(groups[i].first) + " & " + intToDay(groups[i].last);
+        else
+          freq = freq + " & " + intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
+      } else {
+        if (groups[i].length == 1)
+          freq = freq + ", " + intToDay(groups[i].first);
+        else if (groups[i].length == 2)
+          freq = freq + ", " + intToDay(groups[i].first) + ", " + intToDay(groups[i].last);
+        else
+          freq = freq + ", " + intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
+      }
+    }
 
-    if (_form == FormType.main) {
-      return Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Dismissible(
-                key: UniqueKey(),
-                onDismissed: (direction) {
-                  DBProvider.db.deleteAlarm(widget.alarm.alarmID);
-                  widget.updateListCallback();
-                  Scaffold.of(context).showSnackBar(
-                      SnackBar(content: Text(widget.alarm.name + ' deleted')));
-                },
-                background: Container(
-                  color: Colors.red,
-                ),
-                child: Container(
-                  width: 325,
-                  height: height,
-                  child: Card(
-                    color: Color(0xFF434974),
-                    elevation: 15,
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.topCenter,
-                          child: Stack(
-                            children: <Widget>[
-                              /* **** ALARM LABEL **** */
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: 10, top: 5, bottom: 10),
-                                    child: Icon(
-                                      Icons.arrow_right,
-                                      size: 45,
-                                      color: Colors.white,
-                                    ),
+    //print("groups: " + groups.toString());
+    //print("frequency: " + freq);
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Dismissible(
+              key: UniqueKey(),
+              onDismissed: (direction) {
+                DBProvider.db.deleteAlarm(widget.alarm.alarmID);
+                widget.updateListCallback();
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text(widget.alarm.name + ' deleted')));
+              },
+              background: Container(
+                color: Colors.red,
+              ),
+              child: Container(
+                width: 325,
+                height: height,
+                child: Card(
+                  color: Color(0xFF434974),
+                  elevation: 15,
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.topCenter,
+                        child: Stack(
+                          children: <Widget>[
+                            /* **** ALARM LABEL **** */
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(left: 10, top: 5, bottom: 10),
+                                  child: Icon(
+                                    Icons.arrow_right,
+                                    size: 45,
+                                    color: Colors.white,
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(bottom: 5),
@@ -165,6 +218,33 @@ class _AlarmCardsState extends State<AlarmCards> {
                                   activeColor: Colors.green,
                                 ),
                               ),
+                            ),
+                            Container(
+                              alignment: Alignment.bottomLeft,
+                              width: 325,
+                              margin: EdgeInsets.only(left: 25),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    freq,
+                                    style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 15,
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  /* Container(
+                                    padding: EdgeInsets.only(left: 100),
+                                    child: Text(
+                                      'Edit',
+                                      style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontSize: 15,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
                               /* **** DAYS ALARM IS ACTIVE **** */
                               Container(
                                 margin: EdgeInsets.only(top: 50, left: 24),
@@ -196,18 +276,7 @@ class _AlarmCardsState extends State<AlarmCards> {
                                       ),
                                       textAlign: TextAlign.left,
                                     ),
-                                    Container(
-                                      padding: EdgeInsets.only(left: 100),
-                                      child: Text(
-                                        'Edit',
-                                        style: TextStyle(
-                                          fontFamily: 'Open Sans',
-                                          fontSize: 20,
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
+                                  ), */
                                     IconButton(
                                       padding: EdgeInsets.only(),
                                       icon: Icon(
@@ -234,255 +303,7 @@ class _AlarmCardsState extends State<AlarmCards> {
         ],
       );
     }
-    else if(_form == FormType.edit){
-      return Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Dismissible(
-                key: UniqueKey(),
-                onDismissed: (direction) {
-                  DBProvider.db.deleteAlarm(widget.alarm.alarmID);
-                  widget.updateListCallback();
-                  Scaffold.of(context).showSnackBar(
-                      SnackBar(content: Text(widget.alarm.name + ' deleted')));
-                },
-                background: Container(
-                  color: Colors.red,
-                ),
-                child: Container(
-                  width: 325,
-                  height: height*(1.2),
-                  child: Card(
-                    color: Color(0xFF434974),
-                    elevation: 15,
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          alignment: Alignment.topCenter,
-                          child: Stack(
-                            children: <Widget>[
-                              /* **** ALARM LABEL **** */
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: 10, top: 5, bottom: 10),
-                                    child: Icon(
-                                      Icons.arrow_right,
-                                      size: 45,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  // Container for editing the name of the alarm
-                                  Container(
-                                    width: 250,
-                                    margin: EdgeInsets.only(bottom: 5),
-                                    child: TextField(
-                                      autofocus: false,
-                                      decoration: InputDecoration(border: InputBorder.none, hintText: "Enter a Name", hintStyle: TextStyle(color: Colors.grey[500])),
-                                      autocorrect: true,
-                                      textAlign: TextAlign.left,
-                                      keyboardType: TextInputType.text,
-                                      maxLines: 1,
-                                      controller: _nameController,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 23.0,
-                                        letterSpacing: 2.0,
-                                      ),
-                                  ),
-                                  ),
-                                ],
-                              ),
-                              /* **** ON/OFF SWITCH **** */
-                              Container(
-                                alignment: Alignment.topRight,
-                                child: Switch(
-                                  value: isSwitched,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isSwitched =
-                                          value; //TODO: Make the on/off switch actually turn alarm on/off
-                                      print(isSwitched);
-                                    });
-                                  },
-                                  activeTrackColor: Colors.lightGreenAccent,
-                                  activeColor: Colors.green,
-                                ),
-                              ),
-
-
-                              //container for editing the time and am/pm
-                              Container(
-                                margin: EdgeInsets.only(top: 20, left: 5),
-                                child: Row(
-                                  children: <Widget>[
-                                    SizedBox(width: 20),
-                                    NumberPicker.integer(
-                                        initialValue: widget.alarm.hour,
-                                        minValue: 1,
-                                        maxValue: 12,
-                                        onChanged: (newValue) => setState(() => widget.alarm.hour = newValue)),
-                                    Text(':',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 23.0,
-                                        )),
-                                    NumberPicker.integer(
-                                      initialValue: widget.alarm.minute,
-                                      minValue: 0,
-                                      maxValue: 59,
-                                      zeroPad: true,
-                                      listViewWidth: 60.0,
-                                      onChanged: (newValue) => setState(() => widget.alarm.minute = newValue)),
-                                    ToggleButtons(
-                                      children: [Text('AM'), Text('PM')],
-                                      isSelected: _selections,
-                                      onPressed: (int index) {
-                                        setState(() {
-                                          for(int btnIndex = 0; btnIndex < _selections.length; btnIndex++){
-                                            if(btnIndex == index) {
-                                              _selections[btnIndex] = true;
-                                              if (btnIndex == 0) {
-                                                widget.alarm.period = "AM";
-                                              }
-                                              else {
-                                                widget.alarm.period = "PM";
-                                              }
-                                            }
-                                            else{
-                                                _selections[btnIndex] = false;
-                                            }
-                                          }
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-
-                              ),
-                              // container for editing the frequency
-                              Container(
-                                alignment: Alignment.bottomLeft,
-                                width: 325,
-                                //margin: EdgeInsets.only(left: 5),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    RaisedButton(
-                                        textColor: sunday ? Colors.black : Colors.white,
-                                        shape: CircleBorder(),
-                                      child: Text("Sun",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15.0,
-                                        )),
-                                      color: sunday ? Colors.white : Colors.blue,
-                                      onPressed: () => setState(() => sunday = !sunday),
-                                    ),
-                                    RaisedButton(
-                                      textColor: monday ? Colors.black : Colors.white,
-                                      shape: CircleBorder(),
-                                      child: Text("Mon",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15.0,
-                                          )),
-                                      color: monday ? Colors.white : Colors.blue,
-                                      onPressed: () => setState(() => monday = !monday),
-                                    ),
-                                    RaisedButton(
-                                      textColor: tuesday ? Colors.black : Colors.white,
-                                      shape: CircleBorder(),
-                                      child: Text("Tues",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15.0,
-                                          )),
-                                      color: tuesday ? Colors.white : Colors.blue,
-                                      onPressed: () => setState(() => tuesday = !tuesday),
-                                    ),
-                                    RaisedButton(
-                                      textColor: wednesday ? Colors.black : Colors.white,
-                                      shape: CircleBorder(),
-                                      child: Text("Wed",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15.0,
-                                          )),
-                                      color: wednesday ? Colors.white : Colors.blue,
-                                      onPressed: () => setState(() => wednesday = !wednesday),
-                                    ),
-                                    RaisedButton(
-                                      textColor: thursday ? Colors.black : Colors.white,
-                                      shape: CircleBorder(),
-                                      child: Text("Thurs",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15.0,
-                                          )),
-                                      color: thursday ? Colors.white : Colors.blue,
-                                      onPressed: () => setState(() => thursday = !thursday),
-                                    ),
-                                    RaisedButton(
-                                      textColor: friday ? Colors.black : Colors.white,
-                                      shape: CircleBorder(),
-                                      child: Text("Fri",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15.0,
-                                          )),
-                                      color: friday ? Colors.white : Colors.blue,
-                                      onPressed: () => setState(() => friday = !friday),
-                                    ),
-                                    RaisedButton(
-                                      textColor: saturday ? Colors.black : Colors.white,
-                                      shape: CircleBorder(),
-                                      child: Text("Sat",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15.0,
-                                          )),
-                                      color: saturday ? Colors.white : Colors.blue,
-                                      onPressed: () => setState(() => saturday = !saturday),
-                                    ),
-                                    RaisedButton(
-                                      textColor: Colors.white,
-                                      shape: CircleBorder(),
-                                      child: Text("Save",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15.0
-                                          )),
-                                      color: Colors.red,
-                                      onPressed: () {
-                                        _formChange();
-                                        //todo: here we should connect to the database to update the alarm
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ],
-      );
-    }
-  }
+   
 
 // Function that will contain the dropdown for the expandable list
   Widget editAlarm() {
