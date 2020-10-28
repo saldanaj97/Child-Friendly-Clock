@@ -15,14 +15,36 @@ class AlarmCards extends StatefulWidget {
 class _AlarmCardsState extends State<AlarmCards> {
   bool isSwitched = false;
 
+  String intToDay(int i){
+    if(i == 0)
+      return "Sun";
+    else if(i == 1)
+      return "Mon";
+    else if(i == 2)
+      return "Tues";
+    else if(i == 3)
+      return "Wed";
+    else if(i == 4)
+      return "Thur";
+    else if(i == 5)
+      return "Fri";
+    else if(i == 6)
+      return "Sat";
+    return "";
+  }
+
   @override
   Widget build(BuildContext context) {
     var time;
     var height = 150.0;
+    var freq = "";
+
+    List<List<int>> groups = [];
 
 /*     print(widget.alarm.name);
     print('Hour Value: ' + '${widget.alarm.hour}');
     print('Period: ' + widget.alarm.period); */
+    print('Frequency: ' + widget.alarm.frequency.toString());
     if (widget.alarm.period == "PM" && widget.alarm.hour != 12)
       time = TimeOfDay(hour: widget.alarm.hour + 12, minute: widget.alarm.minute);
     else if (widget.alarm.period == "AM" && widget.alarm.hour == 12)
@@ -30,6 +52,46 @@ class _AlarmCardsState extends State<AlarmCards> {
     else
       time = TimeOfDay(hour: widget.alarm.hour, minute: widget.alarm.minute);
 
+    for(int i = 0; i < 7; i++){
+      List<int> group = [];
+      while(widget.alarm.frequency[i]){
+        group.add(i);
+        if(i == 6)
+          break;
+        i++;
+      }
+      if(group.isNotEmpty)
+        groups.add(group);
+    }
+    for(int i = 0; i < groups.length; i++){
+      if(i == 0){
+        if(groups[i].length == 1)
+          freq = intToDay(groups[i].first);
+        else if(groups[i].length == 2)
+          freq = intToDay(groups[i].first) + ", " + intToDay(groups[i].last);
+        else
+          freq = intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
+      }
+      else if(i == groups.length - 1){
+        if(groups[i].length == 1)
+          freq = freq + " & " + intToDay(groups[i].first);
+        else if(groups[i].length == 2)
+          freq = freq + ", " + intToDay(groups[i].first) + " & " + intToDay(groups[i].last);
+        else
+          freq = freq + " & " + intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
+      }
+      else{
+        if(groups[i].length == 1)
+          freq = freq + ", " + intToDay(groups[i].first);
+        else if(groups[i].length == 2)
+          freq = freq + ", " + intToDay(groups[i].first) + ", " + intToDay(groups[i].last);
+        else
+          freq = freq + ", " + intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
+      }
+    }
+
+    //print("groups: " + groups.toString());
+    //print("frequency: " + freq);
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -120,7 +182,7 @@ class _AlarmCardsState extends State<AlarmCards> {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
-                                    'Mon - Fri',
+                                    freq,
                                     style: TextStyle(
                                       fontFamily: 'Open Sans',
                                       fontSize: 25,

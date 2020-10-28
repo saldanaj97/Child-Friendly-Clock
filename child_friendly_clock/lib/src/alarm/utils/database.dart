@@ -30,10 +30,39 @@ class DBProvider{
           name TEXT,
           hour INTEGER,
           minute INTEGER,
-          second INTEGER)
+          second INTEGER,
+          mon INTEGER,
+          tues INTEGER,
+          wed INTEGER,
+          thur INTEGER,
+          fri INTEGER,
+          sat INTEGER,
+          sun INTEGER
+          );
         ''');
       },
-      version: 1
+      onUpgrade: (db, oldVersion, newVersion) async{
+        var batch = db.batch();
+        if(oldVersion == 1) {
+          batch.execute("ALTER TABLE alarm ADD COLUMN mon INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN tues INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN wed INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN thur INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN fri INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN sat INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN sun INTEGER;");
+        }
+        else if(oldVersion == 2) {
+          batch.execute("ALTER TABLE alarm ADD COLUMN tues INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN wed INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN thur INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN fri INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN sat INTEGER;");
+          batch.execute("ALTER TABLE alarm ADD COLUMN sun INTEGER;");
+        }
+        await batch.commit();
+      },
+      version: 3
     );
   }
 
@@ -42,9 +71,9 @@ class DBProvider{
 
     var res = await db.rawInsert('''
       INSERT INTO alarm(
-        period, name, hour, minute, second
-      ) VALUES (?,?,?,?,?)
-    ''', [newAlarm.period, newAlarm.name, newAlarm.hour, newAlarm.minute, newAlarm.second]);
+        period, name, hour, minute, second, sun, mon, tues, wed, thur, fri, sat
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+    ''', [newAlarm.period, newAlarm.name, newAlarm.hour, newAlarm.minute, newAlarm.second, newAlarm.frequency[0],newAlarm.frequency[1],newAlarm.frequency[2],newAlarm.frequency[3],newAlarm.frequency[4],newAlarm.frequency[5],newAlarm.frequency[6],]);
 
     return res;
   }
@@ -63,7 +92,12 @@ class DBProvider{
 
   Future<dynamic> getAlarms() async{
     final db = await database;
+
+    var master = await db.query("sqlite_master");
+    print(master.toString());
+
     var res = await db.query("alarm");
+
     if(res.length == 0)
       return null;
     else{

@@ -11,6 +11,7 @@ class Alarm{
   int hour;
   int minute;
   int second;
+  List<bool> frequency;
 
   Alarm({
     this.name,
@@ -18,7 +19,8 @@ class Alarm{
     this.period,
     this.hour,
     this.minute,
-    this.second
+    this.second,
+    this.frequency
   });
 
   factory Alarm.fromJson(Map<String, dynamic> json) => Alarm(
@@ -27,7 +29,8 @@ class Alarm{
     period: json["period"],
     hour: json["hour"],
     minute: json["minute"],
-    second: json["second"]
+    second: json["second"],
+    frequency: [json["sun"] == 1, json["mon"] == 1, json["tues"] == 1, json["wed"] == 1, json["thur"] == 1, json["fri"] == 1, json["sat"] == 1]
   );
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +39,13 @@ class Alarm{
     "period": period,
     "hour": hour,
     "minute": minute,
-    "second": second
+    "second": second,
+    "sun": frequency[0] ? 1 : 0,
+    "mon": frequency[0] ? 1 : 0,
+    "tues": frequency[0] ? 1 : 0,
+    "wed": frequency[0] ? 1 : 0,
+    "thur": frequency[0] ? 1 : 0,
+    "fri": frequency[0] ? 1 : 0,
+    "sat": frequency[0] ? 1 : 0,
   };
 }
