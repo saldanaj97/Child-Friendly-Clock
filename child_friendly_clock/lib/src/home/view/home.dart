@@ -150,6 +150,10 @@ class _HomeState extends State<Home> {
       am_pm = 'PM';
     }
 
+    if (hourConversion == 0) {
+      hourConversion = 12;
+    }
+
     return Container(
       margin: EdgeInsets.only(bottom: 30),
       child: Column(
