@@ -177,7 +177,9 @@ class _CreateAlarmState extends State<CreateAlarm> {
                 Expanded(
                     child: FlatButton(
                       textColor: Colors.lightBlue,
-                      shape: CircleBorder(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
                       child: Text('Cancel',
                         style: TextStyle(
                         fontWeight: FontWeight.bold,

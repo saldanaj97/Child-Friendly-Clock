@@ -18,7 +18,9 @@ class _SaveButtonState extends State<SaveButton> {
       return Expanded(
           child: FlatButton(
             textColor: Colors.white,
-            shape: CircleBorder(),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
             child: Text('Save',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -34,7 +36,9 @@ class _SaveButtonState extends State<SaveButton> {
       return Expanded(
           child: FlatButton(
             textColor: Colors.grey,
-            shape: CircleBorder(),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
             child: Text('Save',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,

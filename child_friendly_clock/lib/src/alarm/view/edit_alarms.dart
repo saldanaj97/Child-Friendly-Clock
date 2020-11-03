@@ -190,11 +190,14 @@ class _EditAlarmState extends State<EditAlarm>{
               Divider(color: Colors.grey[400], height: 5.0),
               SizedBox(height: 20.0),
               Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
                       child: FlatButton(
                         textColor: Colors.lightBlue,
-                        shape: CircleBorder(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
                         child: Text('Cancel',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
