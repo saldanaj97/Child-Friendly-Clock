@@ -4,7 +4,9 @@ import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:child_friendly_clock/src/alarm/view/edit_alarms.dart';
+
+
 
 class AlarmCards extends StatefulWidget {
   final Alarm alarm;
@@ -15,57 +17,23 @@ class AlarmCards extends StatefulWidget {
   _AlarmCardsState createState() => _AlarmCardsState();
 }
 
-enum FormType {
-  main,
-  edit,
-}
 
 class _AlarmCardsState extends State<AlarmCards> {
-  bool isSwitched = false;
-  List<bool> _selections = [false, false];
   Future alarmsFuture;
-  FormType _form = FormType.main;
-  TextEditingController _nameController;
-  bool canSave = false;
-  bool monday = false;
-  bool tuesday = false;
-  bool wednesday = false;
-  bool thursday = false;
-  bool friday = false;
-  bool saturday = false;
-  bool sunday = false;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.alarm.name);
-    if (widget.alarm.period == 'AM') {
-      _selections = [true, false];
-    } else {
-      _selections = [false, true];
-    }
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
+    alarmsFuture = getAlarms();
   }
 
   getAlarms() async {
     final alarmsData = await DBProvider.db.getAlarms();
     return alarmsData;
   }
+  bool isSwitched = false;
+  bool canSave = false;
 
-  void _formChange() async {
-    setState(() {
-      if (_form == FormType.main) {
-        _form = FormType.edit;
-      } else {
-        _form = FormType.main;
-      }
-    });
-  }
 
   String intToDay(int i) {
     if (i == 0)
@@ -97,9 +65,11 @@ class _AlarmCardsState extends State<AlarmCards> {
     print('Period: ' + widget.alarm.period); */
     print('Frequency: ' + widget.alarm.frequency.toString());
     if (widget.alarm.period == "PM" && widget.alarm.hour != 12)
-      time = TimeOfDay(hour: widget.alarm.hour + 12, minute: widget.alarm.minute);
+      time =
+          TimeOfDay(hour: widget.alarm.hour + 12, minute: widget.alarm.minute);
     else if (widget.alarm.period == "AM" && widget.alarm.hour == 12)
-      time = TimeOfDay(hour: widget.alarm.hour - 12, minute: widget.alarm.minute);
+      time =
+          TimeOfDay(hour: widget.alarm.hour - 12, minute: widget.alarm.minute);
     else
       time = TimeOfDay(hour: widget.alarm.hour, minute: widget.alarm.minute);
 
@@ -124,16 +94,20 @@ class _AlarmCardsState extends State<AlarmCards> {
         if (groups[i].length == 1)
           freq = freq + " & " + intToDay(groups[i].first);
         else if (groups[i].length == 2)
-          freq = freq + ", " + intToDay(groups[i].first) + " & " + intToDay(groups[i].last);
+          freq = freq + ", " + intToDay(groups[i].first) + " & " +
+              intToDay(groups[i].last);
         else
-          freq = freq + " & " + intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
+          freq = freq + " & " + intToDay(groups[i].first) + " - " +
+              intToDay(groups[i].last);
       } else {
         if (groups[i].length == 1)
           freq = freq + ", " + intToDay(groups[i].first);
         else if (groups[i].length == 2)
-          freq = freq + ", " + intToDay(groups[i].first) + ", " + intToDay(groups[i].last);
+          freq = freq + ", " + intToDay(groups[i].first) + ", " +
+              intToDay(groups[i].last);
         else
-          freq = freq + ", " + intToDay(groups[i].first) + " - " + intToDay(groups[i].last);
+          freq = freq + ", " + intToDay(groups[i].first) + " - " +
+              intToDay(groups[i].last);
       }
     }
 
@@ -150,7 +124,8 @@ class _AlarmCardsState extends State<AlarmCards> {
               onDismissed: (direction) {
                 DBProvider.db.deleteAlarm(widget.alarm.alarmID);
                 widget.updateListCallback();
-                Scaffold.of(context).showSnackBar(SnackBar(content: Text(widget.alarm.name + ' deleted')));
+                Scaffold.of(context).showSnackBar(
+                    SnackBar(content: Text(widget.alarm.name + ' deleted')));
               },
               background: Container(
                 color: Colors.red,
@@ -171,7 +146,8 @@ class _AlarmCardsState extends State<AlarmCards> {
                             Row(
                               children: <Widget>[
                                 Container(
-                                  margin: EdgeInsets.only(left: 10, top: 5, bottom: 10),
+                                  margin: EdgeInsets.only(
+                                      left: 10, top: 5, bottom: 10),
                                   child: Icon(
                                     Icons.arrow_right,
                                     size: 45,
@@ -200,7 +176,8 @@ class _AlarmCardsState extends State<AlarmCards> {
                                 value: isSwitched,
                                 onChanged: (value) {
                                   setState(() {
-                                    isSwitched = value; //TODO: Make the on/off switch actually turn alarm on/off
+                                    isSwitched =
+                                        value; //TODO: Make the on/off switch actually turn alarm on/off
                                     print(isSwitched);
                                   });
                                 },
@@ -225,7 +202,8 @@ class _AlarmCardsState extends State<AlarmCards> {
                               width: 325,
                               margin: EdgeInsets.only(left: 25),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
                                 children: [
                                   /* **** DAYS ALARM IS ACTIVE **** */
                                   Text(
@@ -244,7 +222,21 @@ class _AlarmCardsState extends State<AlarmCards> {
                                       Icons.arrow_forward_ios,
                                       color: Colors.white,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => EditAlarm(
+                                            editAlarm: widget.alarm,
+                                              clickCallback: () => setState(
+                                                    () {
+                                                  alarmsFuture = getAlarms();
+                                                },
+                                              ),
+                                            ),
+                                        ),
+                                      );
+                                    },
                                   )
                                 ],
                               ),
@@ -262,35 +254,5 @@ class _AlarmCardsState extends State<AlarmCards> {
       ],
     );
   }
-
-// Function that will contain the dropdown for the expandable list
-  Widget editAlarm() {
-    var selected = false;
-    print("edditing");
-    return Container(
-      child: ClipOval(
-        child: Container(
-          color: selected ? Colors.yellow : Colors.blue,
-          height: 30,
-          width: 30,
-          child: GestureDetector(
-            onTap: () {
-              setState(
-                () {
-                  selected = true;
-                  print('Tapped date circle');
-                },
-              );
-            },
-            child: Center(
-              child: Text(
-                "dayOfTheWeek",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
+

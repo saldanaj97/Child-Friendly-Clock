@@ -3,97 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
+import 'package:child_friendly_clock/src/alarm/view/save_button.dart';
+import 'package:child_friendly_clock/src/alarm/view/frequency_button.dart';
 
-
-class SaveButton extends StatefulWidget {
-  final VoidCallback save;
-  final bool active;
-  SaveButton({this.active, this.save});
-
-  @override
-  _SaveButtonState createState() => _SaveButtonState();
-}
-
-class _SaveButtonState extends State<SaveButton> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.active) {
-      return Expanded(
-          child: FlatButton(
-            textColor: Colors.white,
-            shape: CircleBorder(),
-            child: Text('Save',
-              style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-            )),
-          color: Colors.lightBlue,
-          onPressed: () {
-            widget.save();
-          },
-            //height: 100,
-      ));
-    } else {
-      return Expanded(
-          child: FlatButton(
-            textColor: Colors.grey,
-            shape: CircleBorder(),
-            child: Text('Save',
-              style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-              )),
-            color: Colors.grey[800],
-            onPressed: () {},
-            //height: 100,
-      ));
-    }
-  }
-}
-
-class FrequencyButton extends StatefulWidget {
-  final String day;
-  final bool active;
-  final VoidCallback toggle;
-  FrequencyButton({this.day, this.active, this.toggle});
-
-  @override
-  _FrequencyButtonState createState() => _FrequencyButtonState();
-}
-
-class _FrequencyButtonState extends State<FrequencyButton> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.active) {
-        return RawMaterialButton(
-          child: Text(widget.day,
-                      style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.0,
-                      color: Colors.grey[200]
-              )),
-          shape: CircleBorder(),
-          fillColor: Colors.blue[500],
-          onPressed: widget.toggle,
-          constraints: BoxConstraints(minWidth: 40, minHeight: 40, maxWidth: 41, maxHeight: 40)
-        );
-    }
-    else {
-      return RawMaterialButton(
-        child: Text(widget.day,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14.0,
-                color: Colors.grey[900]
-            )),
-        shape: CircleBorder(),
-        fillColor: Colors.grey[200],
-        onPressed: widget.toggle,
-        constraints: BoxConstraints(minWidth: 40, minHeight: 40, maxWidth: 41, maxHeight: 40),
-      );
-    }
-  }
-}
 
 
 class CreateAlarm extends StatefulWidget {
