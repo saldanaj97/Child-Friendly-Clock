@@ -1,3 +1,4 @@
+import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './../../widgets/view/navbar.dart';
@@ -12,6 +13,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var now = new DateTime.now();
+
+  void handleClick(String value){
+    switch(value){
+      case 'Parental Controls' :
+        print("Parental Controls clicked");
+        //Todo: add parental controls functionality
+        break;
+      case 'Reset App' :
+        print("reset app chosen");
+        showAlertDialog(context);
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +43,22 @@ class _HomeState extends State<Home> {
         elevation: 0,
         centerTitle: false,
         backgroundColor: const Color(0xff2d2e40),
+        leading: PopupMenuButton<String>(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.white,
+            size: 45,
+          ),
+          onSelected: handleClick,
+          itemBuilder: (BuildContext context) {
+            return {"Parental Controls", "Reset App"}.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+        ),
       ),
       backgroundColor: const Color(0xff2d2e40),
       body: Container(

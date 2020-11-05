@@ -1,3 +1,6 @@
+//import 'dart:js';
+
+import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +32,23 @@ class _AlarmState extends State<alarm> {
     return alarmsData;
   }
 
+  void handleClick(String value){
+    switch(value){
+      case 'Parental Controls' :
+        print("Parental Controls clicked");
+        //Todo: add parental controls functionality
+        break;
+      case 'Reset App' :
+        print("reset app chosen");
+        showAlertDialog(context);
+        setState(() {
+          alarmsFuture = getAlarms();
+        });
+        break;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +66,22 @@ class _AlarmState extends State<alarm> {
             fontWeight: FontWeight.w600,
           ),
           textAlign: TextAlign.left,
+        ),
+        leading: PopupMenuButton<String>(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.white,
+            size: 45,
+          ),
+          onSelected: handleClick,
+          itemBuilder: (BuildContext context) {
+            return {"Parental Controls", "Reset App"}.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
         ),
         actions: <Widget>[
           IconButton(
@@ -118,3 +154,4 @@ class _AlarmState extends State<alarm> {
     );
   }
 }
+
