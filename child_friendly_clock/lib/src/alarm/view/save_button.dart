@@ -33,8 +33,9 @@ class _SaveButtonState extends State<SaveButton> {
         //height: 100,
       );
     } else {
-      return Expanded(
-          child: FlatButton(
+      return FlatButton(
+        height: 40,
+        minWidth: 135,
         textColor: Colors.grey,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
@@ -47,7 +48,7 @@ class _SaveButtonState extends State<SaveButton> {
         color: Colors.grey[800],
         onPressed: () {},
         //height: 100,
-      ));
+      );
     }
   }
 }
