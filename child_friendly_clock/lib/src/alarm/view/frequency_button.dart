@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-
 class FrequencyButton extends StatefulWidget {
   final String day;
   final bool active;
@@ -18,30 +16,18 @@ class _FrequencyButtonState extends State<FrequencyButton> {
   Widget build(BuildContext context) {
     if (widget.active) {
       return RawMaterialButton(
-          child: Text(widget.day,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.0,
-                  color: Colors.grey[200]
-              )),
+          child: Text(widget.day, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.0, color: Colors.grey[200])),
           shape: CircleBorder(),
           fillColor: Colors.blue[500],
           onPressed: widget.toggle,
-          constraints: BoxConstraints(minWidth: 40, minHeight: 40, maxWidth: 41, maxHeight: 40)
-      );
-    }
-    else {
+          constraints: BoxConstraints(minWidth: 45, minHeight: 45, maxWidth: 50, maxHeight: 50));
+    } else {
       return RawMaterialButton(
-        child: Text(widget.day,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14.0,
-                color: Colors.grey[900]
-            )),
+        child: Text(widget.day, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.0, color: Colors.grey[900])),
         shape: CircleBorder(),
         fillColor: Colors.grey[200],
         onPressed: widget.toggle,
-        constraints: BoxConstraints(minWidth: 40, minHeight: 40, maxWidth: 41, maxHeight: 40),
+        constraints: BoxConstraints(minWidth: 45, minHeight: 45, maxWidth: 50, maxHeight: 50),
       );
     }
   }
