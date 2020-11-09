@@ -32,13 +32,13 @@ class _AlarmState extends State<alarm> {
     return alarmsData;
   }
 
-  void handleClick(String value){
-    switch(value){
-      case 'Parental Controls' :
+  void handleClick(String value) {
+    switch (value) {
+      case 'Parental Controls':
         print("Parental Controls clicked");
         //Todo: add parental controls functionality
         break;
-      case 'Reset App' :
+      case 'Reset App':
         print("reset app chosen");
         showAlertDialog(context);
         setState(() {
@@ -47,7 +47,6 @@ class _AlarmState extends State<alarm> {
         break;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -154,4 +153,3 @@ class _AlarmState extends State<alarm> {
     );
   }
 }
-
