@@ -24,6 +24,7 @@ class _EditAlarmState extends State<EditAlarm> {
   Future alarmsFuture;
   List<bool> _selections = [false, false];
   List<bool> _frequency = [false, false, false, false, false, false, false];
+  String alarmNote = '';
   // Future alarmsFuture;
 
   @override
@@ -58,12 +59,11 @@ class _EditAlarmState extends State<EditAlarm> {
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 55, 55, 70),
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(left: 25, right: 25),
+              margin: EdgeInsets.only(left: 25, right: 25, bottom: 15),
               child: Row(
                 children: <Widget>[
                   Text('Name: ',
@@ -100,7 +100,7 @@ class _EditAlarmState extends State<EditAlarm> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 25, right: 25),
+              margin: EdgeInsets.only(left: 25, right: 25, bottom: 15),
               child: Row(
                 children: <Widget>[
                   Text('Time:',
@@ -148,70 +148,122 @@ class _EditAlarmState extends State<EditAlarm> {
                 ],
               ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              FrequencyButton(
-                  day: 'Sun',
-                  active: _frequency[0],
-                  toggle: () => setState(() {
-                        _frequency[0] = !_frequency[0];
-                      })),
-              FrequencyButton(
-                  day: 'Mon',
-                  active: _frequency[1],
-                  toggle: () => setState(() {
-                        _frequency[1] = !_frequency[1];
-                      })),
-              FrequencyButton(
-                  day: 'Tues',
-                  active: _frequency[2],
-                  toggle: () => setState(() {
-                        _frequency[2] = !_frequency[2];
-                      })),
-              FrequencyButton(
-                  day: 'Wed',
-                  active: _frequency[3],
-                  toggle: () => setState(() {
-                        _frequency[3] = !_frequency[3];
-                      })),
-              FrequencyButton(
-                  day: 'Thurs',
-                  active: _frequency[4],
-                  toggle: () => setState(() {
-                        _frequency[4] = !_frequency[4];
-                      })),
-              FrequencyButton(
-                  day: 'Fri',
-                  active: _frequency[5],
-                  toggle: () => setState(() {
-                        _frequency[5] = !_frequency[5];
-                      })),
-              FrequencyButton(
-                  day: 'Sat',
-                  active: _frequency[6],
-                  toggle: () => setState(() {
-                        _frequency[6] = !_frequency[6];
-                      }))
-            ]),
-            SizedBox(height: 20.0),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                FlatButton(
-                  height: 40,
-                  minWidth: 135,
-                  textColor: Colors.lightBlue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                FrequencyButton(
+                    day: 'Sun',
+                    active: _frequency[0],
+                    toggle: () => setState(() {
+                          _frequency[0] = !_frequency[0];
+                        })),
+                FrequencyButton(
+                    day: 'Mon',
+                    active: _frequency[1],
+                    toggle: () => setState(() {
+                          _frequency[1] = !_frequency[1];
+                        })),
+                FrequencyButton(
+                    day: 'Tues',
+                    active: _frequency[2],
+                    toggle: () => setState(() {
+                          _frequency[2] = !_frequency[2];
+                        })),
+                FrequencyButton(
+                    day: 'Wed',
+                    active: _frequency[3],
+                    toggle: () => setState(() {
+                          _frequency[3] = !_frequency[3];
+                        })),
+                FrequencyButton(
+                    day: 'Thurs',
+                    active: _frequency[4],
+                    toggle: () => setState(() {
+                          _frequency[4] = !_frequency[4];
+                        })),
+                FrequencyButton(
+                    day: 'Fri',
+                    active: _frequency[5],
+                    toggle: () => setState(() {
+                          _frequency[5] = !_frequency[5];
+                        })),
+                FrequencyButton(
+                    day: 'Sat',
+                    active: _frequency[6],
+                    toggle: () => setState(() {
+                          _frequency[6] = !_frequency[6];
+                        }))
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 15, bottom: 15),
+              child: Column(
+                children: [
+                  Text(
+                    'Note ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28.0,
+                    ),
                   ),
-                  child: Text('Cancel',
+                  Container(
+                    margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+                    child: TextField(
+                      maxLines: 5,
+                      maxLength: 144,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "Leave a note(optional)",
+                        hintStyle: TextStyle(color: Colors.grey[500], fontSize: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                      ),
+                      autofocus: false,
+                      keyboardType: TextInputType.multiline,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                      )),
-                  color: Colors.white,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                SaveButton(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                        letterSpacing: 2.0,
+                      ),
+                      onChanged: (text) {
+                        setState(() {
+                          alarmNote = text;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10, bottom: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FlatButton(
+                    height: 40,
+                    minWidth: 135,
+                    textColor: Colors.lightBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Text('Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        )),
+                    color: Colors.white,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  SaveButton(
                     active: canSave,
                     save: () {
                       widget.editAlarm.frequency = _frequency;
@@ -219,9 +271,11 @@ class _EditAlarmState extends State<EditAlarm> {
                       widget.clickCallback();
                       //Todo: add database functionality to update existing entry based off of widget.editAlarm
                       Navigator.pop(context);
-                    })
-              ],
-            )
+                    },
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
