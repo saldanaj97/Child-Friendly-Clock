@@ -21,6 +21,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
   List<bool> _selections = [true, false];
   List<bool> _frequency = [false, false, false, false, false, false, false]; // for every day of the week starting with sunday
   bool canSave = false;
+  String alarmNote;
 
   @override
   void initState() {
@@ -47,59 +48,11 @@ class _CreateAlarmState extends State<CreateAlarm> {
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 55, 55, 70),
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(30, 15, 30, 0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(),
-                NumberPicker.integer(
-                    initialValue: newAlarm.hour,
-                    minValue: 1,
-                    maxValue: 12,
-                    listViewWidth: 100.0,
-                    haptics: true,
-                    onChanged: (newValue) => setState(() => newAlarm.hour = newValue)),
-                Text(
-                  ':',
-                  style: TextStyle(
-                    color: Colors.lightBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  ),
-                ),
-                NumberPicker.integer(
-                    initialValue: newAlarm.minute,
-                    minValue: 0,
-                    maxValue: 59,
-                    zeroPad: true,
-                    listViewWidth: 60.0,
-                    onChanged: (newValue) => setState(() => newAlarm.minute = newValue)),
-                ToggleButtons(
-                  children: [Text('AM'), Text('PM')],
-                  isSelected: _selections,
-                  onPressed: (int index) {
-                    setState(() {
-                      for (int btnIndex = 0; btnIndex < _selections.length; btnIndex++) {
-                        if (btnIndex == index) {
-                          _selections[btnIndex] = true;
-                          if (btnIndex == 0)
-                            newAlarm.period = "AM";
-                          else
-                            newAlarm.period = "PM";
-                        } else {
-                          _selections[btnIndex] = false;
-                        }
-                      }
-                    });
-                  },
-                )
-              ],
-            ),
-            Divider(color: Colors.grey[400], height: 5.0),
-            Row(
+      body: Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(left: 25, right: 25, bottom: 15),
+            child: Row(
               children: <Widget>[
                 Text(
                   'Name:',
@@ -112,7 +65,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                 ),
                 Expanded(
                   child: TextField(
-                    decoration: InputDecoration(border: InputBorder.none, hintText: 'enter name', hintStyle: TextStyle(color: Colors.grey[500])),
+                    decoration: InputDecoration(border: InputBorder.none, hintText: "Enter name", hintStyle: TextStyle(color: Colors.grey[500])),
                     autofocus: false,
                     keyboardType: TextInputType.text,
                     controller: _nameController,
@@ -124,10 +77,10 @@ class _CreateAlarmState extends State<CreateAlarm> {
                     ),
                     onChanged: (text) {
                       setState(() {
-                        if (text != '') {
-                          canSave = true;
-                        } else {
+                        if (text == '') {
                           canSave = false;
+                        } else {
+                          canSave = true;
                         }
                       });
                     },
@@ -135,7 +88,10 @@ class _CreateAlarmState extends State<CreateAlarm> {
                 )
               ],
             ),
-            Row(
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 25, right: 25, bottom: 15),
+            child: Row(
               children: <Widget>[
                 Text('Time:',
                     style: TextStyle(
@@ -184,63 +140,110 @@ class _CreateAlarmState extends State<CreateAlarm> {
                     })
               ],
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              Expanded(
-                  child: FrequencyButton(
-                      day: 'Sun',
-                      active: _frequency[0],
-                      toggle: () => setState(() {
-                            _frequency[0] = !_frequency[0];
-                          }))),
-              Expanded(
-                  child: FrequencyButton(
-                      day: 'Mon',
-                      active: _frequency[1],
-                      toggle: () => setState(() {
-                            _frequency[1] = !_frequency[1];
-                          }))),
-              Expanded(
-                  child: FrequencyButton(
-                      day: 'Tues',
-                      active: _frequency[2],
-                      toggle: () => setState(() {
-                            _frequency[2] = !_frequency[2];
-                          }))),
-              Expanded(
-                  child: FrequencyButton(
-                      day: 'Wed',
-                      active: _frequency[3],
-                      toggle: () => setState(() {
-                            _frequency[3] = !_frequency[3];
-                          }))),
-              Expanded(
-                  child: FrequencyButton(
-                      day: 'Thurs',
-                      active: _frequency[4],
-                      toggle: () => setState(() {
-                            _frequency[4] = !_frequency[4];
-                          }))),
-              Expanded(
-                  child: FrequencyButton(
-                      day: 'Fri',
-                      active: _frequency[5],
-                      toggle: () => setState(() {
-                            _frequency[5] = !_frequency[5];
-                          }))),
-              Expanded(
-                  child: FrequencyButton(
-                      day: 'Sat',
-                      active: _frequency[6],
-                      toggle: () => setState(() {
-                            _frequency[6] = !_frequency[6];
-                          })))
-            ]),
-            Divider(color: Colors.grey[400], height: 5.0),
-            SizedBox(height: 20.0),
-            Row(
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              FrequencyButton(
+                  day: 'Sun',
+                  active: _frequency[0],
+                  toggle: () => setState(() {
+                        _frequency[0] = !_frequency[0];
+                      })),
+              FrequencyButton(
+                  day: 'Mon',
+                  active: _frequency[1],
+                  toggle: () => setState(() {
+                        _frequency[1] = !_frequency[1];
+                      })),
+              FrequencyButton(
+                  day: 'Tues',
+                  active: _frequency[2],
+                  toggle: () => setState(() {
+                        _frequency[2] = !_frequency[2];
+                      })),
+              FrequencyButton(
+                  day: 'Wed',
+                  active: _frequency[3],
+                  toggle: () => setState(() {
+                        _frequency[3] = !_frequency[3];
+                      })),
+              FrequencyButton(
+                  day: 'Thurs',
+                  active: _frequency[4],
+                  toggle: () => setState(() {
+                        _frequency[4] = !_frequency[4];
+                      })),
+              FrequencyButton(
+                  day: 'Fri',
+                  active: _frequency[5],
+                  toggle: () => setState(() {
+                        _frequency[5] = !_frequency[5];
+                      })),
+              FrequencyButton(
+                  day: 'Sat',
+                  active: _frequency[6],
+                  toggle: () => setState(() {
+                        _frequency[6] = !_frequency[6];
+                      }))
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 15, bottom: 15),
+            child: Column(
               children: [
-                Expanded(
-                    child: FlatButton(
+                Text(
+                  'Note ',
+                  style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 2.0,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28.0,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: TextField(
+                    maxLines: 5,
+                    maxLength: 144,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Leave a note(optional)",
+                      hintStyle: TextStyle(color: Colors.grey[500], fontSize: 20),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: Colors.white,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    ),
+                    autofocus: false,
+                    keyboardType: TextInputType.multiline,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                    ),
+                    onChanged: (text) {
+                      setState(() {
+                        alarmNote = text;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 15, bottom: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FlatButton(
+                  height: 40,
+                  minWidth: 135,
                   textColor: Colors.lightBlue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
@@ -251,22 +254,22 @@ class _CreateAlarmState extends State<CreateAlarm> {
                         fontSize: 20.0,
                       )),
                   color: Colors.white,
-                  onPressed: () => Navigator.of(context).pop(), //height: 100,
-                )),
-                //savebutton
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
                 SaveButton(
-                    active: canSave,
-                    save: () {
-                      newAlarm.name = _nameController.text;
-                      newAlarm.frequency = _frequency;
-                      DBProvider.db.newAlarm(newAlarm);
-                      widget.clickCallback();
-                      Navigator.pop(context);
-                    })
+                  active: canSave,
+                  save: () {
+                    newAlarm.frequency = _frequency;
+                    newAlarm.name = _nameController.text;
+                    widget.clickCallback();
+                    //Todo: add database functionality to update existing entry based off of widget.editAlarm
+                    Navigator.pop(context);
+                  },
+                )
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
