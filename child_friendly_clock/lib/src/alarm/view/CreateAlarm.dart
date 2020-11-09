@@ -3,14 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
-<<<<<<< HEAD
-import 'package:flutter_picker/flutter_picker.dart';
-=======
 import 'package:child_friendly_clock/src/alarm/view/save_button.dart';
 import 'package:child_friendly_clock/src/alarm/view/frequency_button.dart';
->>>>>>> master
-
-
 
 class CreateAlarm extends StatefulWidget {
   final VoidCallback clickCallback;
@@ -39,8 +33,6 @@ class _CreateAlarmState extends State<CreateAlarm> {
     _nameController.dispose();
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -192,51 +184,69 @@ class _CreateAlarmState extends State<CreateAlarm> {
                     })
               ],
             ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(child:
-                FrequencyButton(day: 'Sun', active: _frequency[0], toggle: () => setState(() {
-                  _frequency[0] = !_frequency[0];
-                }))),
-                Expanded(child:
-                FrequencyButton(day: 'Mon', active: _frequency[1], toggle: () => setState(() {
-                  _frequency[1] = !_frequency[1];
-                }))),
-                Expanded(child:
-                FrequencyButton(day: 'Tues', active: _frequency[2], toggle: () => setState(() {
-                  _frequency[2] = !_frequency[2];
-                }))),
-                Expanded(child:
-                FrequencyButton(day: 'Wed', active: _frequency[3], toggle: () => setState(() {
-                  _frequency[3] = !_frequency[3];
-                }))),
-                Expanded(child:
-                FrequencyButton(day: 'Thurs', active: _frequency[4], toggle: () => setState(() {
-                  _frequency[4] = !_frequency[4];
-                }))),
-                Expanded(child:
-                FrequencyButton(day: 'Fri', active: _frequency[5], toggle: () => setState(() {
-                  _frequency[5] = !_frequency[5];
-                }))),
-                Expanded(child:
-                FrequencyButton(day: 'Sat', active: _frequency[6], toggle: () => setState(() {
-                  _frequency[6] = !_frequency[6];
-                })))
-              ]
-            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              Expanded(
+                  child: FrequencyButton(
+                      day: 'Sun',
+                      active: _frequency[0],
+                      toggle: () => setState(() {
+                            _frequency[0] = !_frequency[0];
+                          }))),
+              Expanded(
+                  child: FrequencyButton(
+                      day: 'Mon',
+                      active: _frequency[1],
+                      toggle: () => setState(() {
+                            _frequency[1] = !_frequency[1];
+                          }))),
+              Expanded(
+                  child: FrequencyButton(
+                      day: 'Tues',
+                      active: _frequency[2],
+                      toggle: () => setState(() {
+                            _frequency[2] = !_frequency[2];
+                          }))),
+              Expanded(
+                  child: FrequencyButton(
+                      day: 'Wed',
+                      active: _frequency[3],
+                      toggle: () => setState(() {
+                            _frequency[3] = !_frequency[3];
+                          }))),
+              Expanded(
+                  child: FrequencyButton(
+                      day: 'Thurs',
+                      active: _frequency[4],
+                      toggle: () => setState(() {
+                            _frequency[4] = !_frequency[4];
+                          }))),
+              Expanded(
+                  child: FrequencyButton(
+                      day: 'Fri',
+                      active: _frequency[5],
+                      toggle: () => setState(() {
+                            _frequency[5] = !_frequency[5];
+                          }))),
+              Expanded(
+                  child: FrequencyButton(
+                      day: 'Sat',
+                      active: _frequency[6],
+                      toggle: () => setState(() {
+                            _frequency[6] = !_frequency[6];
+                          })))
+            ]),
             Divider(color: Colors.grey[400], height: 5.0),
             SizedBox(height: 20.0),
             Row(
               children: [
                 Expanded(
                     child: FlatButton(
-                      textColor: Colors.lightBlue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Text('Cancel',
-                        style: TextStyle(
+                  textColor: Colors.lightBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Text('Cancel',
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20.0,
                       )),
@@ -261,7 +271,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
     );
   }
 
-  Widget timeSelector() {
+/*   Widget timeSelector() {
     showPickerNumber(BuildContext context) {
       return Picker(
           adapter: NumberPickerAdapter(data: [
@@ -283,5 +293,5 @@ class _CreateAlarmState extends State<CreateAlarm> {
             print(picker.getSelectedValues());
           }).showDialog(context);
     }
-  }
+  } */
 }
