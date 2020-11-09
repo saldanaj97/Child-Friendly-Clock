@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
+import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/view/edit_alarms.dart';
+import '../view/note.dart';
 
 class AlarmCards extends StatefulWidget {
   final Alarm alarm;
@@ -170,59 +172,74 @@ class _AlarmCardsState extends State<AlarmCards> {
                               ],
                             ),
                             Container(
-                              margin: EdgeInsets.only(right: 120),
-                              child: Text(
-                                time.format(context),
-                                style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 40,
-                                  color: const Color(0xffffffff),
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              margin: EdgeInsets.only(left: 15),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    time.format(context),
+                                    style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 40,
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.speaker_notes,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        // showNote takes in context and a string so
+                                        // replace 'User ... ' with the note from the db
+                                        showNote(context, 'User Note Here');
+                                      })
+                                ],
                               ),
                             ),
                             /* *** Days / Edit Button *** */
                             Container(
-                                margin: EdgeInsets.only(left: 15),
-                                width: 325,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      freq,
-                                      style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontSize: 15,
-                                        color: const Color(0xffffffff),
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                      textAlign: TextAlign.left,
+                              margin: EdgeInsets.only(left: 15),
+                              width: 325,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    freq,
+                                    style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontSize: 15,
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w300,
                                     ),
-                                    IconButton(
-                                      padding: EdgeInsets.only(),
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => EditAlarm(
-                                              editAlarm: widget.alarm,
-                                              clickCallback: () => setState(
-                                                () {
-                                                  alarmsFuture = getAlarms();
-                                                },
-                                              ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  IconButton(
+                                    padding: EdgeInsets.only(),
+                                    icon: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EditAlarm(
+                                            editAlarm: widget.alarm,
+                                            clickCallback: () => setState(
+                                              () {
+                                                alarmsFuture = getAlarms();
+                                              },
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ) /* **** DAYS ALARM IS ACTIVE **** */
-                                ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       )
@@ -236,4 +253,9 @@ class _AlarmCardsState extends State<AlarmCards> {
       ],
     );
   }
+
+  AlertDialog alert = AlertDialog(
+    title: Text('Note'),
+    content: Text('Users note will go here'),
+  );
 }
