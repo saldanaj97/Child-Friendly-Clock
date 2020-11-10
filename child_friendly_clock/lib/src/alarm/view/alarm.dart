@@ -10,10 +10,6 @@ import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 
 class alarm extends StatefulWidget {
-  alarm({
-    Key key,
-  }) : super(key: key);
-
   @override
   _AlarmState createState() => _AlarmState();
 }
