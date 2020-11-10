@@ -18,7 +18,7 @@ class CreateAlarm extends StatefulWidget {
 
 class _CreateAlarmState extends State<CreateAlarm> {
   TextEditingController _nameController;
-  var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None");
+  var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None", note: "No note set. ");
   double proxyMinute = 0.0;
   List<bool> _selections = [true, false];
   List<bool> _frequency = [false, false, false, false, false, false, false]; // for every day of the week starting with sunday
@@ -242,7 +242,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                         ),
                         onChanged: (text) {
                           setState(() {
-                            alarmNote = text;
+                            newAlarm.note = text;
                           });
                         },
                       ),

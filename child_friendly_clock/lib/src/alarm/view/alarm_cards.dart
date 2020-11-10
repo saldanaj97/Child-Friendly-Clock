@@ -59,7 +59,6 @@ class _AlarmCardsState extends State<AlarmCards> {
 
     List<List<int>> groups = [];
 
-    print('Frequency: ' + widget.alarm.frequency.toString());
     if (widget.alarm.period == "PM" && widget.alarm.hour != 12)
       time = TimeOfDay(hour: widget.alarm.hour + 12, minute: widget.alarm.minute);
     else if (widget.alarm.period == "AM" && widget.alarm.hour == 12)
@@ -193,7 +192,8 @@ class _AlarmCardsState extends State<AlarmCards> {
                                       onPressed: () {
                                         // showNote takes in context and a string so
                                         // replace 'User ... ' with the note from the db
-                                        showNote(context, 'User Note Here');
+                                        print(widget.alarm.note);
+                                        showNote(context, widget.alarm.note);
                                       })
                                 ],
                               ),
@@ -253,9 +253,4 @@ class _AlarmCardsState extends State<AlarmCards> {
       ],
     );
   }
-
-  AlertDialog alert = AlertDialog(
-    title: Text('Note'),
-    content: Text('Users note will go here'),
-  );
 }

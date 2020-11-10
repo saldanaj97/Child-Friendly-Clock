@@ -105,8 +105,8 @@ class DBProvider {
   Future<dynamic> getAlarms() async {
     final db = await database;
     var res = await db.query("alarm");
-    var master = await db.query('sqlite_master');
-    print(master);
+    //var master = await db.query('sqlite_master');
+    //print(master);
     if (res.length == 0)
       return null;
     else {
