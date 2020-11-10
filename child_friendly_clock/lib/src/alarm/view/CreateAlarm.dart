@@ -3,6 +3,7 @@ import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 import 'package:child_friendly_clock/src/alarm/view/save_button.dart';
@@ -18,7 +19,7 @@ class CreateAlarm extends StatefulWidget {
 
 class _CreateAlarmState extends State<CreateAlarm> {
   TextEditingController _nameController;
-  var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None");
+  var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None", note: "No note set. ");
   double proxyMinute = 0.0;
   List<bool> _selections = [true, false];
   List<bool> _frequency = [false, false, false, false, false, false, false]; // for every day of the week starting with sunday
@@ -242,7 +243,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                         ),
                         onChanged: (text) {
                           setState(() {
-                            alarmNote = text;
+                            newAlarm.note = text;
                           });
                         },
                       ),
@@ -279,6 +280,13 @@ class _CreateAlarmState extends State<CreateAlarm> {
                         newAlarm.name = _nameController.text;
                         DBProvider.db.newAlarm(newAlarm);
                         Navigator.pushReplacement(context, SizeRoute(page: alarm()));
+                        var notificationMessage = newAlarm.name + ' has now been added. ';
+                        Flushbar(
+                          message: notificationMessage,
+                          duration: Duration(seconds: 3),
+                          margin: EdgeInsets.all(8),
+                          borderRadius: 8,
+                        )..show(context);
                       },
                     )
                   ],
