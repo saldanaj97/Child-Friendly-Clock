@@ -1,6 +1,7 @@
 import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import './../../widgets/view/navbar.dart';
 import './clock/clock.dart';
 
@@ -13,18 +14,31 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var now = new DateTime.now();
+  Timer _everySecond;
 
-  void handleClick(String value){
-    switch(value){
-      case 'Parental Controls' :
+  void handleClick(String value) {
+    switch (value) {
+      case 'Parental Controls':
         print("Parental Controls clicked");
         //Todo: add parental controls functionality
         break;
-      case 'Reset App' :
+      case 'Reset App':
         print("reset app chosen");
         showAlertDialog(context);
         break;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    now = new DateTime.now();
+    _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if (!mounted) return;
+      setState(() {
+        now = new DateTime.now();
+      });
+    });
   }
 
   @override
@@ -172,6 +186,7 @@ class _HomeState extends State<Home> {
 
   Widget currentTime(int hour, int minute) {
     var hourConversion = hour % 12;
+    var minConversion = '0';
     var am_pm;
 
     if (hour >= 0 && hour < 12) {
@@ -182,6 +197,12 @@ class _HomeState extends State<Home> {
 
     if (hourConversion == 0) {
       hourConversion = 12;
+    }
+
+    if (minute < 10) {
+      minConversion = '0' + minute.toString();
+    } else {
+      minConversion = minute.toString();
     }
 
     return Container(
@@ -200,7 +221,7 @@ class _HomeState extends State<Home> {
             children: [
               Text(hourConversion.toString(), style: TextStyle(color: Colors.orange, fontSize: 37, fontWeight: FontWeight.w600)),
               Text(':', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(minute.toString(), style: TextStyle(color: Colors.cyan, fontSize: 37, fontWeight: FontWeight.w600)),
+              Text(minConversion, style: TextStyle(color: Colors.cyan, fontSize: 37, fontWeight: FontWeight.w600)),
               Text(am_pm, style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600))
             ],
           ),
