@@ -1,3 +1,5 @@
+import 'package:child_friendly_clock/src/alarm/view/alarm.dart';
+import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -36,13 +38,20 @@ class _CreateAlarmState extends State<CreateAlarm> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 45, 45, 70),
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pushReplacement(context, SizeRoute(page: alarm())),
         ),
         title: Text('Add Alarm'),
         centerTitle: true,
@@ -259,16 +268,17 @@ class _CreateAlarmState extends State<CreateAlarm> {
                             fontSize: 20.0,
                           )),
                       color: Colors.white,
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        Navigator.pushReplacement(context, SizeRoute(page: alarm()));
+                      },
                     ),
                     SaveButton(
                       active: canSave,
                       save: () {
                         newAlarm.frequency = _frequency;
                         newAlarm.name = _nameController.text;
-                        widget.clickCallback();
-                        //Todo: add database functionality to update existing entry based off of widget.editAlarm
-                        Navigator.pop(context);
+                        DBProvider.db.newAlarm(newAlarm);
+                        Navigator.pushReplacement(context, SizeRoute(page: alarm()));
                       },
                     )
                   ],

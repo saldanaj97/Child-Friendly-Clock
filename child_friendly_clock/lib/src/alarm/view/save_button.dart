@@ -47,6 +47,8 @@ class _SaveButtonState extends State<SaveButton> {
             )),
         color: Colors.grey[800],
         onPressed: () {},
+        // TODO: Possible notification to the user that they are missing information
+        // needed to save the alarm
         //height: 100,
       );
     }
