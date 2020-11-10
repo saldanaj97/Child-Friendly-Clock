@@ -33,7 +33,8 @@ class DBProvider {
           thur INTEGER,
           fri INTEGER,
           sat INTEGER,
-          sun INTEGER
+          sun INTEGER, 
+          note TEXT
           );
         ''');
     }, onUpgrade: (db, oldVersion, newVersion) async {
@@ -56,8 +57,11 @@ class DBProvider {
           batch.execute("ALTER TABLE alarm ADD COLUMN sat INTEGER;");
           batch.execute("ALTER TABLE alarm ADD COLUMN sun INTEGER;");
         } */
+      else if (oldVersion == 3) {
+        batch.execute("ALTER TABLE alarm ADD COLUMN note TEXT;");
+      }
       await batch.commit();
-    }, version: 3);
+    }, version: 4);
   }
 
   newAlarm(Alarm newAlarm) async {
@@ -65,8 +69,8 @@ class DBProvider {
 
     var res = await db.rawInsert('''
       INSERT INTO alarm(
-        period, name, hour, minute, second, sun, mon, tues, wed, thur, fri, sat
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+        period, name, hour, minute, second, sun, mon, tues, wed, thur, fri, sat, note
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
     ''', [
       newAlarm.period,
       newAlarm.name,
@@ -80,6 +84,7 @@ class DBProvider {
       newAlarm.frequency[4],
       newAlarm.frequency[5],
       newAlarm.frequency[6],
+      newAlarm.note,
     ]);
 
     return res;
@@ -100,7 +105,8 @@ class DBProvider {
   Future<dynamic> getAlarms() async {
     final db = await database;
     var res = await db.query("alarm");
-
+    var master = await db.query('sqlite_master');
+    print(master);
     if (res.length == 0)
       return null;
     else {
