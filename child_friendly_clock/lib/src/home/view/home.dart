@@ -174,9 +174,9 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(numToMonth(month), style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(day.toString() + ', ', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(year.toString(), style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
+              Text(numToMonth(month), style: TextStyle(color: Colors.white, fontSize: 33, fontWeight: FontWeight.w600)),
+              Text(day.toString() + ', ', style: TextStyle(color: Colors.white, fontSize: 33, fontWeight: FontWeight.w600)),
+              Text(year.toString(), style: TextStyle(color: Colors.white, fontSize: 33, fontWeight: FontWeight.w600)),
             ],
           ),
         ],
@@ -206,7 +206,7 @@ class _HomeState extends State<Home> {
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: 30),
+      margin: EdgeInsets.only(bottom: 15),
       child: Column(
         children: [
           Row(
@@ -219,10 +219,10 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(hourConversion.toString(), style: TextStyle(color: Colors.orange, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(':', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(minConversion, style: TextStyle(color: Colors.cyan, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(am_pm, style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600))
+              Text(hourConversion.toString(), style: TextStyle(color: Colors.orange, fontSize: 40, fontWeight: FontWeight.w600)),
+              Text(':', style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.w600)),
+              Text(minConversion, style: TextStyle(color: Colors.cyan, fontSize: 40, fontWeight: FontWeight.w600)),
+              Text(am_pm, style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.w600))
             ],
           ),
         ],
