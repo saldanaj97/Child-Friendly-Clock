@@ -92,7 +92,6 @@ class DBProvider {
 
   deleteAlarm(int alarmID) async {
     final db = await database;
-
     int count = await db.rawDelete("DELETE FROM alarm WHERE alarmID = ?", [alarmID]);
 
     //if count isn't one we either didn't delete anything or deleted more than we wanted to.
@@ -117,5 +116,37 @@ class DBProvider {
   Future<dynamic> resetApplication() async {
     final db = await database;
     await db.rawDelete('DELETE FROM alarm');
+  }
+
+  updateAlarm(Alarm alarmToUpdate, String name, int hour, int min, List<bool> frequency, String newNote) async {
+    final db = await database;
+    await db.rawQuery('UPDATE alarm SET name = ' +
+        '\'' +
+        name +
+        '\', hour = ' +
+        hour.toString() +
+        ', minute = ' +
+        min.toString() +
+        ', sun = ' +
+        frequency[0].toString() +
+        ', mon = ' +
+        frequency[1].toString() +
+        ', tues = ' +
+        frequency[2].toString() +
+        ', wed = ' +
+        frequency[3].toString() +
+        ', thur = ' +
+        frequency[4].toString() +
+        ', fri = ' +
+        frequency[5].toString() +
+        ', sat = ' +
+        frequency[6].toString() +
+        ', note = ' +
+        '\'' +
+        newNote +
+        '\'' +
+        ' WHERE alarmID = ' +
+        alarmToUpdate.alarmID.toString() +
+        ';');
   }
 }
