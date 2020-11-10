@@ -3,6 +3,7 @@ import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 import 'package:child_friendly_clock/src/alarm/view/save_button.dart';
@@ -279,6 +280,13 @@ class _CreateAlarmState extends State<CreateAlarm> {
                         newAlarm.name = _nameController.text;
                         DBProvider.db.newAlarm(newAlarm);
                         Navigator.pushReplacement(context, SizeRoute(page: alarm()));
+                        var notificationMessage = newAlarm.name + ' has now been added. ';
+                        Flushbar(
+                          message: notificationMessage,
+                          duration: Duration(seconds: 3),
+                          margin: EdgeInsets.all(8),
+                          borderRadius: 8,
+                        )..show(context);
                       },
                     )
                   ],
