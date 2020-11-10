@@ -113,4 +113,9 @@ class DBProvider {
       return res.isNotEmpty ? res : null;
     }
   }
+
+  Future<dynamic> resetApplication() async {
+    final db = await database;
+    await db.rawDelete('DELETE FROM alarm');
+  }
 }
