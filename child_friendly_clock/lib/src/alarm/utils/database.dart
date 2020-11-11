@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
@@ -90,11 +91,23 @@ class DBProvider{
       return -1;
   }
 
+  editAlarm(Alarm editAlarm) async {
+    final db = await database;
+
+    var res = db.rawUpdate( " Update Alarm Set Period = ?, hour = ?, minute = ?, second = ?, sun = ?,mon = ?, tue = ?, wed = ?, thur = ?, fri = ?, sat = ? where name = ? ",
+          [editAlarm.period, editAlarm.hour, editAlarm.minute, editAlarm.second,
+          editAlarm.frequency[0],editAlarm.frequency[1],editAlarm.frequency[2], editAlarm.frequency[3],
+          editAlarm.frequency[4],editAlarm.frequency[5], editAlarm.frequency[6],
+          editAlarm.name]);
+    return res;
+
+  }
+
   Future<dynamic> getAlarms() async{
     final db = await database;
 
     var master = await db.query("sqlite_master");
-    print(master.toString());
+    //print(master.toString());
 
     var res = await db.query("alarm");
 

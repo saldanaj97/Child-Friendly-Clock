@@ -215,6 +215,7 @@ class _EditAlarmState extends State<EditAlarm>{
                           widget.editAlarm.name = _alarmNameController.text;
                           widget.clickCallback();
                           //Todo: add database functionality to update existing entry based off of widget.editAlarm
+                          DBProvider.db.editAlarm(widget.editAlarm);
                           Navigator.pop(context);
                         }
                     )
