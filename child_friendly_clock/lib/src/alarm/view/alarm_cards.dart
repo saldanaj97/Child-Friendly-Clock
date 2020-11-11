@@ -68,7 +68,7 @@ class _AlarmCardsState extends State<AlarmCards> {
 
     for (int i = 0; i < 7; i++) {
       List<int> group = [];
-      while (widget.alarm.frequency[i]) {
+      while (widget.alarm.frequency[i] == 1) {
         group.add(i);
         if (i == 6) break;
         i++;

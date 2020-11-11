@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
@@ -11,6 +12,7 @@ class DBProvider {
   // singleton. When you call this it will check if an instance of this file
   // exists. If it doesn't then it will make a new instance of this class.
   Future<Database> get database async {
+    print("getting database");
     if (_database != null) return _database;
 
     _database = await initDB();
@@ -18,50 +20,30 @@ class DBProvider {
   }
 
   initDB() async {
-    return await openDatabase(join(await getDatabasesPath(), 'cf_clock.db'), onCreate: (db, version) async {
-      await db.execute('''
-          CREATE TABLE alarm(
-          alarmID INTEGER PRIMARY KEY,
-          period TEXT,
-          name TEXT,
-          hour INTEGER,
-          minute INTEGER,
-          second INTEGER,
-          mon INTEGER,
-          tues INTEGER,
-          wed INTEGER,
-          thur INTEGER,
-          fri INTEGER,
-          sat INTEGER,
-          sun INTEGER, 
-          note TEXT
-          );
-        ''');
-    }, onUpgrade: (db, oldVersion, newVersion) async {
-      var batch = db.batch();
-      if (oldVersion == 1) {
-        batch.execute("ALTER TABLE alarm ADD COLUMN mon INTEGER;");
-        batch.execute("ALTER TABLE alarm ADD COLUMN tues INTEGER;");
-        batch.execute("ALTER TABLE alarm ADD COLUMN wed INTEGER;");
-        batch.execute("ALTER TABLE alarm ADD COLUMN thur INTEGER;");
-        batch.execute("ALTER TABLE alarm ADD COLUMN fri INTEGER;");
-        batch.execute("ALTER TABLE alarm ADD COLUMN sat INTEGER;");
-        batch.execute("ALTER TABLE alarm ADD COLUMN sun INTEGER;");
-      }
-      /* 
-        else if(oldVersion == 2) {
-          batch.execute("ALTER TABLE alarm ADD COLUMN tues INTEGER;");
-          batch.execute("ALTER TABLE alarm ADD COLUMN wed INTEGER;");
-          batch.execute("ALTER TABLE alarm ADD COLUMN thur INTEGER;");
-          batch.execute("ALTER TABLE alarm ADD COLUMN fri INTEGER;");
-          batch.execute("ALTER TABLE alarm ADD COLUMN sat INTEGER;");
-          batch.execute("ALTER TABLE alarm ADD COLUMN sun INTEGER;");
-        } */
-      else if (oldVersion == 3) {
-        batch.execute("ALTER TABLE alarm ADD COLUMN note TEXT;");
-      }
-      await batch.commit();
-    }, version: 4);
+    print("creating database");
+    return await openDatabase(
+        join(await getDatabasesPath(), 'cf_clock.db'),
+        onCreate: (db, version) async {
+          await db.execute('''
+              CREATE TABLE alarm(
+              alarmID INTEGER PRIMARY KEY,
+              period TEXT,
+              name TEXT,
+              hour INTEGER,
+              minute INTEGER,
+              second INTEGER,
+              mon INTEGER,
+              tues INTEGER,
+              wed INTEGER,
+              thur INTEGER,
+              fri INTEGER,
+              sat INTEGER,
+              sun INTEGER, 
+              note TEXT
+              );
+            ''');
+      },
+    version: 1);
   }
 
   newAlarm(Alarm newAlarm) async {
@@ -101,8 +83,22 @@ class DBProvider {
       return -1;
   }
 
-  Future<dynamic> getAlarms() async {
+  editAlarm(Alarm editAlarm) async {
     final db = await database;
+
+    var res = db.rawUpdate( " Update Alarm Set Period = ?, hour = ?, minute = ?, second = ?, sun = ?, mon = ?, tues = ?, wed = ?, thur = ?, fri = ?, sat = ?,note = ? where name = ? ",
+          [editAlarm.period, editAlarm.hour, editAlarm.minute, editAlarm.second,
+          editAlarm.frequency[0],editAlarm.frequency[1],editAlarm.frequency[2], editAlarm.frequency[3],
+          editAlarm.frequency[4],editAlarm.frequency[5], editAlarm.frequency[6],
+          editAlarm.note,
+          editAlarm.name]);
+    return res;
+
+  }
+
+  Future<dynamic> getAlarms() async{
+    final db = await database;
+
     var res = await db.query("alarm");
     //var master = await db.query('sqlite_master');
     //print(master);
@@ -115,38 +111,9 @@ class DBProvider {
 
   Future<dynamic> resetApplication() async {
     final db = await database;
-    await db.rawDelete('DELETE FROM alarm');
-  }
-
-  updateAlarm(Alarm alarmToUpdate, String name, int hour, int min, List<bool> frequency, String newNote) async {
-    final db = await database;
-    await db.rawQuery('UPDATE alarm SET name = ' +
-        '\'' +
-        name +
-        '\', hour = ' +
-        hour.toString() +
-        ', minute = ' +
-        min.toString() +
-        ', sun = ' +
-        frequency[0].toString() +
-        ', mon = ' +
-        frequency[1].toString() +
-        ', tues = ' +
-        frequency[2].toString() +
-        ', wed = ' +
-        frequency[3].toString() +
-        ', thur = ' +
-        frequency[4].toString() +
-        ', fri = ' +
-        frequency[5].toString() +
-        ', sat = ' +
-        frequency[6].toString() +
-        ', note = ' +
-        '\'' +
-        newNote +
-        '\'' +
-        ' WHERE alarmID = ' +
-        alarmToUpdate.alarmID.toString() +
-        ';');
+    await db.rawDelete('DROP TABLE IF EXISTS alarm');
+    await db.close();
+    await deleteDatabase(join(await getDatabasesPath(), 'cf_clock.db'));
+    _database = null;
   }
 }
