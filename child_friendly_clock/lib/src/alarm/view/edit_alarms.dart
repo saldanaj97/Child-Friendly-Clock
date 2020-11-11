@@ -26,7 +26,7 @@ class _EditAlarmState extends State<EditAlarm>{
   int hour, minute;
   Future alarmsFuture;
   List<bool> _selections = [false, false];
-  List<bool> _frequency = [false, false, false, false, false, false, false];
+  List<int> _frequency = [0, 0, 0, 0, 0, 0, 0];
   // Future alarmsFuture;
 
   @override
@@ -158,32 +158,53 @@ class _EditAlarmState extends State<EditAlarm>{
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(child:
-                    FrequencyButton(day: 'Sun', active: _frequency[0], toggle: () => setState(() {
-                      _frequency[0] = !_frequency[0];
+                    FrequencyButton(day: 'Sun', active: _frequency[0] == 1, toggle: () => setState(() {
+                      if(_frequency[0] == 1)
+                        _frequency[0] = 0;
+                      else
+                        _frequency[0] = 1;
                     }))),
                     Expanded(child:
-                    FrequencyButton(day: 'Mon', active: _frequency[1], toggle: () => setState(() {
-                      _frequency[1] = !_frequency[1];
+                    FrequencyButton(day: 'Mon', active: _frequency[1] == 1, toggle: () => setState(() {
+                      if(_frequency[1] == 1)
+                        _frequency[1] = 0;
+                      else
+                        _frequency[1] = 1;
                     }))),
                     Expanded(child:
-                    FrequencyButton(day: 'Tues', active: _frequency[2], toggle: () => setState(() {
-                      _frequency[2] = !_frequency[2];
+                    FrequencyButton(day: 'Tues', active: _frequency[2] == 1, toggle: () => setState(() {
+                      if(_frequency[2] == 1)
+                        _frequency[2] = 0;
+                      else
+                        _frequency[2] = 1;
                     }))),
                     Expanded(child:
-                    FrequencyButton(day: 'Wed', active: _frequency[3], toggle: () => setState(() {
-                      _frequency[3] = !_frequency[3];
+                    FrequencyButton(day: 'Wed', active: _frequency[3] == 1, toggle: () => setState(() {
+                      if(_frequency[3] == 1)
+                        _frequency[3] = 0;
+                      else
+                        _frequency[3] = 1;
                     }))),
                     Expanded(child:
-                    FrequencyButton(day: 'Thurs', active: _frequency[4], toggle: () => setState(() {
-                      _frequency[4] = !_frequency[4];
+                    FrequencyButton(day: 'Thurs', active: _frequency[4] == 1, toggle: () => setState(() {
+                      if(_frequency[4] == 1)
+                        _frequency[4] = 0;
+                      else
+                        _frequency[4] = 1;
                     }))),
                     Expanded(child:
-                    FrequencyButton(day: 'Fri', active: _frequency[5], toggle: () => setState(() {
-                      _frequency[5] = !_frequency[5];
+                    FrequencyButton(day: 'Fri', active: _frequency[5] == 1, toggle: () => setState(() {
+                      if(_frequency[5] == 1)
+                        _frequency[5] = 0;
+                      else
+                        _frequency[5] = 1;
                     }))),
                     Expanded(child:
-                    FrequencyButton(day: 'Sat', active: _frequency[6], toggle: () => setState(() {
-                      _frequency[6] = !_frequency[6];
+                    FrequencyButton(day: 'Sat', active: _frequency[6] == 1, toggle: () => setState(() {
+                      if(_frequency[6] == 1)
+                        _frequency[6] = 0;
+                      else
+                        _frequency[6] = 1;
                     })))
                   ]
               ),
