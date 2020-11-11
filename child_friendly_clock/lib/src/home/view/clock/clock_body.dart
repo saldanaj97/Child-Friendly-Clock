@@ -10,6 +10,7 @@ class ClockBody extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
+            margin: EdgeInsets.only(left: 5, right: 5),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,

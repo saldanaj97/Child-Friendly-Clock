@@ -4,7 +4,7 @@ Alarm alarmFromJson(String str) => Alarm.fromJson(json.decode(str));
 
 String alarmToJson(Alarm data) => json.encode(data.toJson());
 
-class Alarm{
+class Alarm {
   String name;
   int alarmID;
   String period;
@@ -12,16 +12,9 @@ class Alarm{
   int minute;
   int second;
   List<int> frequency;
+  String note;
 
-  Alarm({
-    this.name,
-    this.alarmID,
-    this.period,
-    this.hour,
-    this.minute,
-    this.second,
-    this.frequency
-  });
+  Alarm({this.name, this.alarmID, this.period, this.hour, this.minute, this.second, this.frequency, this.note});
 
   factory Alarm.fromJson(Map<String, dynamic> json) => Alarm(
     name: json["name"],
@@ -30,7 +23,8 @@ class Alarm{
     hour: json["hour"],
     minute: json["minute"],
     second: json["second"],
-    frequency: [json["sun"], json["mon"], json["tues"], json["wed"], json["thur"], json["fri"], json["sat"]]
+    frequency: [json["sun"], json["mon"], json["tues"], json["wed"], json["thur"], json["fri"], json["sat"]],
+    note: json["note"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -47,5 +41,6 @@ class Alarm{
     "thur": frequency[0],
     "fri": frequency[0],
     "sat": frequency[0],
+    "note": note
   };
 }
