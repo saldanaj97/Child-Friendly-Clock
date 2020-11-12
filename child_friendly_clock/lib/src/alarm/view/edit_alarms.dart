@@ -19,6 +19,7 @@ class EditAlarm extends StatefulWidget {
 
 class _EditAlarmState extends State<EditAlarm> {
   TextEditingController _alarmNameController = new TextEditingController();
+  TextEditingController _noteController = new TextEditingController();
   bool canSave = true;
   List<bool> _selections = [false, false];
   List<int> _frequency = [0, 0, 0, 0, 0, 0, 0];
@@ -29,6 +30,7 @@ class _EditAlarmState extends State<EditAlarm> {
   void initState() {
     super.initState();
     _alarmNameController.text = widget.editAlarm.name;
+    _noteController.text = widget.editAlarm.note;
     if (widget.editAlarm.period == "AM") {
       _selections[0] = true;
     } else {
@@ -225,6 +227,7 @@ class _EditAlarmState extends State<EditAlarm> {
                           ),
                         ),
                         autofocus: false,
+                        controller: _noteController,
                         keyboardType: TextInputType.multiline,
                         style: TextStyle(color: Colors.black, fontSize: 18.0, letterSpacing: 2.0),
                         onChanged: (text) {

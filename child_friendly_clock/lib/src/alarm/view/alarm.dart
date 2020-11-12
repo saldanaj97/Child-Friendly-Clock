@@ -116,7 +116,9 @@ class _AlarmState extends State<alarm> {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       Map<String, dynamic> read = alarmsData.data[index];
+                      print(read);
                       Alarm rowAlarm = Alarm.fromJson(read);
+
                       return AlarmCards(
                         alarm: rowAlarm,
                         updateListCallback: () => setState(() {

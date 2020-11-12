@@ -9,7 +9,7 @@ showNote(BuildContext context, String userNote) {
 
   AlertDialog alert = AlertDialog(
     title: Text('Note'),
-    content: Text(userNote),
+    content: SingleChildScrollView(child:  Text(userNote)),
     actions: [
       continueButton,
     ],

@@ -86,14 +86,13 @@ class DBProvider {
   editAlarm(Alarm editAlarm) async {
     final db = await database;
 
-    var res = db.rawUpdate( " Update Alarm Set Period = ?, hour = ?, minute = ?, second = ?, sun = ?, mon = ?, tues = ?, wed = ?, thur = ?, fri = ?, sat = ?,note = ? where name = ? ",
+    var res = await db.rawUpdate("UPDATE alarm SET Period = ?, hour = ?, minute = ?, second = ?, sun = ?, mon = ?, tues = ?, wed = ?, thur = ?, fri = ?, sat = ?,note = ?,name=? WHERE alarmID = ?",
           [editAlarm.period, editAlarm.hour, editAlarm.minute, editAlarm.second,
           editAlarm.frequency[0],editAlarm.frequency[1],editAlarm.frequency[2], editAlarm.frequency[3],
           editAlarm.frequency[4],editAlarm.frequency[5], editAlarm.frequency[6],
           editAlarm.note,
-          editAlarm.name]);
+          editAlarm.name, editAlarm.alarmID]);
     return res;
-
   }
 
   Future<dynamic> getAlarms() async{
