@@ -1,7 +1,8 @@
 //import 'dart:js';
 
-import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
+import 'package:child_friendly_clock/src/home/view/home.dart';
 import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './alarm_cards.dart';
@@ -12,6 +13,43 @@ import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 class alarm extends StatefulWidget {
   @override
   _AlarmState createState() => _AlarmState();
+}
+
+showAlertDialog(BuildContext context) {
+  Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      });
+
+  Widget continueButton = FlatButton(
+      child: Text("Delete Everything"),
+      onPressed: () {
+        DBProvider.db.resetApplication();
+        Navigator.pushReplacement(context, SizeRoute(page: Home()));
+        Flushbar(
+          message: 'App is now back to initial state',
+          duration: Duration(seconds: 3),
+          margin: EdgeInsets.all(8),
+          borderRadius: 8,
+        )..show(context);
+      });
+
+  AlertDialog alert = AlertDialog(
+    title: Text("Reset App"),
+    content: Text("Are you sure you want to reset the app? \n This will remove all previously saved settings"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
 
 class _AlarmState extends State<alarm> {
@@ -43,6 +81,8 @@ class _AlarmState extends State<alarm> {
         break;
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {

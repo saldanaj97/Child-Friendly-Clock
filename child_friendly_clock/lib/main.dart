@@ -1,8 +1,12 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:child_friendly_clock/src/home/view/home.dart';
 
-void main() => runApp(new MyApp());
-
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
+  runApp(new MyApp());
+}
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 

@@ -1,12 +1,11 @@
 import 'dart:ui';
-
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
-import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/view/edit_alarms.dart';
 import '../view/note.dart';
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 
 class AlarmCards extends StatefulWidget {
   final Alarm alarm;
@@ -16,6 +15,11 @@ class AlarmCards extends StatefulWidget {
   @override
   _AlarmCardsState createState() => _AlarmCardsState();
 }
+showPrint(int i){
+  print('alarm $i ');
+  //showNote(, "Alarm");
+}
+
 
 class _AlarmCardsState extends State<AlarmCards> {
   Future alarmsFuture;
@@ -161,7 +165,108 @@ class _AlarmCardsState extends State<AlarmCards> {
                                     onChanged: (value) {
                                       setState(() {
                                         isSwitched = value; //TODO: Make the on/off switch actually turn alarm on/off
+                                        int addHour;
+                                        if (widget.alarm.period == "AM") {
+                                          addHour = 0;
+                                        }
+                                        else{
+                                          addHour = 11;
+                                        }
+                                        int hours = (widget.alarm.hour + addHour);
+                                        int minute = widget.alarm.minute;
+                                        DateTime monday = new DateTime(2020, 11, 2, hours, minute);
+                                        DateTime tuesday = new DateTime(2020, 11, 3, hours, minute);
+                                        DateTime wednesday = new DateTime(2020, 11, 4, hours, minute);
+                                        DateTime thursday = new DateTime(2020, 11, 5, hours, minute);
+                                        DateTime friday = new DateTime(2020, 11, 6, hours, minute);
+                                        DateTime saturday = new DateTime(2020, 11, 7, hours, minute);
+                                        DateTime sunday = new DateTime(2020, 11, 1, hours, minute);
+                                        DateTime now = new DateTime.now();
+
+
+
                                         print(isSwitched);
+                                        if(value == true) {
+                                          if(widget.alarm.frequency[0] == 1){
+                                             AndroidAlarmManager.periodic(
+                                                  Duration(minutes: 10),
+                                                  0,
+                                                  showPrint,
+                                                  startAt: sunday,
+                                                  exact: true,
+                                                  wakeup: true,
+                                                  rescheduleOnReboot: true);
+                                          }
+                                          if(widget.alarm.frequency[1] == 1){
+                                            AndroidAlarmManager.periodic(
+                                                Duration(minutes: 10),
+                                                1,
+                                                showPrint,
+                                                startAt: monday,
+                                                exact: true,
+                                                wakeup: true,
+                                                rescheduleOnReboot: true);
+                                          }
+                                          if(widget.alarm.frequency[2] == 1){
+                                            AndroidAlarmManager.periodic(
+                                                Duration(minutes: 10),
+                                                2,
+                                                showPrint,
+                                                startAt: tuesday,
+                                                exact: true,
+                                                wakeup: true,
+                                                rescheduleOnReboot: true);
+                                          }
+                                          if(widget.alarm.frequency[3] == 1){
+                                            AndroidAlarmManager.periodic(
+                                                Duration(minutes: 10),
+                                                3,
+                                                showPrint,
+                                                startAt: wednesday,
+                                                exact: true,
+                                                wakeup: true,
+                                                rescheduleOnReboot: true);
+                                          }
+                                          if(widget.alarm.frequency[4] == 1){
+                                            AndroidAlarmManager.periodic(
+                                                Duration(minutes: 10),
+                                                4,
+                                                showPrint,
+                                                startAt: thursday,
+                                                exact: true,
+                                                wakeup: true,
+                                                rescheduleOnReboot: true);
+                                          }
+                                          if(widget.alarm.frequency[5] == 1){
+                                            AndroidAlarmManager.periodic(
+                                                Duration(minutes: 10),
+                                                5,
+                                                showPrint,
+                                                startAt: friday,
+                                                exact: true,
+                                                wakeup: true,
+                                                rescheduleOnReboot: true);
+                                          }
+                                          if(widget.alarm.frequency[6] == 1){
+                                            AndroidAlarmManager.periodic(
+                                                Duration(minutes: 10),
+                                                6,
+                                                showPrint,
+                                                startAt: saturday,
+                                                exact: true,
+                                                wakeup: true,
+                                                rescheduleOnReboot: true);
+                                          }
+                                        }
+                                        else{
+                                          AndroidAlarmManager.cancel(0);
+                                          AndroidAlarmManager.cancel(1);
+                                          AndroidAlarmManager.cancel(2);
+                                          AndroidAlarmManager.cancel(3);
+                                          AndroidAlarmManager.cancel(4);
+                                          AndroidAlarmManager.cancel(5);
+                                          AndroidAlarmManager.cancel(6);
+                                        }
                                       });
                                     },
                                     activeTrackColor: Colors.lightGreenAccent,
