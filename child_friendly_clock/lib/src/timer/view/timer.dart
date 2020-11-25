@@ -8,20 +8,18 @@ class Timer extends StatefulWidget {
 }
 
 class _TimerState extends State<Timer> {
-
-  void handleClick(String value){
-    switch(value){
-      case 'Parental Controls' :
+  void handleClick(String value) {
+    switch (value) {
+      case 'Parental Controls':
         print("Parental Controls clicked");
         //Todo: add parental controls functionality
         break;
-      case 'Reset App' :
+      case 'Reset App':
         print("reset app chosen");
         showAlertDialog(context);
         break;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +69,7 @@ class _TimerState extends State<Timer> {
                   width: 100,
                   height: 100,
                   child: FloatingActionButton(
+                    heroTag: 'PauseButton',
                     elevation: 15,
                     backgroundColor: Colors.red,
                     child: new Icon(
@@ -87,6 +86,7 @@ class _TimerState extends State<Timer> {
                   width: 100,
                   height: 100,
                   child: FloatingActionButton(
+                    heroTag: 'StartButton',
                     elevation: 15,
                     backgroundColor: Colors.green,
                     child: new Icon(

@@ -103,13 +103,13 @@ class _HomeState extends State<Home> {
   String timeOfDay(int hour) {
     String timeOfDay = '';
 
-    if (hour >= 20 || hour < 4) {
+    if (hour >= 20 && hour < 4) {
       // 8pm - 4am
-      timeOfDay = 'Night';
-    } else if (hour >= 5 || hour < 11) {
+      timeOfDay = 'Evening';
+    } else if (hour >= 5 && hour < 11) {
       // 5am - 11am
       timeOfDay = 'Morning';
-    } else if (hour >= 12 || hour <= 19) {
+    } else if (hour >= 12 && hour <= 19) {
       // 12pm - 7pm
       timeOfDay = 'Afternoon';
     } else {

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:child_friendly_clock/src/home/view/home.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await AndroidAlarmManager.initialize();
+  // Removed temporarily while working on fixing bugs
+  /* WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize(); */
   runApp(new MyApp());
 }
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
