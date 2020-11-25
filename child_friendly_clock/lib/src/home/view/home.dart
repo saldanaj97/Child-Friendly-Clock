@@ -115,8 +115,6 @@ class _HomeState extends State<Home> {
     } else {
       timeOfDay = 'undefined';
     }
-    print(hour);
-    print(timeOfDay);
     return timeOfDay;
   }
 
