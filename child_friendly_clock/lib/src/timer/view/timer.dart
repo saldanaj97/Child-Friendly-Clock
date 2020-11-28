@@ -228,12 +228,36 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
   String timeToString(timerAmount) {
-    timerAmount = timerAmount % (24 * 3600);
-    print(timerAmount);
-    int hour = (timerAmount / 60).round();
-    timerAmount %= 3600;
-    int minutes = timerAmount % 60;
+    String formattedTime = '';
+    int min = 0;
+    int sec = 0;
 
-    return (hour.toString() + ' : ' + minutes.toString());
+    // Min
+    timerAmount %= (24 * 3600);
+    if (timerAmount >= 60) {
+      min = (timerAmount / 60).toInt();
+    }
+
+    // Sec
+    timerAmount %= 3600;
+    if (timerAmount % 60 > 0) {
+      sec = timerAmount % 60;
+    }
+
+    // String formatting
+    if (min + sec == 0) {
+      formattedTime = '00 : 00';
+    } else if (min > 0 && min <= 9) {
+      formattedTime = '0' + min.toString();
+    } else if (min >= 10) {
+      formattedTime = min.toString();
+    }
+    formattedTime += ' : ';
+    if (sec >= 0 && sec <= 9) {
+      formattedTime += '0' + sec.toString();
+    } else if (sec > 9) {
+      formattedTime += sec.toString();
+    }
+    return formattedTime;
   }
 }
