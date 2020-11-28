@@ -255,7 +255,7 @@ class _TimerScreenState extends State<TimerScreen> {
     formattedTime += ' : ';
     if (sec >= 0 && sec <= 9) {
       formattedTime += '0' + sec.toString();
-    } else if (sec > 10) {
+    } else if (sec > 9) {
       formattedTime += sec.toString();
     }
     return formattedTime;
