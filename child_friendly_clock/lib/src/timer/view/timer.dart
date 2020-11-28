@@ -9,11 +9,10 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  int _counter = 10;
+  int _counter = 0;
   Timer _timer;
 
   void _startTimer() {
-    _counter = 10;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_counter > 0) {
@@ -40,8 +39,6 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int timer_duration = 0;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -98,6 +95,7 @@ class _TimerScreenState extends State<TimerScreen> {
                     ),
                     onPressed: () {
                       print('Pause Pressed');
+                      _timer.cancel();
                     },
                   ),
                 ),
