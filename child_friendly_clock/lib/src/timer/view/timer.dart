@@ -1,27 +1,41 @@
+import 'dart:async';
 import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/view/navbar.dart';
 
-class Timer extends StatefulWidget {
+class TimerScreen extends StatefulWidget {
   @override
-  _TimerState createState() => _TimerState();
+  _TimerScreenState createState() => _TimerScreenState();
 }
 
-class _TimerState extends State<Timer> {
+class _TimerScreenState extends State<TimerScreen> {
+  int _counter = 0;
+  Timer _timer;
 
-  void handleClick(String value){
-    switch(value){
-      case 'Parental Controls' :
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_counter > 0) {
+          _counter--;
+        } else {
+          _timer.cancel();
+        }
+      });
+    });
+  }
+
+  void handleClick(String value) {
+    switch (value) {
+      case 'Parental Controls':
         print("Parental Controls clicked");
         //Todo: add parental controls functionality
         break;
-      case 'Reset App' :
+      case 'Reset App':
         print("reset app chosen");
         showAlertDialog(context);
         break;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +76,7 @@ class _TimerState extends State<Timer> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // TIMER NUMBERS
-            Text('00:00:00', style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
+            Text(timeToString(_counter), style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               // PLAY PAUSE BUTTONS
@@ -71,6 +85,7 @@ class _TimerState extends State<Timer> {
                   width: 100,
                   height: 100,
                   child: FloatingActionButton(
+                    heroTag: 'PauseButton',
                     elevation: 15,
                     backgroundColor: Colors.red,
                     child: new Icon(
@@ -80,6 +95,7 @@ class _TimerState extends State<Timer> {
                     ),
                     onPressed: () {
                       print('Pause Pressed');
+                      _timer.cancel();
                     },
                   ),
                 ),
@@ -87,6 +103,7 @@ class _TimerState extends State<Timer> {
                   width: 100,
                   height: 100,
                   child: FloatingActionButton(
+                    heroTag: 'StartButton',
                     elevation: 15,
                     backgroundColor: Colors.green,
                     child: new Icon(
@@ -95,7 +112,8 @@ class _TimerState extends State<Timer> {
                       size: 75,
                     ),
                     onPressed: () {
-                      print('Play Pressed');
+                      print('Start Pressed');
+                      _startTimer();
                     },
                   ),
                 ),
@@ -128,7 +146,9 @@ class _TimerState extends State<Timer> {
                           fillColor: Colors.blue,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
-                            print('1 min pressed');
+                            setState(() {
+                              _counter = 60;
+                            });
                           },
                         ),
                       ),
@@ -146,7 +166,9 @@ class _TimerState extends State<Timer> {
                           fillColor: Colors.pink,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
-                            print('5 min pressed');
+                            setState(() {
+                              _counter = 300;
+                            });
                           },
                         ),
                       ),
@@ -168,7 +190,9 @@ class _TimerState extends State<Timer> {
                           fillColor: Colors.purple,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
-                            print('10 min pressed');
+                            setState(() {
+                              _counter = 600;
+                            });
                           },
                         ),
                       ),
@@ -185,7 +209,9 @@ class _TimerState extends State<Timer> {
                           fillColor: Colors.amber[400],
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
-                            print('30 min pressed');
+                            setState(() {
+                              _counter = 1800;
+                            });
                           },
                         ),
                       ),
@@ -199,5 +225,39 @@ class _TimerState extends State<Timer> {
       ),
       bottomNavigationBar: Navbar(),
     );
+  }
+
+  String timeToString(timerAmount) {
+    String formattedTime = '';
+    int min = 0;
+    int sec = 0;
+
+    // Min
+    timerAmount %= (24 * 3600);
+    if (timerAmount >= 60) {
+      min = (timerAmount / 60).toInt();
+    }
+
+    // Sec
+    timerAmount %= 3600;
+    if (timerAmount % 60 > 0) {
+      sec = timerAmount % 60;
+    }
+
+    // String formatting
+    if (min + sec == 0) {
+      formattedTime = '00 : 00';
+    } else if (min > 0 && min <= 9) {
+      formattedTime = '0' + min.toString();
+    } else if (min >= 10) {
+      formattedTime = min.toString();
+    }
+    formattedTime += ' : ';
+    if (sec >= 0 && sec <= 9) {
+      formattedTime += '0' + sec.toString();
+    } else if (sec > 9) {
+      formattedTime += sec.toString();
+    }
+    return formattedTime;
   }
 }

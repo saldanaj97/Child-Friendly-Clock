@@ -59,6 +59,7 @@ class StopwatchPageState extends State<StopwatchPage> {
       width: 100,
       height: 100,
       child: FloatingActionButton(
+        heroTag: 'Reset',
         backgroundColor: color,
         child: new Text(
           text,
@@ -69,13 +70,13 @@ class StopwatchPageState extends State<StopwatchPage> {
     );
   }
 
-  void handleClick(String value){
-    switch(value){
-      case 'Parental Controls' :
+  void handleClick(String value) {
+    switch (value) {
+      case 'Parental Controls':
         print("Parental Controls clicked");
         //Todo: add parental controls functionality
         break;
-      case 'Reset App' :
+      case 'Reset App':
         print("reset app chosen");
         showAlertDialog(context);
         break;
@@ -131,6 +132,7 @@ class StopwatchPageState extends State<StopwatchPage> {
                     width: 100,
                     height: 100,
                     child: FloatingActionButton(
+                      heroTag: 'Start',
                       backgroundColor: Colors.grey,
                       child: new Text(
                         'Reset',
