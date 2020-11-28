@@ -76,7 +76,7 @@ class _TimerScreenState extends State<TimerScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // TIMER NUMBERS
-            Text('$_counter', style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
+            Text(timeToString(_counter), style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               // PLAY PAUSE BUTTONS
@@ -147,7 +147,7 @@ class _TimerScreenState extends State<TimerScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
                             setState(() {
-                              _counter = 1;
+                              _counter = 60;
                             });
                           },
                         ),
@@ -167,7 +167,7 @@ class _TimerScreenState extends State<TimerScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
                             setState(() {
-                              _counter = 5;
+                              _counter = 300;
                             });
                           },
                         ),
@@ -191,7 +191,7 @@ class _TimerScreenState extends State<TimerScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
                             setState(() {
-                              _counter = 10;
+                              _counter = 600;
                             });
                           },
                         ),
@@ -210,7 +210,7 @@ class _TimerScreenState extends State<TimerScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
                             setState(() {
-                              _counter = 30;
+                              _counter = 1800;
                             });
                           },
                         ),
@@ -225,5 +225,15 @@ class _TimerScreenState extends State<TimerScreen> {
       ),
       bottomNavigationBar: Navbar(),
     );
+  }
+
+  String timeToString(timerAmount) {
+    timerAmount = timerAmount % (24 * 3600);
+    print(timerAmount);
+    int hour = (timerAmount / 60).round();
+    timerAmount %= 3600;
+    int minutes = timerAmount % 60;
+
+    return (hour.toString() + ' : ' + minutes.toString());
   }
 }
