@@ -229,11 +229,10 @@ class _TimerScreenState extends State<TimerScreen> {
 
   String timeToString(timerAmount) {
     timerAmount = timerAmount % (24 * 3600);
-    print(timerAmount);
-    int hour = (timerAmount / 60).round();
+    int min = (timerAmount / 60).round();
     timerAmount %= 3600;
-    int minutes = timerAmount % 60;
+    int sec = timerAmount % 60;
 
-    return (hour.toString() + ' : ' + minutes.toString());
+    return (min.toString() + ' : ' + sec.toString());
   }
 }
