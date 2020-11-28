@@ -1,50 +1,45 @@
-import 'package:child_friendly_clock/src/alarm/view/alarm.dart';
-import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
-import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 import 'package:child_friendly_clock/src/alarm/view/save_button.dart';
 import 'package:child_friendly_clock/src/alarm/view/frequency_button.dart';
+import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 
-class CreateAlarm extends StatefulWidget {
+class EditAlarm extends StatefulWidget {
+  final Alarm editAlarm;
   final VoidCallback clickCallback;
-  CreateAlarm({this.clickCallback});
+  EditAlarm({this.clickCallback, this.editAlarm});
 
   @override
-  _CreateAlarmState createState() => _CreateAlarmState();
+  _EditAlarmState createState() => _EditAlarmState();
 }
 
-class _CreateAlarmState extends State<CreateAlarm> {
-  TextEditingController _nameController;
-  var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None", note: "No note set. ");
-  double proxyMinute = 0.0;
-  List<bool> _selections = [true, false];
-  List<int> _frequency = [0, 0, 0, 0, 0, 0, 0]; // for every day of the week starting with sunday
-  bool canSave = false;
-  String alarmNote;
+class _EditAlarmState extends State<EditAlarm> {
+  TextEditingController _alarmNameController = new TextEditingController();
+  TextEditingController _noteController = new TextEditingController();
+  bool canSave = true;
+  List<bool> _selections = [false, false];
+  List<int> _frequency = [0, 0, 0, 0, 0, 0, 0];
+  // Future alarmsFuture;
+  String alarmNote = '';
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
+    _alarmNameController.text = widget.editAlarm.name;
+    _noteController.text = widget.editAlarm.note;
+    if (widget.editAlarm.period == "AM") {
+      _selections[0] = true;
+    } else {
+      _selections[1] = true;
     }
+    _frequency = widget.editAlarm.frequency;
   }
 
+// Function that will contain the dropdown for the expandable list
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +47,9 @@ class _CreateAlarmState extends State<CreateAlarm> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pushReplacement(context, SizeRoute(page: alarm())),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Add Alarm'),
+        title: Text('Edit Alarm'),
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 55, 55, 70),
       ),
@@ -69,21 +64,19 @@ class _CreateAlarmState extends State<CreateAlarm> {
                 margin: EdgeInsets.only(left: 25, right: 25, bottom: 15),
                 child: Row(
                   children: <Widget>[
-                    Text(
-                      'Name:',
-                      style: TextStyle(
-                        color: Colors.white,
-                        letterSpacing: 2.0,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28.0,
-                      ),
-                    ),
+                    Text('Name: ',
+                        style: TextStyle(
+                          color: Colors.white,
+                          letterSpacing: 2.0,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 28.0,
+                        )),
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(border: InputBorder.none, hintText: "Enter name", hintStyle: TextStyle(color: Colors.grey[500])),
                         autofocus: false,
                         keyboardType: TextInputType.text,
-                        controller: _nameController,
+                        controller: _alarmNameController,
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           color: Colors.white,
@@ -117,96 +110,93 @@ class _CreateAlarmState extends State<CreateAlarm> {
                         )),
                     SizedBox(width: 20.0),
                     NumberPicker.integer(
-                        initialValue: newAlarm.hour,
+                        initialValue: widget.editAlarm.hour,
                         minValue: 1,
                         maxValue: 12,
                         listViewWidth: 35.0,
-                        onChanged: (newValue) => setState(() => newAlarm.hour = newValue)),
-                    Text(':',
-                        style: TextStyle(
-                          color: Colors.lightBlue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                        )),
+                        onChanged: (newValue) => setState(() => widget.editAlarm.hour = newValue)),
+                    Text(':', style: TextStyle(color: Colors.lightBlue, fontWeight: FontWeight.bold, fontSize: 20.0)),
                     NumberPicker.integer(
-                        initialValue: newAlarm.minute,
+                        initialValue: widget.editAlarm.minute,
                         minValue: 0,
-                        maxValue: 59,
                         zeroPad: true,
+                        maxValue: 59,
                         listViewWidth: 60.0,
-                        onChanged: (newValue) => setState(() => newAlarm.minute = newValue)),
+                        onChanged: (newValue) => setState(() => widget.editAlarm.minute = newValue)),
                     ToggleButtons(
-                        children: [Text('AM'), Text('PM')],
-                        isSelected: _selections,
-                        onPressed: (int index) {
-                          setState(() {
-                            for (int btnIndex = 0; btnIndex < _selections.length; btnIndex++) {
-                              if (btnIndex == index) {
-                                _selections[btnIndex] = true;
-                                if (btnIndex == 0)
-                                  newAlarm.period = "AM";
-                                else
-                                  newAlarm.period = "PM";
+                      children: [Text('AM'), Text('PM')],
+                      isSelected: _selections,
+                      onPressed: (int index) {
+                        setState(() {
+                          for (int btnIndex = 0; btnIndex < _selections.length; btnIndex++) {
+                            if (btnIndex == index) {
+                              _selections[btnIndex] = true;
+                              if (btnIndex == 0) {
+                                widget.editAlarm.period = "AM";
                               } else {
-                                _selections[btnIndex] = false;
+                                widget.editAlarm.period = "PM";
                               }
+                            } else {
+                              _selections[btnIndex] = false;
                             }
-                          });
-                        })
+                          }
+                        });
+                      },
+                    )
                   ],
                 ),
               ),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
                   Expanded(child:
                   FrequencyButton(day: 'Sun', active: _frequency[0] == 1, toggle: () => setState(() {
-                  if(_frequency[0] == 1)
-                  _frequency[0] = 0;
-                  else
-                  _frequency[0] = 1;
+                    if(_frequency[0] == 1)
+                      _frequency[0] = 0;
+                    else
+                      _frequency[0] = 1;
                   }))),
                   Expanded(child:
                   FrequencyButton(day: 'Mon', active: _frequency[1] == 1, toggle: () => setState(() {
-                  if(_frequency[1] == 1)
-                  _frequency[1] = 0;
-                  else
-                  _frequency[1] = 1;
+                    if(_frequency[1] == 1)
+                      _frequency[1] = 0;
+                    else
+                      _frequency[1] = 1;
                   }))),
                   Expanded(child:
                   FrequencyButton(day: 'Tues', active: _frequency[2] == 1, toggle: () => setState(() {
-                  if(_frequency[2] == 1)
-                  _frequency[2] = 0;
-                  else
-                  _frequency[2] = 1;
+                    if(_frequency[2] == 1)
+                      _frequency[2] = 0;
+                    else
+                      _frequency[2] = 1;
                   }))),
                   Expanded(child:
                   FrequencyButton(day: 'Wed', active: _frequency[3] == 1, toggle: () => setState(() {
-                  if(_frequency[3] == 1)
-                  _frequency[3] = 0;
-                  else
-                  _frequency[3] = 1;
+                    if(_frequency[3] == 1)
+                      _frequency[3] = 0;
+                    else
+                      _frequency[3] = 1;
                   }))),
                   Expanded(child:
                   FrequencyButton(day: 'Thurs', active: _frequency[4] == 1, toggle: () => setState(() {
-                  if(_frequency[4] == 1)
-                  _frequency[4] = 0;
-                  else
-                  _frequency[4] = 1;
+                    if(_frequency[4] == 1)
+                      _frequency[4] = 0;
+                    else
+                      _frequency[4] = 1;
                   }))),
                   Expanded(child:
                   FrequencyButton(day: 'Fri', active: _frequency[5] == 1, toggle: () => setState(() {
-                  if(_frequency[5] == 1)
-                  _frequency[5] = 0;
-                  else
-                  _frequency[5] = 1;
+                    if(_frequency[5] == 1)
+                      _frequency[5] = 0;
+                    else
+                      _frequency[5] = 1;
                   }))),
                   Expanded(child:
                   FrequencyButton(day: 'Sat', active: _frequency[6] == 1, toggle: () => setState(() {
-                  if(_frequency[6] == 1)
-                  _frequency[6] = 0;
-                  else
-                  _frequency[6] = 1;
+                    if(_frequency[6] == 1)
+                      _frequency[6] = 0;
+                    else
+                      _frequency[6] = 1;
                   })))
                 ],
               ),
@@ -216,12 +206,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                   children: [
                     Text(
                       'Note ',
-                      style: TextStyle(
-                        color: Colors.white,
-                        letterSpacing: 2.0,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28.0,
-                      ),
+                      style: TextStyle(color: Colors.white, letterSpacing: 2.0, fontWeight: FontWeight.bold, fontSize: 28.0),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -231,7 +216,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          hintText: "Leave a note(optional)",
+                          hintText: widget.editAlarm.note,
                           hintStyle: TextStyle(color: Colors.grey[500], fontSize: 20),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0),
@@ -242,15 +227,12 @@ class _CreateAlarmState extends State<CreateAlarm> {
                           ),
                         ),
                         autofocus: false,
+                        controller: _noteController,
                         keyboardType: TextInputType.multiline,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.0,
-                          letterSpacing: 2.0,
-                        ),
+                        style: TextStyle(color: Colors.black, fontSize: 18.0, letterSpacing: 2.0),
                         onChanged: (text) {
                           setState(() {
-                            newAlarm.note = text;
+                            widget.editAlarm.note = text;
                           });
                         },
                       ),
@@ -259,7 +241,7 @@ class _CreateAlarmState extends State<CreateAlarm> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 15, bottom: 15),
+                margin: EdgeInsets.only(top: 10, bottom: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -270,24 +252,19 @@ class _CreateAlarmState extends State<CreateAlarm> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
-                      child: Text('Cancel',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                          )),
+                      child: Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
                       color: Colors.white,
-                      onPressed: () {
-                        Navigator.pushReplacement(context, SizeRoute(page: alarm()));
-                      },
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
                     SaveButton(
                       active: canSave,
                       save: () {
-                        newAlarm.frequency = _frequency;
-                        newAlarm.name = _nameController.text;
-                        DBProvider.db.newAlarm(newAlarm);
-                        Navigator.pushReplacement(context, SizeRoute(page: alarm()));
-                        var notificationMessage = newAlarm.name + ' has now been added. ';
+                        widget.editAlarm.frequency = _frequency;
+                        widget.editAlarm.name = _alarmNameController.text;
+                        DBProvider.db.editAlarm(widget.editAlarm);
+                        widget.clickCallback();
+                        Navigator.of(context).pop();
+                        var notificationMessage = widget.editAlarm.name + ' has now been updated. ';
                         Flushbar(
                           message: notificationMessage,
                           duration: Duration(seconds: 3),

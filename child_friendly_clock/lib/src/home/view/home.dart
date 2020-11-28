@@ -1,5 +1,7 @@
+import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import './../../widgets/view/navbar.dart';
 import './clock/clock.dart';
 
@@ -12,6 +14,32 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var now = new DateTime.now();
+  Timer _everySecond;
+
+  void handleClick(String value) {
+    switch (value) {
+      case 'Parental Controls':
+        print("Parental Controls clicked");
+        //Todo: add parental controls functionality
+        break;
+      case 'Reset App':
+        print("reset app chosen");
+        showAlertDialog(context);
+        break;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    now = new DateTime.now();
+    _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if (!mounted) return;
+      setState(() {
+        now = new DateTime.now();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +57,22 @@ class _HomeState extends State<Home> {
         elevation: 0,
         centerTitle: false,
         backgroundColor: const Color(0xff2d2e40),
+        leading: PopupMenuButton<String>(
+          icon: Icon(
+            Icons.menu,
+            color: Colors.white,
+            size: 45,
+          ),
+          onSelected: handleClick,
+          itemBuilder: (BuildContext context) {
+            return {"Parental Controls", "Reset App"}.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+        ),
       ),
       backgroundColor: const Color(0xff2d2e40),
       body: Container(
@@ -130,9 +174,9 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(numToMonth(month), style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(day.toString() + ', ', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(year.toString(), style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
+              Text(numToMonth(month), style: TextStyle(color: Colors.white, fontSize: 33, fontWeight: FontWeight.w600)),
+              Text(day.toString() + ', ', style: TextStyle(color: Colors.white, fontSize: 33, fontWeight: FontWeight.w600)),
+              Text(year.toString(), style: TextStyle(color: Colors.white, fontSize: 33, fontWeight: FontWeight.w600)),
             ],
           ),
         ],
@@ -142,6 +186,7 @@ class _HomeState extends State<Home> {
 
   Widget currentTime(int hour, int minute) {
     var hourConversion = hour % 12;
+    var minConversion = '0';
     var am_pm;
 
     if (hour >= 0 && hour < 12) {
@@ -150,8 +195,18 @@ class _HomeState extends State<Home> {
       am_pm = 'PM';
     }
 
+    if (hourConversion == 0) {
+      hourConversion = 12;
+    }
+
+    if (minute < 10) {
+      minConversion = '0' + minute.toString();
+    } else {
+      minConversion = minute.toString();
+    }
+
     return Container(
-      margin: EdgeInsets.only(bottom: 30),
+      margin: EdgeInsets.only(bottom: 15),
       child: Column(
         children: [
           Row(
@@ -164,10 +219,10 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(hourConversion.toString(), style: TextStyle(color: Colors.orange, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(':', style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(minute.toString(), style: TextStyle(color: Colors.cyan, fontSize: 37, fontWeight: FontWeight.w600)),
-              Text(am_pm, style: TextStyle(color: Colors.white, fontSize: 37, fontWeight: FontWeight.w600))
+              Text(hourConversion.toString(), style: TextStyle(color: Colors.orange, fontSize: 40, fontWeight: FontWeight.w600)),
+              Text(':', style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.w600)),
+              Text(minConversion, style: TextStyle(color: Colors.cyan, fontSize: 40, fontWeight: FontWeight.w600)),
+              Text(am_pm, style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.w600))
             ],
           ),
         ],
