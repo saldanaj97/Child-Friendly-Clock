@@ -41,7 +41,7 @@ class Navbar extends StatelessWidget {
               icon: Icon(Icons.hourglass_full, color: Colors.white, size: 35),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(context, SizeRoute(page: Timer()));
+                Navigator.push(context, SizeRoute(page: TimerScreen()));
               }),
           title: Text(
             'Timer',

@@ -1,13 +1,30 @@
+import 'dart:async';
 import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/view/navbar.dart';
 
-class Timer extends StatefulWidget {
+class TimerScreen extends StatefulWidget {
   @override
-  _TimerState createState() => _TimerState();
+  _TimerScreenState createState() => _TimerScreenState();
 }
 
-class _TimerState extends State<Timer> {
+class _TimerScreenState extends State<TimerScreen> {
+  int _counter = 10;
+  Timer _timer;
+
+  void _startTimer() {
+    _counter = 10;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_counter > 0) {
+          _counter--;
+        } else {
+          _timer.cancel();
+        }
+      });
+    });
+  }
+
   void handleClick(String value) {
     switch (value) {
       case 'Parental Controls':
@@ -23,6 +40,8 @@ class _TimerState extends State<Timer> {
 
   @override
   Widget build(BuildContext context) {
+    int timer_duration = 0;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -60,7 +79,7 @@ class _TimerState extends State<Timer> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // TIMER NUMBERS
-            Text('00:00:00', style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
+            Text('$_counter', style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               // PLAY PAUSE BUTTONS
@@ -95,7 +114,8 @@ class _TimerState extends State<Timer> {
                       size: 75,
                     ),
                     onPressed: () {
-                      print('Play Pressed');
+                      print('Start Pressed');
+                      _startTimer();
                     },
                   ),
                 ),
@@ -128,7 +148,9 @@ class _TimerState extends State<Timer> {
                           fillColor: Colors.blue,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
-                            print('1 min pressed');
+                            setState(() {
+                              _counter = 1;
+                            });
                           },
                         ),
                       ),
@@ -146,7 +168,9 @@ class _TimerState extends State<Timer> {
                           fillColor: Colors.pink,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
-                            print('5 min pressed');
+                            setState(() {
+                              _counter = 5;
+                            });
                           },
                         ),
                       ),
@@ -168,7 +192,9 @@ class _TimerState extends State<Timer> {
                           fillColor: Colors.purple,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
-                            print('10 min pressed');
+                            setState(() {
+                              _counter = 10;
+                            });
                           },
                         ),
                       ),
@@ -185,7 +211,9 @@ class _TimerState extends State<Timer> {
                           fillColor: Colors.amber[400],
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           onPressed: () {
-                            print('30 min pressed');
+                            setState(() {
+                              _counter = 30;
+                            });
                           },
                         ),
                       ),
