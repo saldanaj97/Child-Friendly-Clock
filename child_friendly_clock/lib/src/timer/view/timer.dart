@@ -22,7 +22,7 @@ class _TimerScreenState extends State<TimerScreen> {
       setState(() {
         if (_counter > 0) {
           _counter--;
-          updateMin();
+          if (_counter / 60 >= 1) updateMin();
         } else {
           _timer.cancel();
         }
@@ -87,7 +87,11 @@ class _TimerScreenState extends State<TimerScreen> {
         );
       },
     ).then((value) => {
-          if (value != null) setState(() => seconds = value),
+          if (value != null)
+            setState(() {
+              seconds = value;
+              _counter = value;
+            }),
         });
   }
 
@@ -162,7 +166,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   width: 100,
                   height: 100,
                   child: FloatingActionButton(
-                    heroTag: 'minDial',
+                    heroTag: 'secDial',
                     elevation: 0,
                     child: Text(formattedSeconds(), style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
                     onPressed: _showSecondsDialog,
@@ -207,7 +211,6 @@ class _TimerScreenState extends State<TimerScreen> {
                       print('Start Pressed');
                       _counter += hours * 3600;
                       _counter += mins * 60;
-                      _counter += seconds;
                       secondsPassed = 59;
                       _startTimer();
                     },
@@ -330,8 +333,6 @@ class _TimerScreenState extends State<TimerScreen> {
       formattedTime = '0' + mins.toString();
     } else if (mins >= 10) {
       formattedTime = mins.toString();
-    } else {
-      formattedTime = '00';
     }
 
     return formattedTime;
@@ -346,10 +347,11 @@ class _TimerScreenState extends State<TimerScreen> {
     }
 
     if (sec >= 0 && sec <= 9) {
-      formattedTime += '0' + seconds.toString();
+      formattedTime += '0' + sec.toString();
     } else if (sec > 9) {
-      formattedTime += seconds.toString();
+      formattedTime += sec.toString();
     }
+    print(sec);
     return formattedTime;
   }
 
