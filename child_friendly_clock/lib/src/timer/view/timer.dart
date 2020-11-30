@@ -43,6 +43,22 @@ class _TimerScreenState extends State<TimerScreen> {
     }
   }
 
+  Future _showHourDialog() async {
+    await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return NumberPickerDialog.integer(
+          minValue: 0,
+          maxValue: 24,
+          title: new Text("Minutes: "),
+          initialIntegerValue: 0,
+        );
+      },
+    ).then((value) => {
+          if (value != null) setState(() => hours = value),
+        });
+  }
+
   Future _showMinDialog() async {
     await showDialog<int>(
       context: context,
@@ -50,7 +66,7 @@ class _TimerScreenState extends State<TimerScreen> {
         return NumberPickerDialog.integer(
           minValue: 0,
           maxValue: 60,
-          title: new Text("Hours:"),
+          title: new Text("Minutes: "),
           initialIntegerValue: 0,
         );
       },
@@ -59,19 +75,19 @@ class _TimerScreenState extends State<TimerScreen> {
         });
   }
 
-  Future _showHourDialog() async {
+  Future _showSecondsDialog() async {
     await showDialog<int>(
       context: context,
       builder: (BuildContext context) {
         return NumberPickerDialog.integer(
           minValue: 0,
           maxValue: 24,
-          title: new Text("Hours:"),
+          title: new Text("Seconds: "),
           initialIntegerValue: 0,
         );
       },
     ).then((value) => {
-          if (value != null) setState(() => hours = value),
+          if (value != null) setState(() => seconds = value),
         });
   }
 
@@ -143,8 +159,15 @@ class _TimerScreenState extends State<TimerScreen> {
                 ),
                 Text(':', style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
                 Container(
-                  margin: EdgeInsets.only(right: 15),
-                  child: Text(formattedSeconds(), style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
+                  width: 100,
+                  height: 100,
+                  child: FloatingActionButton(
+                    heroTag: 'minDial',
+                    elevation: 0,
+                    child: Text(formattedSeconds(), style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
+                    onPressed: _showSecondsDialog,
+                    backgroundColor: Colors.transparent,
+                  ),
                 ),
               ],
             ),
@@ -167,6 +190,7 @@ class _TimerScreenState extends State<TimerScreen> {
                         _counter = 0;
                         mins = 0;
                         hours = 0;
+                        seconds = 0;
                       });
                     },
                   ),
@@ -183,6 +207,7 @@ class _TimerScreenState extends State<TimerScreen> {
                       print('Start Pressed');
                       _counter += hours * 3600;
                       _counter += mins * 60;
+                      _counter += seconds;
                       secondsPassed = 59;
                       _startTimer();
                     },
@@ -305,7 +330,10 @@ class _TimerScreenState extends State<TimerScreen> {
       formattedTime = '0' + mins.toString();
     } else if (mins >= 10) {
       formattedTime = mins.toString();
+    } else {
+      formattedTime = '00';
     }
+
     return formattedTime;
   }
 
@@ -318,9 +346,9 @@ class _TimerScreenState extends State<TimerScreen> {
     }
 
     if (sec >= 0 && sec <= 9) {
-      formattedTime += '0' + sec.toString();
+      formattedTime += '0' + seconds.toString();
     } else if (sec > 9) {
-      formattedTime += sec.toString();
+      formattedTime += seconds.toString();
     }
     return formattedTime;
   }
