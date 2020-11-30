@@ -10,6 +10,7 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
+  Color startButtonColor = Colors.green;
   int _counter = 0;
   Timer _timer;
   int hours = 0;
@@ -21,8 +22,6 @@ class _TimerScreenState extends State<TimerScreen> {
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        print(hours);
-        print(mins);
         if (_counter > 0) {
           _counter--;
           if (hours > 0 && mins >= 0) {
@@ -203,6 +202,7 @@ class _TimerScreenState extends State<TimerScreen> {
                         mins = 0;
                         hours = 0;
                         seconds = 0;
+                        startButtonColor = Colors.green;
                       });
                     },
                   ),
@@ -213,14 +213,18 @@ class _TimerScreenState extends State<TimerScreen> {
                   child: FloatingActionButton(
                     heroTag: 'StartButton',
                     elevation: 15,
-                    backgroundColor: Colors.green,
+                    backgroundColor: startButtonColor,
                     child: Text('Start', style: TextStyle(fontSize: 30)),
                     onPressed: () {
-                      print('Start Pressed');
                       _counter += hours * 3600;
                       _counter += mins * 60;
                       secondsPassed = 59;
                       minPassed = 59;
+                      if (_counter != 0) {
+                        setState(() {
+                          startButtonColor = Colors.grey;
+                        });
+                      }
                       _startTimer();
                     },
                   ),
@@ -344,7 +348,6 @@ class _TimerScreenState extends State<TimerScreen> {
     } else if (hours <= 0) {
       formattedTime = '00';
     }
-    print(formattedTime);
     return formattedTime;
   }
 
