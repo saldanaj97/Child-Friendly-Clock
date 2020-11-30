@@ -16,13 +16,18 @@ class _TimerScreenState extends State<TimerScreen> {
   int mins = 0;
   int seconds = 0;
   int secondsPassed = 60;
+  int minPassed = 60;
 
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_counter > 0) {
           _counter--;
-          if (_counter / 60 >= 1) updateMin();
+          if (mins > 0 && seconds == 0) {
+            updateMin();
+          } else if (mins == 0 && hours > 0) {
+            updateHours();
+          }
         } else {
           _timer.cancel();
         }
@@ -50,7 +55,7 @@ class _TimerScreenState extends State<TimerScreen> {
         return NumberPickerDialog.integer(
           minValue: 0,
           maxValue: 24,
-          title: new Text("Minutes: "),
+          title: new Text("Hours: "),
           initialIntegerValue: 0,
         );
       },
@@ -65,7 +70,7 @@ class _TimerScreenState extends State<TimerScreen> {
       builder: (BuildContext context) {
         return NumberPickerDialog.integer(
           minValue: 0,
-          maxValue: 60,
+          maxValue: 59,
           title: new Text("Minutes: "),
           initialIntegerValue: 0,
         );
@@ -81,7 +86,7 @@ class _TimerScreenState extends State<TimerScreen> {
       builder: (BuildContext context) {
         return NumberPickerDialog.integer(
           minValue: 0,
-          maxValue: 24,
+          maxValue: 59,
           title: new Text("Seconds: "),
           initialIntegerValue: 0,
         );
@@ -144,7 +149,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   child: FloatingActionButton(
                     heroTag: 'hourDial',
                     elevation: 0,
-                    child: Text('00', style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
+                    child: Text(formattedHours(), style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold)),
                     onPressed: _showHourDialog,
                     backgroundColor: Colors.transparent,
                   ),
@@ -326,32 +331,41 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
+  String formattedHours() {
+    String formattedTime = '';
+    if (hours >= 0 && hours <= 9) {
+      formattedTime = '0' + hours.toString();
+    } else if (hours >= 10) {
+      formattedTime = hours.toString();
+    } else if (hours < 0) {
+      formattedTime = '00';
+    }
+    print(formattedTime);
+    return formattedTime;
+  }
+
   String formattedMinutes() {
     String formattedTime = '';
-
+    mins = _counter ~/ 60;
     if (mins >= 0 && mins <= 9) {
       formattedTime = '0' + mins.toString();
-    } else if (mins >= 10) {
+    } else if (mins <= 59) {
       formattedTime = mins.toString();
+    } else {
+      formattedTime = '00';
     }
-
     return formattedTime;
   }
 
   String formattedSeconds() {
     String formattedTime = '';
-    int sec = 0;
+    seconds = _counter % 60;
 
-    if (_counter % 60 > 0) {
-      sec = _counter % 60;
+    if (seconds >= 0 && seconds <= 9) {
+      formattedTime += '0' + seconds.toString();
+    } else if (seconds > 9) {
+      formattedTime += seconds.toString();
     }
-
-    if (sec >= 0 && sec <= 9) {
-      formattedTime += '0' + sec.toString();
-    } else if (sec > 9) {
-      formattedTime += sec.toString();
-    }
-    print(sec);
     return formattedTime;
   }
 
@@ -361,6 +375,15 @@ class _TimerScreenState extends State<TimerScreen> {
       secondsPassed = 0;
     } else {
       secondsPassed++;
+    }
+  }
+
+  void updateHours() {
+    if (minPassed == 59) {
+      hours--;
+      minPassed = 0;
+    } else {
+      minPassed++;
     }
   }
 }
