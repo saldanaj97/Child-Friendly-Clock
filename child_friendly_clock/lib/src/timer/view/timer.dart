@@ -110,6 +110,7 @@ class _TimerScreenState extends State<TimerScreen> {
       ),
       backgroundColor: const Color(0xff2d2e40),
       body: Container(
+        width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -152,8 +153,8 @@ class _TimerScreenState extends State<TimerScreen> {
               // PLAY PAUSE BUTTONS
               children: [
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 125,
+                  height: 125,
                   child: FloatingActionButton(
                     heroTag: 'PauseButton',
                     elevation: 15,
@@ -171,8 +172,8 @@ class _TimerScreenState extends State<TimerScreen> {
                   ),
                 ),
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 125,
+                  height: 125,
                   child: FloatingActionButton(
                     heroTag: 'StartButton',
                     elevation: 15,
@@ -203,14 +204,14 @@ class _TimerScreenState extends State<TimerScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        height: MediaQuery.of(context).size.height / 5.5,
-                        width: MediaQuery.of(context).size.height / 5.5,
+                        height: MediaQuery.of(context).size.height / 5.75,
+                        width: MediaQuery.of(context).size.height / 5.75,
                         margin: EdgeInsets.only(bottom: 20),
                         child: RawMaterialButton(
                           elevation: 15,
                           child: Text(
                             '1 Min',
-                            style: TextStyle(color: Colors.white, fontSize: 40),
+                            style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.aspectRatio * 90),
                             textAlign: TextAlign.center,
                           ),
                           fillColor: Colors.blue,
@@ -223,14 +224,14 @@ class _TimerScreenState extends State<TimerScreen> {
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height / 5.5,
-                        width: MediaQuery.of(context).size.height / 5.5,
+                        height: MediaQuery.of(context).size.height / 5.75,
+                        width: MediaQuery.of(context).size.height / 5.75,
                         margin: EdgeInsets.only(bottom: 20),
                         child: RawMaterialButton(
                           elevation: 15,
                           child: Text(
                             '5 Min',
-                            style: TextStyle(color: Colors.white, fontSize: 40),
+                            style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.aspectRatio * 90),
                             textAlign: TextAlign.center,
                           ),
                           fillColor: Colors.pink,
@@ -248,13 +249,13 @@ class _TimerScreenState extends State<TimerScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        height: MediaQuery.of(context).size.height / 5.5,
-                        width: MediaQuery.of(context).size.height / 5.5,
+                        height: MediaQuery.of(context).size.height / 5.75,
+                        width: MediaQuery.of(context).size.height / 5.75,
                         child: RawMaterialButton(
                           elevation: 15,
                           child: Text(
                             '10 Min',
-                            style: TextStyle(color: Colors.white, fontSize: 40),
+                            style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.aspectRatio * 90),
                             textAlign: TextAlign.center,
                           ),
                           fillColor: Colors.purple,
@@ -267,13 +268,13 @@ class _TimerScreenState extends State<TimerScreen> {
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height / 5.5,
-                        width: MediaQuery.of(context).size.height / 5.5,
+                        height: MediaQuery.of(context).size.height / 5.75,
+                        width: MediaQuery.of(context).size.height / 5.75,
                         child: RawMaterialButton(
                           elevation: 15,
                           child: Text(
                             '30 Min',
-                            style: TextStyle(color: Colors.white, fontSize: 40),
+                            style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.aspectRatio * 90),
                             textAlign: TextAlign.center,
                           ),
                           fillColor: Colors.amber[400],
