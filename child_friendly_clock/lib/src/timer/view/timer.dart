@@ -15,18 +15,21 @@ class _TimerScreenState extends State<TimerScreen> {
   int hours = 0;
   int mins = 0;
   int seconds = 0;
-  int secondsPassed = 60;
-  int minPassed = 60;
+  int secondsPassed = 0;
+  int minPassed = 0;
 
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
+        print(hours);
+        print(mins);
         if (_counter > 0) {
           _counter--;
-          if (mins > 0 && seconds == 0) {
-            updateMin();
-          } else if (mins == 0 && hours > 0) {
+          if (hours > 0 && mins >= 0) {
             updateHours();
+          }
+          if (mins >= 0 && seconds == 0) {
+            updateMin();
           }
         } else {
           _timer.cancel();
@@ -217,6 +220,7 @@ class _TimerScreenState extends State<TimerScreen> {
                       _counter += hours * 3600;
                       _counter += mins * 60;
                       secondsPassed = 59;
+                      minPassed = 59;
                       _startTimer();
                     },
                   ),
@@ -333,11 +337,11 @@ class _TimerScreenState extends State<TimerScreen> {
 
   String formattedHours() {
     String formattedTime = '';
-    if (hours >= 0 && hours <= 9) {
+    if (hours > 0 && hours <= 9) {
       formattedTime = '0' + hours.toString();
     } else if (hours >= 10) {
       formattedTime = hours.toString();
-    } else if (hours < 0) {
+    } else if (hours <= 0) {
       formattedTime = '00';
     }
     print(formattedTime);
@@ -346,12 +350,12 @@ class _TimerScreenState extends State<TimerScreen> {
 
   String formattedMinutes() {
     String formattedTime = '';
-    mins = _counter ~/ 60;
+    mins = mins % 60;
     if (mins >= 0 && mins <= 9) {
       formattedTime = '0' + mins.toString();
     } else if (mins <= 59) {
       formattedTime = mins.toString();
-    } else {
+    } else if (mins < 0) {
       formattedTime = '00';
     }
     return formattedTime;
