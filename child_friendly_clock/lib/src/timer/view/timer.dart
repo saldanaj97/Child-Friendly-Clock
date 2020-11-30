@@ -158,7 +158,7 @@ class _TimerScreenState extends State<TimerScreen> {
                     heroTag: 'PauseButton',
                     elevation: 15,
                     backgroundColor: Colors.red,
-                    child: Text('Reset'),
+                    child: Text('Reset', style: TextStyle(fontSize: 30)),
                     onPressed: () {
                       print('Pause Pressed');
                       _timer.cancel();
@@ -177,7 +177,7 @@ class _TimerScreenState extends State<TimerScreen> {
                     heroTag: 'StartButton',
                     elevation: 15,
                     backgroundColor: Colors.green,
-                    child: Text('Start'),
+                    child: Text('Start', style: TextStyle(fontSize: 30)),
                     onPressed: () {
                       print('Start Pressed');
                       _counter += hours * 3600;
@@ -203,14 +203,14 @@ class _TimerScreenState extends State<TimerScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        height: 100,
-                        width: 100,
-                        margin: EdgeInsets.only(bottom: 35),
+                        height: MediaQuery.of(context).size.height / 5.5,
+                        width: MediaQuery.of(context).size.height / 5.5,
+                        margin: EdgeInsets.only(bottom: 20),
                         child: RawMaterialButton(
                           elevation: 15,
                           child: Text(
                             '1 Min',
-                            style: TextStyle(color: Colors.white, fontSize: 43),
+                            style: TextStyle(color: Colors.white, fontSize: 40),
                             textAlign: TextAlign.center,
                           ),
                           fillColor: Colors.blue,
@@ -223,14 +223,14 @@ class _TimerScreenState extends State<TimerScreen> {
                         ),
                       ),
                       Container(
-                        height: 100,
-                        width: 100,
-                        margin: EdgeInsets.only(bottom: 35),
+                        height: MediaQuery.of(context).size.height / 5.5,
+                        width: MediaQuery.of(context).size.height / 5.5,
+                        margin: EdgeInsets.only(bottom: 20),
                         child: RawMaterialButton(
                           elevation: 15,
                           child: Text(
                             '5 Min',
-                            style: TextStyle(color: Colors.white, fontSize: 43),
+                            style: TextStyle(color: Colors.white, fontSize: 40),
                             textAlign: TextAlign.center,
                           ),
                           fillColor: Colors.pink,
@@ -248,13 +248,13 @@ class _TimerScreenState extends State<TimerScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: MediaQuery.of(context).size.height / 5.5,
+                        width: MediaQuery.of(context).size.height / 5.5,
                         child: RawMaterialButton(
                           elevation: 15,
                           child: Text(
                             '10 Min',
-                            style: TextStyle(color: Colors.white, fontSize: 43),
+                            style: TextStyle(color: Colors.white, fontSize: 40),
                             textAlign: TextAlign.center,
                           ),
                           fillColor: Colors.purple,
@@ -267,13 +267,13 @@ class _TimerScreenState extends State<TimerScreen> {
                         ),
                       ),
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: MediaQuery.of(context).size.height / 5.5,
+                        width: MediaQuery.of(context).size.height / 5.5,
                         child: RawMaterialButton(
                           elevation: 15,
                           child: Text(
                             '30 Min',
-                            style: TextStyle(color: Colors.white, fontSize: 43),
+                            style: TextStyle(color: Colors.white, fontSize: 40),
                             textAlign: TextAlign.center,
                           ),
                           fillColor: Colors.amber[400],
