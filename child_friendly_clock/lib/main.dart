@@ -5,8 +5,8 @@ import 'package:child_friendly_clock/src/home/view/home.dart';
 
 void main() async {
   // Removed temporarily while working on fixing bugs
-  /* WidgetsFlutterBinding.ensureInitialized();
-  await AndroidAlarmManager.initialize(); */
+  WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
   runApp(new MyApp());
 }
 

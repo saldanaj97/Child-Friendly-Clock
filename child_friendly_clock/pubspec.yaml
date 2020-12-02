@@ -31,7 +31,7 @@ dependencies:
   android_alarm_manager: ^0.4.5+17
   cupertino_icons: ^1.0.0
   splashscreen:
-  
+  flutter_ringtone_player: ^2.0.0
 
 dev_dependencies:
   flutter_test:
