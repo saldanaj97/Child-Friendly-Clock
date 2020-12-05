@@ -1,5 +1,7 @@
 //import 'dart:js';
 
+import 'dart:async';
+
 import 'package:child_friendly_clock/src/home/view/home.dart';
 import 'package:child_friendly_clock/src/widgets/view/navbar.dart';
 import 'package:flushbar/flushbar.dart';
@@ -9,6 +11,8 @@ import './alarm_cards.dart';
 import './CreateAlarm.dart';
 import 'package:child_friendly_clock/src/alarm/utils/database.dart';
 import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
+import 'dart:isolate';
+import 'dart:ui';
 
 class alarm extends StatefulWidget {
   @override
@@ -81,8 +85,6 @@ class _AlarmState extends State<alarm> {
         break;
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -161,9 +163,9 @@ class _AlarmState extends State<alarm> {
 
                       return AlarmCards(
                         alarm: rowAlarm,
-                        updateListCallback: () => setState(() {
-                          alarmsFuture = getAlarms();
-                        }),
+                        updateListCallback: () async {
+                          setState(() {alarmsFuture = getAlarms();});
+                        },
                       ); // One individual Alarm
                     },
                     childCount: alarmsData.data.length,

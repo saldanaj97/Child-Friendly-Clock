@@ -3,6 +3,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:child_friendly_clock/src/widgets/view/menubar.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/view/navbar.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 class TimerScreen extends StatefulWidget {
   @override
@@ -30,7 +31,16 @@ class _TimerScreenState extends State<TimerScreen> {
           if (mins >= 0 && seconds == 0) {
             updateMin();
           }
-        } else {
+        }
+        else {
+          //This starts the ring tone.
+          FlutterRingtonePlayer.play(
+            android: AndroidSounds.alarm,
+            ios: IosSounds.alarm,
+            looping: true,
+            volume: 0.3,
+            asAlarm: true,
+          );
           _timer.cancel();
         }
       });
@@ -196,6 +206,7 @@ class _TimerScreenState extends State<TimerScreen> {
                     child: Text('Reset', style: TextStyle(fontSize: 30)),
                     onPressed: () {
                       print('Pause Pressed');
+                      FlutterRingtonePlayer.stop();
                       _timer.cancel();
                       setState(() {
                         _counter = 0;

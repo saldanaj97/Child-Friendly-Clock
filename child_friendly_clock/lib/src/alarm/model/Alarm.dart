@@ -13,8 +13,9 @@ class Alarm {
   int second;
   List<int> frequency;
   String note;
+  int enabled;
 
-  Alarm({this.name, this.alarmID, this.period, this.hour, this.minute, this.second, this.frequency, this.note});
+  Alarm({this.name, this.alarmID, this.period, this.hour, this.minute, this.second, this.frequency, this.note, this.enabled});
 
   factory Alarm.fromJson(Map<String, dynamic> json) => Alarm(
     name: json["name"],
@@ -24,7 +25,8 @@ class Alarm {
     minute: json["minute"],
     second: json["second"],
     frequency: [json["sun"], json["mon"], json["tues"], json["wed"], json["thur"], json["fri"], json["sat"]],
-    note: json["note"]
+    note: json["note"],
+    enabled: json["enabled"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +43,7 @@ class Alarm {
     "thur": frequency[0],
     "fri": frequency[0],
     "sat": frequency[0],
-    "note": note
+    "note": note,
+    "enabled": enabled
   };
 }

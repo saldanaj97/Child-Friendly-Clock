@@ -19,7 +19,7 @@ class CreateAlarm extends StatefulWidget {
 
 class _CreateAlarmState extends State<CreateAlarm> {
   TextEditingController _nameController;
-  var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None", note: "No note set. ");
+  var newAlarm = Alarm(hour: 8, minute: 0, second: 0, period: "AM", name: "None", note: "No note set. ", enabled: 0);
   double proxyMinute = 0.0;
   List<bool> _selections = [true, false];
   List<int> _frequency = [0, 0, 0, 0, 0, 0, 0]; // for every day of the week starting with sunday
@@ -286,7 +286,9 @@ class _CreateAlarmState extends State<CreateAlarm> {
                         newAlarm.frequency = _frequency;
                         newAlarm.name = _nameController.text;
                         DBProvider.db.newAlarm(newAlarm);
-                        Navigator.pushReplacement(context, SizeRoute(page: alarm()));
+                        widget.clickCallback();
+                        Navigator.pop(context);
+                        //Navigator.pushReplacement(context, SizeRoute(page: alarm()));
                         var notificationMessage = newAlarm.name + ' has now been added. ';
                         Flushbar(
                           message: notificationMessage,

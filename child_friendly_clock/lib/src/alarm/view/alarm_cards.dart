@@ -7,6 +7,12 @@ import 'package:child_friendly_clock/src/alarm/model/Alarm.dart';
 import 'package:child_friendly_clock/src/alarm/view/edit_alarms.dart';
 import '../view/note.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'dart:isolate';
+import '../utils/globals.dart' as globals;
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 class AlarmCards extends StatefulWidget {
   final Alarm alarm;
@@ -102,6 +108,13 @@ class _AlarmCardsState extends State<AlarmCards> {
       }
     }
 
+    if(widget.alarm.enabled == 1){
+      isSwitched = true;
+    }
+    else{
+      isSwitched = false;
+    }
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -110,10 +123,12 @@ class _AlarmCardsState extends State<AlarmCards> {
           children: <Widget>[
             Dismissible(
               key: UniqueKey(),
-              onDismissed: (direction) {
-                DBProvider.db.deleteAlarm(widget.alarm.alarmID);
-                widget.updateListCallback();
+              onDismissed: (direction) async {
+                await DBProvider.db.deleteAlarm(widget.alarm.alarmID);
                 Scaffold.of(context).showSnackBar(SnackBar(content: Text(widget.alarm.name + ' deleted')));
+                widget.updateListCallback();
+                for(int i = 0; i < 8; i++)
+                  await AndroidAlarmManager.cancel(widget.alarm.alarmID+i);
               },
               background: Container(
                 color: Colors.red,
@@ -160,12 +175,17 @@ class _AlarmCardsState extends State<AlarmCards> {
                                 Container(
                                   child: Switch(
                                     value: isSwitched,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isSwitched = value;
-                                        print(isSwitched);
-                                        alarmSetup(widget.alarm, isSwitched);
-                                      });
+                                    onChanged: (value) async {
+                                      if(value){
+                                        widget.alarm.enabled = 1;
+                                      }
+                                      else{
+                                        widget.alarm.enabled = 0;
+                                      }
+                                      isSwitched = value;
+                                      await DBProvider.db.editAlarm(widget.alarm);
+                                      alarmSetup(widget.alarm, isSwitched);
+                                      widget.updateListCallback();
                                     },
                                     activeTrackColor: Colors.lightGreenAccent,
                                     activeColor: Colors.green,
@@ -195,7 +215,7 @@ class _AlarmCardsState extends State<AlarmCards> {
                                       onPressed: () {
                                         // showNote takes in context and a string so
                                         // replace 'User ... ' with the note from the db
-                                        showNote(context, widget.alarm.note);
+                                        showNote(context, widget.alarm.note, -1);
                                       })
                                 ],
                               ),
@@ -257,9 +277,12 @@ class _AlarmCardsState extends State<AlarmCards> {
   }
 
   void alarmSetup(Alarm setupAlarm, bool value) async{
+    print("Setting Up Alarm");
     int addHour;
     if (setupAlarm.period == "AM") {
       addHour = 0;
+      if(setupAlarm.hour == 12)
+        addHour = -12;
     } else {
       addHour = 12;
     }
@@ -276,6 +299,8 @@ class _AlarmCardsState extends State<AlarmCards> {
     int month = now.month;
     int day = now.day;
     int year = now.year;
+
+    DateTime oneshot = new DateTime(year, month, day, hours, minute);
     //depending on what day it is, we will create alarm times for the next 7 days
     switch(now.weekday){
       //if it is monday
@@ -412,58 +437,124 @@ class _AlarmCardsState extends State<AlarmCards> {
         break;
     }
 
+    tz.initializeTimeZones();
+    final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(timeZoneName));
     //if the switch is set to on, initialize alarms and have them repeat every 7 days
     int alarmID = widget.alarm.alarmID*10;
-    var buildContext = context;
     if (value == true) {
       if (widget.alarm.frequency[0] == 1) {
-        await AndroidAlarmManager.periodic(Duration(days: 7), alarmID, showPrint,
-            startAt: sunday,
-            exact: true,
-            wakeup: true,
-            rescheduleOnReboot: true);
+        if(DateTime.now().isBefore(sunday)) {
+          await AndroidAlarmManager.periodic(
+              Duration(days: 7), alarmID, showPrint,
+              startAt: sunday,
+              exact: true,
+              wakeup: true,
+              rescheduleOnReboot: true);
+        }
+      }
+      else{
+        await AndroidAlarmManager.cancel(alarmID);
       }
       if (widget.alarm.frequency[1] == 1) {
-        await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+1, showPrint,
-            startAt: monday,
-            exact: true,
-            wakeup: true,
-            rescheduleOnReboot: true);
+        if(DateTime.now().isBefore(monday)){
+          await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+1, showPrint,
+              startAt: monday,
+              exact: true,
+              wakeup: true,
+              rescheduleOnReboot: true);
+        }
+      }
+      else{
+        await AndroidAlarmManager.cancel(alarmID+1);
       }
       if (widget.alarm.frequency[2] == 1) {
-        await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+2, showPrint,
+        if(DateTime.now().isBefore(tuesday)){
+          await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+2, showPrint,
             startAt: tuesday,
             exact: true,
             wakeup: true,
             rescheduleOnReboot: true);
+        }
+      }
+      else{
+        await AndroidAlarmManager.cancel(alarmID+2);
       }
       if (widget.alarm.frequency[3] == 1) {
-        await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+3, showPrint,
-            startAt: wednesday,
-            exact: true,
-            wakeup: true,
-            rescheduleOnReboot: true);
+        if(DateTime.now().isBefore(wednesday)){
+          await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+3, showPrint,
+              startAt: wednesday,
+              exact: true,
+              wakeup: true,
+              rescheduleOnReboot: true);
+        }
+      }
+      else{
+        await AndroidAlarmManager.cancel(alarmID+3);
       }
       if (widget.alarm.frequency[4] == 1) {
-        await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+4, showPrint,
-            startAt: thursday,
-            exact: true,
-            wakeup: true,
-            rescheduleOnReboot: true);
+        print('calculated datetime: $thursday');
+        if(DateTime.now().isBefore(thursday)) {
+          await AndroidAlarmManager.periodic(
+              Duration(days: 7), alarmID + 4, showPrint,
+              startAt: thursday,
+              exact: true,
+              wakeup: true,
+              rescheduleOnReboot: true);
+        }
+        else{
+          await AndroidAlarmManager.periodic(
+              Duration(days: 7), alarmID + 4, showPrint,
+              startAt: _nextWeekInstanceOfDateTime(thursday),
+              exact: true,
+              wakeup: true,
+              rescheduleOnReboot: true);
+        }
+      }
+      else{
+        await AndroidAlarmManager.cancel(alarmID+4);
       }
       if (widget.alarm.frequency[5] == 1) {
-        await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+5, showPrint,
-            startAt: friday,
-            exact: true,
-            wakeup: true,
-            rescheduleOnReboot: true);
+        if(DateTime.now().isBefore(friday)) {
+          await AndroidAlarmManager.periodic(
+              Duration(days: 7), alarmID + 5, showPrint,
+              startAt: friday,
+              exact: true,
+              wakeup: true,
+              rescheduleOnReboot: true);
+        }
+      }
+      else{
+        await AndroidAlarmManager.cancel(alarmID+5);
       }
       if (widget.alarm.frequency[6] == 1) {
-        await AndroidAlarmManager.periodic(Duration(days: 7), alarmID+6, showPrint,
-            startAt: saturday,
-            exact: true,
-            wakeup: true,
-            rescheduleOnReboot: true);
+        if(DateTime.now().isBefore(saturday)) {
+          await AndroidAlarmManager.periodic(
+              Duration(days: 7), alarmID + 6, showPrint,
+              startAt: saturday,
+              exact: true,
+              wakeup: true,
+              rescheduleOnReboot: true);
+        }
+      }
+      else{
+        await AndroidAlarmManager.cancel(alarmID+6);
+      }
+      if(!widget.alarm.frequency.contains(1)){
+        if(DateTime.now().isBefore(oneshot)) {
+          //no day was selected so just make the alarm for today.
+          await AndroidAlarmManager.oneShotAt(oneshot, alarmID+7, showPrint);
+          print("made one shot: $oneshot");
+        }
+        else{
+          //time already passed today so make for tomorrow.
+          DateTime newTime = _tomorrowInstanceOfDateTime(oneshot);
+          await AndroidAlarmManager.oneShotAt(newTime, alarmID+7, showPrint);
+          print("made one shot: $newTime");
+        }
+      }
+      else{
+        await AndroidAlarmManager.cancel(alarmID+7);
       }
       //cancel alarms if switch is set to off
     } else {
@@ -474,22 +565,58 @@ class _AlarmCardsState extends State<AlarmCards> {
       await AndroidAlarmManager.cancel(alarmID+4);
       await AndroidAlarmManager.cancel(alarmID+5);
       await AndroidAlarmManager.cancel(alarmID+6);
+      await AndroidAlarmManager.cancel(alarmID+7);
     }
   }
+}
 
+DateTime _tomorrowInstanceOfDateTime(DateTime dt){
+  final DateTime now = DateTime.now();
+  DateTime scheduledDate = DateTime(now.year, now.month, dt.day, dt.hour, dt.minute);
+  if (scheduledDate.isBefore(now)) {
+    scheduledDate = scheduledDate.add(const Duration(days: 1));
+  }
+  return scheduledDate;
+}
+DateTime _nextWeekInstanceOfDateTime(DateTime dt){
+  final DateTime now = DateTime.now();
+  DateTime scheduledDate = DateTime(now.year, now.month, dt.day, dt.hour, dt.minute);
+  if (scheduledDate.isBefore(now)) {
+    scheduledDate = scheduledDate.add(const Duration(days: 7));
+  }
+  return scheduledDate;
 }
 
 showPrint(int alarmID) async{
   print(alarmID);
-  //**
-  // uncomment this code to enable alarm noise, use FlutterRingtonePlayer.stop(); to stop the noise
-  //FlutterRingtonePlayer.play(
-  //  android: AndroidSounds.alarm,
-  //  ios: IosSounds.alarm,
-  //  looping: true,
-  //  volume: 0.3,
-  //  asAlarm: true,
-  //);
-  //Todo: create a notification from here for the user to snooze or dismiss the alarm
+  //Receive port to listen for when the user wants to turn off the alarm ringtone.
+  final ReceivePort rPort = ReceivePort();
+  IsolateNameServer.registerPortWithName(
+    rPort.sendPort,
+    "alarm $alarmID isolate",
+  );
+  rPort.listen((message) {
+    FlutterRingtonePlayer.stop();
+  });
+
+  //This starts the ring tone.
+  await FlutterRingtonePlayer.play(
+    android: AndroidSounds.alarm,
+    ios: IosSounds.alarm,
+    looping: true,
+    volume: 0.3,
+    asAlarm: true,
+  );
+
+  var androidPlatformChannelSpecifics = new AndroidNotificationDetails('your channel id', 'your channel name', 'your channel description', importance: Importance.max, priority: Priority.high, icon: "notif_icon");
+  var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+  var platformChannelSpecifics = new NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+  await globals.flutterLocalNotificationsPlugin.show(0, "Alarm!", "Click Here To Stop.", platformChannelSpecifics, payload: '$alarmID');
+
+  // Send port to tell app that the alarm went off.
+  SendPort uiSendPort;
+  uiSendPort ??= IsolateNameServer.lookupPortByName('isolate');
+  uiSendPort?.send(alarmID);
 }
+
 

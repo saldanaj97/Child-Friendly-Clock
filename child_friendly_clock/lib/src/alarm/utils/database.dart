@@ -39,7 +39,8 @@ class DBProvider {
               fri INTEGER,
               sat INTEGER,
               sun INTEGER, 
-              note TEXT
+              note TEXT,
+              enabled INTEGER
               );
             ''');
       },
@@ -51,8 +52,8 @@ class DBProvider {
 
     var res = await db.rawInsert('''
       INSERT INTO alarm(
-        period, name, hour, minute, second, sun, mon, tues, wed, thur, fri, sat, note
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+        period, name, hour, minute, second, sun, mon, tues, wed, thur, fri, sat, note, enabled
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?, ?)
     ''', [
       newAlarm.period,
       newAlarm.name,
@@ -67,6 +68,7 @@ class DBProvider {
       newAlarm.frequency[5],
       newAlarm.frequency[6],
       newAlarm.note,
+      newAlarm.enabled
     ]);
 
     return res;
@@ -86,12 +88,12 @@ class DBProvider {
   editAlarm(Alarm editAlarm) async {
     final db = await database;
 
-    var res = await db.rawUpdate("UPDATE alarm SET Period = ?, hour = ?, minute = ?, second = ?, sun = ?, mon = ?, tues = ?, wed = ?, thur = ?, fri = ?, sat = ?,note = ?,name=? WHERE alarmID = ?",
+    var res = await db.rawUpdate("UPDATE alarm SET Period = ?, hour = ?, minute = ?, second = ?, sun = ?, mon = ?, tues = ?, wed = ?, thur = ?, fri = ?, sat = ?,note = ?,name=?, enabled=? WHERE alarmID = ?",
           [editAlarm.period, editAlarm.hour, editAlarm.minute, editAlarm.second,
           editAlarm.frequency[0],editAlarm.frequency[1],editAlarm.frequency[2], editAlarm.frequency[3],
           editAlarm.frequency[4],editAlarm.frequency[5], editAlarm.frequency[6],
           editAlarm.note,
-          editAlarm.name, editAlarm.alarmID]);
+          editAlarm.name, editAlarm.enabled, editAlarm.alarmID]);
     return res;
   }
 

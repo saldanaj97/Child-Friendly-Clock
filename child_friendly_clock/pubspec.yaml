@@ -32,6 +32,8 @@ dependencies:
   cupertino_icons: ^1.0.0
   splashscreen:
   flutter_ringtone_player: ^2.0.0
+  flutter_local_notifications: ^3.0.1+6
+  flutter_native_timezone: ^1.0.4
 
 dev_dependencies:
   flutter_test:
